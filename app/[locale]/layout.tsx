@@ -7,6 +7,10 @@ import '../globals.css'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { hasLocale, locales, localeTag } from '@/i18n/config'
 import { site } from '@/data/site'
+import { Footer } from '@/components/layout/Footer'
+import { GridOverlay } from '@/components/layout/GridOverlay'
+import { Nav } from '@/components/layout/Nav'
+import { SkipLink } from '@/components/layout/SkipLink'
 
 /**
  * Archivo carries the whole display voice. It is one of the very few Google
@@ -67,6 +71,15 @@ export default async function RootLayout({
   const { locale } = await params
   if (!hasLocale(locale)) notFound()
 
+  const dict = await getDictionary(locale)
+
+  const navLinks = [
+    { href: '#services', label: dict.nav.services },
+    { href: '#work', label: dict.nav.work },
+    { href: '#process', label: dict.nav.process },
+    { href: '#contact', label: dict.nav.contact },
+  ]
+
   return (
     // The font variables MUST sit on <html>. `--font-sans` is declared at
     // `:root`, and custom-property substitution happens where the property is
@@ -84,7 +97,27 @@ export default async function RootLayout({
         <noscript>
           <style>{`.anim-clip{visibility:visible!important}`}</style>
         </noscript>
-        {children}
+
+        {/*
+         * Everything above <main> is `position: fixed` chrome. Once
+         * ScrollSmoother lands in Phase 2 these MUST stay siblings of
+         * #smooth-wrapper — a transformed ancestor creates a containing block
+         * and they would scroll with the content instead of the viewport.
+         */}
+        <SkipLink label={dict.nav.skipToContent} />
+        <GridOverlay />
+        <Nav
+          locale={locale}
+          links={navLinks}
+          switchLabel={dict.nav.switchTo}
+          menuLabel={dict.nav.menu}
+          closeLabel={dict.nav.close}
+        />
+
+        <div className="relative z-10">
+          {children}
+          <Footer dict={dict.footer} locale={locale} />
+        </div>
       </body>
     </html>
   )
