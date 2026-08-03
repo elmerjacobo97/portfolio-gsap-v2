@@ -11,6 +11,7 @@ import { Footer } from '@/components/layout/Footer'
 import { GridOverlay } from '@/components/layout/GridOverlay'
 import { Nav } from '@/components/layout/Nav'
 import { SkipLink } from '@/components/layout/SkipLink'
+import { Curtain } from '@/components/motion/Curtain'
 import { Cursor } from '@/components/motion/Cursor'
 import { Intro } from '@/components/motion/Intro'
 import { RouteMotion } from '@/components/motion/RouteMotion'
@@ -78,11 +79,14 @@ export default async function RootLayout({
 
   const dict = await getDictionary(locale)
 
+  // Absolute, not bare hashes: on a case-study page `#services` does not
+  // exist, and a bare hash link would silently do nothing. Nav intercepts
+  // these for a smooth scroll only when the target is on the current page.
   const navLinks = [
-    { href: '#services', label: dict.nav.services },
-    { href: '#work', label: dict.nav.work },
-    { href: '#process', label: dict.nav.process },
-    { href: '#contact', label: dict.nav.contact },
+    { href: `/${locale}#services`, label: dict.nav.services },
+    { href: `/${locale}#work`, label: dict.nav.work },
+    { href: `/${locale}#process`, label: dict.nav.process },
+    { href: `/${locale}#contact`, label: dict.nav.contact },
   ]
 
   return (
@@ -125,6 +129,7 @@ export default async function RootLayout({
         />
         <ScrollProgress />
         <Cursor />
+        <Curtain />
         <Intro />
 
         <SmoothProvider>

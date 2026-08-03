@@ -1,10 +1,10 @@
-import Link from 'next/link'
-
 import { cn } from '@/lib/cn'
+import { TransitionLink } from '@/components/motion/TransitionLink'
 
 /**
- * Renders a next/link for internal routes and a plain anchor for external ones.
- * The arrow is a separate span so Phase 2 can tween it independently on hover.
+ * Internal links go through the curtain wipe, external ones open in a new tab.
+ * Keeping both behind one component is what stops half the internal links on
+ * the site from wiping and the other half from jumping.
  */
 export function ArrowLink({
   href,
@@ -40,8 +40,8 @@ export function ArrowLink({
   }
 
   return (
-    <Link href={href} className={classes}>
+    <TransitionLink href={href} className={classes}>
       {content}
-    </Link>
+    </TransitionLink>
   )
 }

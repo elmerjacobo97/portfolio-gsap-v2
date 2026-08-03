@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useRef } from 'react'
 
 import type { Project } from '@/data/projects'
@@ -8,6 +7,7 @@ import type { Locale } from '@/i18n/config'
 import { t } from '@/i18n/t'
 import { cn } from '@/lib/cn'
 import { gsap, useGSAP } from '@/lib/gsap'
+import { TransitionLink } from '@/components/motion/TransitionLink'
 import { MediaPlate } from './MediaPlate'
 
 /** Column placement alternates so the grid never reads as a table of cards. */
@@ -71,7 +71,10 @@ export function WorkCard({
         PLACEMENT[index % PLACEMENT.length],
       )}
     >
-      <Link href={`/${locale}/work/${project.slug}`} className="group block">
+      <TransitionLink
+        href={`/${locale}/work/${project.slug}`}
+        className="group block"
+      >
         <div className="u-meta text-text-dim work-meta flex flex-wrap gap-x-4 gap-y-1">
           <span>{project.year}</span>
           <span aria-hidden className="text-ink-600">
@@ -105,7 +108,7 @@ export function WorkCard({
         <p className="text-body text-chalk-200 mt-3 max-w-[46ch]">
           {t(project.tagline, locale)}
         </p>
-      </Link>
+      </TransitionLink>
     </article>
   )
 }

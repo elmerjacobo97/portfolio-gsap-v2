@@ -7,6 +7,7 @@ import type { Locale } from '@/i18n/config'
 import { cn } from '@/lib/cn'
 import { gsap, ScrollSmoother, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { OK } from '@/lib/motion'
+import { TransitionLink } from '@/components/motion/TransitionLink'
 import { LocaleSwitcher } from './LocaleSwitcher'
 import { MobileMenu } from './MobileMenu'
 
@@ -52,10 +53,11 @@ export function Nav({
   })
 
   // ScrollSmoother owns scrolling, so native anchor jumps would fight it.
-  // Falls back to scrollIntoView when the smoother is not running (reduced
-  // motion), which is exactly the behaviour those visitors should get.
+  // If the section is not on this page (a case study, say), we do nothing and
+  // let the browser follow the absolute href back to the home page.
   const handleAnchor = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    const target = document.querySelector(href)
+    const hash = href.slice(href.indexOf('#'))
+    const target = document.querySelector(hash)
     if (!target) return
 
     e.preventDefault()
@@ -76,12 +78,12 @@ export function Nav({
         className="bg-canvas/80 border-rule fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md"
       >
         <div className="grid-page items-center py-4">
-          <a
+          <TransitionLink
             href={`/${locale}`}
             className="u-meta text-text hover:text-accent col-span-6 transition-colors duration-200 md:col-span-4"
           >
             {site.shortName}
-          </a>
+          </TransitionLink>
 
           <nav
             aria-label="Primary"

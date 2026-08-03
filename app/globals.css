@@ -203,6 +203,16 @@
   .anim-clip {
     visibility: hidden;
   }
+
+  /*
+   * Hidden via `transform`, NOT Tailwind's `scale-y-0` — that utility compiles
+   * to the independent CSS `scale` property, which composes on top of whatever
+   * `transform` GSAP writes. The curtain would animate while staying flat.
+   */
+  .curtain {
+    transform: scaleY(0);
+    transform-origin: bottom center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

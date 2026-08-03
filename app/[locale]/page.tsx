@@ -28,7 +28,11 @@ export default async function Home({
       <Work dict={dict.work} locale={locale} />
       <Process dict={dict.process} locale={locale} />
       <About dict={dict.about} />
-      <Contact dict={dict.contact} />
+      <Contact
+        dict={dict.contact}
+        closeLabel={dict.nav.close}
+        locale={locale}
+      />
     </main>
   )
 }
