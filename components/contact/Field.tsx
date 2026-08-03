@@ -19,6 +19,7 @@ export function Field({
   textarea,
   options,
   error,
+  defaultValue,
   className,
 }: {
   name: string
@@ -28,6 +29,7 @@ export function Field({
   textarea?: boolean
   options?: readonly string[]
   error?: string
+  defaultValue?: string
   className?: string
 }) {
   const rootRef = useRef<HTMLDivElement>(null)
@@ -69,6 +71,7 @@ export function Field({
           name={name}
           required={required}
           rows={4}
+          defaultValue={defaultValue}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
           className={control}
@@ -78,6 +81,7 @@ export function Field({
           id={id}
           name={name}
           required={required}
+          defaultValue={defaultValue || undefined}
           className={cn(control, 'appearance-none')}
         >
           {options.map((option) => (
@@ -92,6 +96,7 @@ export function Field({
           name={name}
           type={type}
           required={required}
+          defaultValue={defaultValue}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
           className={control}

@@ -24,15 +24,19 @@ export function ContactForm({
   const rootRef = useRef<HTMLDivElement>(null)
   const mountedAtRef = useRef<HTMLInputElement>(null)
 
-  // Written straight to the DOM, not through state: this is a one-way write to
-  // an external system, so it needs no re-render (and setState in an effect
-  // would trigger a cascading one). Stamping it client-side after mount is the
-  // point — a script POSTing directly to the action has no plausible value.
+  // Written straight to the DOM, not through state: a one-way write to an
+  // external system needs no re-render (and setState in an effect would
+  // trigger a cascading one). Stamping it client-side is the point — a script
+  // POSTing directly to the action has no plausible value for it.
+  //
+  // Re-stamped on every `state` change because React 19 resets the form once
+  // its action completes, which restores this input to its empty defaultValue.
+  // Without the re-stamp the form is stuck rejecting every retry as "too fast".
   useEffect(() => {
     if (mountedAtRef.current) {
       mountedAtRef.current.value = String(Date.now())
     }
-  }, [])
+  }, [state])
 
   useGSAP(
     () => {
@@ -90,17 +94,36 @@ export function ContactForm({
             />
           </div>
 
+          {/* defaultValue echoes the last submission back: React 19 resets an
+              uncontrolled form when its action completes, so a validation
+              error would otherwise wipe everything the visitor typed. */}
           <div className="grid gap-8 sm:grid-cols-2">
-            <Field name="name" label={dict.name} required error={state.errors?.name} />
+            <Field
+              name="name"
+              label={dict.name}
+              required
+              error={state.errors?.name}
+              defaultValue={state.values?.name}
+            />
             <Field
               name="email"
               label={dict.email}
               type="email"
               required
               error={state.errors?.email}
+              defaultValue={state.values?.email}
             />
-            <Field name="company" label={dict.company} />
-            <Field name="scope" label={dict.scope} options={dict.scopeOptions} />
+            <Field
+              name="company"
+              label={dict.company}
+              defaultValue={state.values?.company}
+            />
+            <Field
+              name="scope"
+              label={dict.scope}
+              options={dict.scopeOptions}
+              defaultValue={state.values?.scope}
+            />
           </div>
 
           <Field
@@ -109,6 +132,7 @@ export function ContactForm({
             textarea
             required
             error={state.errors?.message}
+            defaultValue={state.values?.message}
           />
 
           {state.formError ? (

@@ -4,7 +4,7 @@ import { headers } from 'next/headers'
 import { Resend } from 'resend'
 import { z } from 'zod'
 
-import type { ContactState } from './contact-state'
+import type { ContactState, ContactValues } from './contact-state'
 import { defaultLocale, hasLocale, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { rateLimit } from '@/lib/rate-limit'
@@ -29,6 +29,14 @@ export async function submitContact(
   const dict = await getDictionary(locale)
   const messages = dict.contact.form.errors
 
+  const values: ContactValues = {
+    name: String(formData.get('name') ?? ''),
+    email: String(formData.get('email') ?? ''),
+    company: String(formData.get('company') ?? ''),
+    scope: String(formData.get('scope') ?? ''),
+    message: String(formData.get('message') ?? ''),
+  }
+
   // 1. Honeypot. A filled hidden field means a bot. Return success and send
   //    nothing — a visible failure just teaches the bot to retry.
   if (String(formData.get('company_website') ?? '').length > 0) {
@@ -40,7 +48,7 @@ export async function submitContact(
   const mountedAt = Number(formData.get('mountedAt') ?? 0)
   const elapsed = Date.now() - mountedAt
   if (!mountedAt || elapsed < MIN_ELAPSED_MS || elapsed > MAX_ELAPSED_MS) {
-    return { ok: false, formError: messages.tooFast }
+    return { ok: false, formError: messages.tooFast, values }
   }
 
   // 3. Per-IP rate limit. `headers()` is safe here: a Server Action is a
@@ -49,7 +57,7 @@ export async function submitContact(
   const forwardedFor = (await headers()).get('x-forwarded-for')
   const ip = forwardedFor?.split(',')[0]?.trim() || 'unknown'
   if (!rateLimit(ip).ok) {
-    return { ok: false, formError: messages.rateLimit }
+    return { ok: false, formError: messages.rateLimit, values }
   }
 
   const schema = z.object({
@@ -76,7 +84,7 @@ export async function submitContact(
         errors[field] ??= issue.message
       }
     }
-    return { ok: false, errors }
+    return { ok: false, errors, values }
   }
 
   const apiKey = process.env.RESEND_API_KEY
@@ -85,7 +93,7 @@ export async function submitContact(
 
   if (!apiKey || !to || !from) {
     console.error('[contact] Missing RESEND_API_KEY / CONTACT_TO_EMAIL / CONTACT_FROM_EMAIL')
-    return { ok: false, formError: dict.contact.form.errorGeneric }
+    return { ok: false, formError: dict.contact.form.errorGeneric, values }
   }
 
   const { name, email, company, scope, message } = parsed.data
@@ -113,11 +121,11 @@ export async function submitContact(
 
     if (error) {
       console.error('[contact] Resend error:', error)
-      return { ok: false, formError: dict.contact.form.errorGeneric }
+      return { ok: false, formError: dict.contact.form.errorGeneric, values }
     }
   } catch (err) {
     console.error('[contact] Send failed:', err)
-    return { ok: false, formError: dict.contact.form.errorGeneric }
+    return { ok: false, formError: dict.contact.form.errorGeneric, values }
   }
 
   // Deliberately NO revalidatePath/updateTag — the page is statically
