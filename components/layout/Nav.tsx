@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { site } from '@/data/site'
 import type { Locale } from '@/i18n/config'
 import { cn } from '@/lib/cn'
+import { gsap, ScrollSmoother, ScrollTrigger, useGSAP } from '@/lib/gsap'
+import { OK } from '@/lib/motion'
 import { LocaleSwitcher } from './LocaleSwitcher'
 import { MobileMenu } from './MobileMenu'
 
@@ -24,10 +26,52 @@ export function Nav({
   closeLabel: string
 }) {
   const [open, setOpen] = useState(false)
+  const headerRef = useRef<HTMLElement>(null)
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia()
+
+    mm.add(OK, () => {
+      const header = headerRef.current
+      if (!header) return
+
+      const trigger = ScrollTrigger.create({
+        onUpdate: (self) =>
+          gsap.to(header, {
+            yPercent: self.direction === 1 && self.scroll() > 240 ? -100 : 0,
+            duration: 0.4,
+            ease: 'power3.out',
+            overwrite: true,
+          }),
+      })
+
+      return () => trigger.kill()
+    })
+
+    return () => mm.revert()
+  })
+
+  // ScrollSmoother owns scrolling, so native anchor jumps would fight it.
+  // Falls back to scrollIntoView when the smoother is not running (reduced
+  // motion), which is exactly the behaviour those visitors should get.
+  const handleAnchor = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    const target = document.querySelector(href)
+    if (!target) return
+
+    e.preventDefault()
+    const smoother = ScrollSmoother.get()
+
+    if (smoother) {
+      smoother.scrollTo(target, true, 'top top')
+    } else {
+      target.scrollIntoView()
+    }
+  }
 
   return (
     <>
       <header
+        ref={headerRef}
         data-nav
         className="bg-canvas/80 border-rule fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md"
       >
@@ -47,6 +91,7 @@ export function Nav({
               <a
                 key={link.href}
                 href={link.href}
+                onClick={(e) => handleAnchor(e, link.href)}
                 className="u-label text-text-dim hover:text-text transition-colors duration-200"
               >
                 {link.label}

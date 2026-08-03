@@ -1,6 +1,7 @@
 import { site } from '@/data/site'
 import type { Locale } from '@/i18n/config'
 import type { Dictionary } from '@/i18n/dictionary'
+import { Marquee } from '@/components/motion/Marquee'
 import { LocalTime } from './LocalTime'
 
 export function Footer({
@@ -10,30 +11,20 @@ export function Footer({
   dict: Dictionary['footer']
   locale: Locale
 }) {
-  const marqueeItems = Array.from({ length: 4 }, (_, i) => i)
-
   return (
     <footer className="border-rule overflow-hidden border-t">
       <div className="footer-inner">
-        <div className="border-rule overflow-hidden border-b py-8">
-          <div className="footer-marquee flex w-max">
-            {[0, 1].map((copy) => (
-              <div
-                key={copy}
-                aria-hidden={copy === 1 || undefined}
-                className="flex shrink-0 items-center"
-              >
-                {marqueeItems.map((i) => (
-                  <span key={i} className="text-h1 u-wide flex items-center">
-                    <span className="px-8">{dict.marquee}</span>
-                    <span aria-hidden className="text-accent">
-                      ✳
-                    </span>
-                  </span>
-                ))}
-              </div>
+        <div className="border-rule border-b py-8">
+          <Marquee duration={34}>
+            {[0, 1, 2, 3].map((i) => (
+              <span key={i} className="text-h1 u-wide flex items-center">
+                <span className="px-8">{dict.marquee}</span>
+                <span aria-hidden className="text-accent">
+                  ✳
+                </span>
+              </span>
             ))}
-          </div>
+          </Marquee>
         </div>
 
         <div className="grid-page items-baseline gap-y-8 py-10">
