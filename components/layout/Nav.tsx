@@ -78,9 +78,11 @@ export function Nav({
         className="bg-canvas/80 border-rule fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md"
       >
         <div className="grid-page items-center py-4">
+          {/* `py-2` on every nav control: the 11–13px mono type gives a ~19px
+              hit box, under the 24px minimum touch target (axe: target-size). */}
           <TransitionLink
             href={`/${locale}`}
-            className="u-meta text-text hover:text-accent col-span-6 transition-colors duration-200 md:col-span-4"
+            className="u-meta text-text hover:text-accent col-span-6 inline-flex items-center py-2 transition-colors duration-200 md:col-span-4"
           >
             {site.shortName}
           </TransitionLink>
@@ -94,7 +96,7 @@ export function Nav({
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleAnchor(e, link.href)}
-                className="u-label text-text-dim hover:text-text transition-colors duration-200"
+                className="u-label text-text-dim hover:text-text inline-flex items-center px-2 py-2 transition-colors duration-200"
               >
                 {link.label}
               </a>
@@ -108,7 +110,7 @@ export function Nav({
               onClick={() => setOpen(true)}
               aria-expanded={open}
               className={cn(
-                'u-label text-text hover:text-accent transition-colors duration-200 md:hidden',
+                'u-label text-text hover:text-accent inline-flex items-center py-2 transition-colors duration-200 md:hidden',
               )}
             >
               {menuLabel}

@@ -56,6 +56,9 @@ export function Work({
                 type: 'lines',
                 mask: 'lines',
                 autoSplit: true,
+                // Line splits keep whole words in order, so no aria-label is
+                // needed — and adding one to an <h3> is prohibited anyway.
+                aria: 'none',
                 onSplit(self) {
                   return gsap.from(self.lines, {
                     yPercent: 110,

@@ -60,7 +60,11 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
             type: 'chars,words,lines',
             mask: 'lines',
             autoSplit: true,
-            aria: 'auto',
+            // NOT 'auto': that puts `aria-label` on the split <span>, and a
+            // span has no implicit role, so aria-label is prohibited there
+            // (axe: aria-prohibited-attr). The markup carries an sr-only copy
+            // of the name instead, with the animated lines aria-hidden.
+            aria: 'none',
             onSplit(self) {
               return gsap.from(self.chars, {
                 yPercent: 110,
@@ -119,16 +123,22 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
          */}
         <div className="col-span-12">
           <h1 className="text-mega u-wide text-text">
+            {/* The only copy assistive tech reads: the split version below is
+                broken into per-character elements, which screen readers would
+                otherwise spell out letter by letter. */}
+            <span className="sr-only">
+              {dict.lineOne} {dict.lineTwo}
+            </span>
             {/*
              * Each line is its own block so SplitText can mask per line.
              * `whitespace-nowrap` is load-bearing: splitting into chars wraps
              * every character in its own element, and without it the browser
              * happily breaks a line mid-word (JACOBO → JAC / OBO).
              */}
-            <span className="hero-line block whitespace-nowrap">
+            <span aria-hidden className="hero-line block whitespace-nowrap">
               {dict.lineOne}
             </span>
-            <span className="hero-line block whitespace-nowrap">
+            <span aria-hidden className="hero-line block whitespace-nowrap">
               {dict.lineTwo}
             </span>
           </h1>

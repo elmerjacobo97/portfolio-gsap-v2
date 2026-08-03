@@ -27,18 +27,20 @@ export function LocaleSwitcher({
     <Link
       href={href}
       prefetch
-      aria-label={label}
-      className="u-meta text-text-dim hover:text-accent transition-colors duration-200"
+      className="u-meta text-text-dim hover:text-accent inline-flex items-center py-2 transition-colors duration-200"
     >
-      <span aria-hidden className={locale === 'es' ? 'text-text' : undefined}>
-        ES
-      </span>
+      {/*
+       * No aria-label here. An aria-label that does not contain the visible
+       * text ("ES / EN") makes the accessible name diverge from what a voice
+       * -control user would say (axe: label-content-name-mismatch). The
+       * sr-only suffix appends the intent instead of replacing the label.
+       */}
+      <span className={locale === 'es' ? 'text-text' : undefined}>ES</span>
       <span aria-hidden className="text-ink-600 mx-1">
         /
       </span>
-      <span aria-hidden className={locale === 'en' ? 'text-text' : undefined}>
-        EN
-      </span>
+      <span className={locale === 'en' ? 'text-text' : undefined}>EN</span>
+      <span className="sr-only"> — {label}</span>
     </Link>
   )
 }

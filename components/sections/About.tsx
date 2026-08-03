@@ -21,6 +21,10 @@ export function About({ dict }: { dict: Dictionary['about'] }) {
           type: 'lines',
           mask: 'lines',
           autoSplit: true,
+          // 'auto' would add aria-label to a <p>, where it is prohibited.
+          // Safe to skip here: splitting by line keeps whole words in order,
+          // so the text still reads correctly.
+          aria: 'none',
           onSplit(self) {
             return gsap.from(self.lines, {
               yPercent: 100,
@@ -67,7 +71,7 @@ export function About({ dict }: { dict: Dictionary['about'] }) {
         >
           <span className="bg-accent/70 absolute top-1/2 -left-1/4 h-px w-[150%] origin-center -rotate-45" />
           <span className="about-portrait-color bg-accent/10 absolute inset-0 opacity-0" />
-          <span className="u-meta text-chalk-400/25 absolute right-5 bottom-5">
+          <span className="u-meta text-chalk-400 absolute right-5 bottom-5">
             {site.city}, {site.country}
           </span>
         </div>

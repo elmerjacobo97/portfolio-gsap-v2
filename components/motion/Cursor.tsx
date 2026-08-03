@@ -39,7 +39,13 @@ export function Cursor() {
     <div
       ref={dotRef}
       aria-hidden
-      className="cursor-dot bg-accent pointer-events-none fixed top-0 left-0 z-[80] hidden size-3 -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-difference [@media(pointer:fine)]:block"
+      /*
+     * The reduced-motion query is part of the CSS, not just the matchMedia
+     * branch: without it the dot still renders for reduced-motion visitors on
+     * a fine pointer, frozen at the top-left corner because no mousemove
+     * listener is ever attached.
+     */
+    className="cursor-dot bg-accent pointer-events-none fixed top-0 left-0 z-[80] hidden size-3 -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-difference [@media(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:block"
     />
   )
 }

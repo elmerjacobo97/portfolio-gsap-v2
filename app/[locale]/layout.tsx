@@ -11,6 +11,8 @@ import { Footer } from '@/components/layout/Footer'
 import { GridOverlay } from '@/components/layout/GridOverlay'
 import { Nav } from '@/components/layout/Nav'
 import { SkipLink } from '@/components/layout/SkipLink'
+import { JsonLd } from '@/components/layout/JsonLd'
+import { buildAlternates } from '@/lib/seo'
 import { Curtain } from '@/components/motion/Curtain'
 import { Cursor } from '@/components/motion/Cursor'
 import { Intro } from '@/components/motion/Intro'
@@ -54,15 +56,36 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(site.url),
-    title: dict.meta.title,
+    title: {
+      default: dict.meta.title,
+      template: `%s — ${site.shortName}`,
+    },
     description: dict.meta.description,
-    alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        es: '/es',
-        en: '/en',
-        'x-default': '/es',
-      },
+    applicationName: site.shortName,
+    authors: [{ name: site.name, url: site.url }],
+    creator: site.name,
+    keywords: [...site.stack],
+    alternates: buildAlternates(locale),
+    openGraph: {
+      type: 'website',
+      siteName: site.shortName,
+      title: dict.meta.title,
+      description: dict.meta.description,
+      url: `/${locale}`,
+      locale: localeTag[locale].replace('-', '_'),
+      alternateLocale: locales
+        .filter((l) => l !== locale)
+        .map((l) => localeTag[l].replace('-', '_')),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: dict.meta.title,
+      description: dict.meta.description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
     },
   }
 }
@@ -118,6 +141,8 @@ export default async function RootLayout({
          * block, so a fixed element nested inside it would scroll with the
          * page instead of staying pinned to the viewport.
          */}
+        <JsonLd locale={locale} description={dict.meta.description} />
+
         <SkipLink label={dict.nav.skipToContent} />
         <GridOverlay />
         <Nav

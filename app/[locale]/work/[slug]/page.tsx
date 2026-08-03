@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { getProject, nextProject, projectSlugs } from '@/data/projects'
-import { hasLocale, locales } from '@/i18n/config'
+import { hasLocale } from '@/i18n/config'
+import { buildAlternates } from '@/lib/seo'
 import { getDictionary } from '@/i18n/get-dictionary'
 import { t } from '@/i18n/t'
 import { site } from '@/data/site'
@@ -31,19 +32,26 @@ export async function generateMetadata({
   const project = getProject(slug)
   if (!project) return {}
 
-  const title = `${t(project.title, locale)} — ${site.shortName}`
+  // Bare title only: the root layout's `title.template` appends
+  // " — Elmer Jacobo". Adding the suffix here too produced
+  // "Operations dashboard — Elmer Jacobo — Elmer Jacobo".
+  const title = t(project.title, locale)
+  const description = t(project.summary, locale)
+  const fullTitle = `${title} — ${site.shortName}`
 
   return {
     metadataBase: new URL(site.url),
     title,
-    description: t(project.summary, locale),
-    alternates: {
-      canonical: `/${locale}/work/${slug}`,
-      languages: Object.fromEntries([
-        ...locales.map((l) => [l, `/${l}/work/${slug}`]),
-        ['x-default', `/es/work/${slug}`],
-      ]),
+    description,
+    alternates: buildAlternates(locale, `/work/${slug}`),
+    // OG/Twitter titles bypass the template, so they carry the suffix.
+    openGraph: {
+      type: 'article',
+      title: fullTitle,
+      description,
+      url: `/${locale}/work/${slug}`,
     },
+    twitter: { card: 'summary_large_image', title: fullTitle, description },
   }
 }
 
