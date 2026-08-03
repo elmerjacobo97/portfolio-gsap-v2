@@ -1,26 +1,223 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * `static` is required: Tailwind v4 prunes theme variables it does not see used
+ * by a generated utility, and several tokens here are consumed only by the
+ * hand-written @utility and @layer base rules below.
+ */
+@theme static {
+  /* ── COLOR ──────────────────────────────────────────────────────────── */
+  --color-ink-950: #050505; /* page canvas */
+  --color-ink-900: #0a0a0a;
+  --color-ink-850: #101010; /* raised surfaces, media wells */
+  --color-ink-800: #161616; /* cards */
+  --color-ink-700: #242424; /* hairline rules — the visible grid */
+  --color-ink-600: #3a3a3a; /* outlined numerals, disabled */
+
+  --color-chalk-50: #f7f7f2; /* primary text — warm off-white, never #fff */
+  --color-chalk-200: #c9c9c2;
+  --color-chalk-400: #8a8a82; /* mono meta labels */
+  --color-chalk-600: #55554f;
+
+  --color-acid-300: #e9ff9b;
+  --color-acid-400: #deff6b;
+  --color-acid-500: #d4ff3f; /* THE accent */
+  --color-acid-600: #b4e01f;
+  --color-acid-700: #8fb414;
+
+  --color-alert-500: #ff4a1c; /* form errors only — never the accent */
+
+  /* Semantic aliases. Components use these, never the raw scale. */
+  --color-canvas: var(--color-ink-950);
+  --color-surface: var(--color-ink-850);
+  --color-rule: var(--color-ink-700);
+  --color-text: var(--color-chalk-50);
+  --color-text-dim: var(--color-chalk-400);
+  --color-accent: var(--color-acid-500);
+
+  /* ── TYPE ───────────────────────────────────────────────────────────── */
+  --font-display: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-space-mono), ui-monospace, "SF Mono", monospace;
+
+  --text-mega: clamp(3.25rem, 12.5vw, 15rem);
+  --text-mega--line-height: 0.82;
+  --text-mega--letter-spacing: -0.045em;
+  --text-mega--font-weight: 800;
+
+  --text-numeral: clamp(4rem, 14vw, 16rem);
+  --text-numeral--line-height: 0.78;
+  --text-numeral--letter-spacing: -0.05em;
+  --text-numeral--font-weight: 800;
+
+  --text-display: clamp(2.75rem, 7.5vw, 8rem);
+  --text-display--line-height: 0.88;
+  --text-display--letter-spacing: -0.035em;
+  --text-display--font-weight: 700;
+
+  --text-h1: clamp(2rem, 4.6vw, 4.25rem);
+  --text-h1--line-height: 0.94;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h1--font-weight: 700;
+
+  --text-h2: clamp(1.625rem, 3vw, 2.75rem);
+  --text-h2--line-height: 1;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 700;
+
+  --text-h3: clamp(1.25rem, 1.9vw, 1.625rem);
+  --text-h3--line-height: 1.1;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h3--font-weight: 600;
+
+  --text-lead: clamp(1.0625rem, 1.5vw, 1.4375rem);
+  --text-lead--line-height: 1.42;
+
+  --text-body: clamp(0.9375rem, 1vw, 1.0625rem);
+  --text-body--line-height: 1.55;
+
+  --text-meta: 0.8125rem; /* 13px — mono meta rails */
+  --text-meta--line-height: 1.1;
+  --text-meta--letter-spacing: 0.12em;
+
+  --text-micro: 0.6875rem; /* 11px — eyebrows, indices */
+  --text-micro--line-height: 1.1;
+  --text-micro--letter-spacing: 0.2em;
+
+  /* ── LAYOUT ─────────────────────────────────────────────────────────── */
+  --container-page: 100rem; /* 1600px */
+  --spacing-gutter: clamp(1rem, 3.2vw, 2.5rem);
+  --spacing-section: clamp(6rem, 14vw, 14rem);
+  --spacing-hair: 1px;
+
+  /* ── MOTION ─────────────────────────────────────────────────────────── */
+  --ease-brutal: cubic-bezier(0.16, 1, 0.3, 1); /* CSS twin of expo.out */
+  --ease-cut: cubic-bezier(0.85, 0, 0.15, 1); /* CSS twin of expo.inOut */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ── UTILITIES ────────────────────────────────────────────────────────── */
+
+/* The 12-column bed. Responsive col-spans do all the work on top of it. */
+@utility grid-page {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--spacing-gutter);
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Same horizontal rhythm as grid-page, without the columns. */
+@utility page-pad {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* The hard horizontal rule motif. */
+@utility rule-h {
+  display: block;
+  block-size: var(--spacing-hair);
+  inline-size: 100%;
+  background: var(--color-rule);
+}
+
+/* The expanded-grotesque display voice — Archivo's wdth axis pushed to 118. */
+@utility u-wide {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 118, "wght" 800;
+  text-transform: uppercase;
+}
+
+/* Mono eyebrow / index / meta label. */
+@utility u-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  line-height: var(--text-micro--line-height);
+  letter-spacing: var(--text-micro--letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+
+@utility u-meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  letter-spacing: var(--text-meta--letter-spacing);
+  text-transform: uppercase;
+}
+
+/* Outlined numeral used behind process steps and section indices. */
+@utility u-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-ink-600);
+}
+
+/* ── BASE ─────────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    background: var(--color-canvas);
+    color-scheme: dark;
+    /* MUST stay auto — native smooth scrolling fights ScrollSmoother. */
+    scroll-behavior: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    color: var(--color-text);
+    /* Do NOT set overflow here — ScrollSmoother owns the wrapper. */
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-ink-950);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 0;
+  }
+
+  /* The one pre-animation state. GSAP flips it via autoAlpha. */
+  .anim-clip {
+    visibility: hidden;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  .anim-clip {
+    visibility: visible !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
