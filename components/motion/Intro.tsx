@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 
 import { gsap, ScrollSmoother, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { markIntroDone } from '@/lib/intro'
@@ -15,12 +15,13 @@ const SEEN_KEY = 'intro-seen'
  */
 export function Intro() {
   const rootRef = useRef<HTMLDivElement>(null)
-  const [count, setCount] = useState(0)
 
   useGSAP(
     () => {
       const root = rootRef.current
       if (!root) return
+      const count = root.querySelector<HTMLElement>('.intro-count')
+      const bar = root.querySelector<HTMLElement>('.intro-bar')
 
       const skip =
         window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
@@ -50,6 +51,7 @@ export function Intro() {
             sessionStorage.setItem(SEEN_KEY, '1')
             ScrollSmoother.get()?.paused(false)
             ScrollTrigger.refresh()
+            gsap.set(root, { display: 'none' })
             markIntroDone()
           },
         })
@@ -60,23 +62,25 @@ export function Intro() {
             v: 100,
             duration: 1.5,
             snap: { v: 1 },
-            onUpdate: () => setCount(Math.round(counter.v)),
+            onUpdate: () => {
+              if (count) count.textContent = String(Math.round(counter.v)).padStart(3, '0')
+            },
           },
           0,
         )
           .fromTo(
-            '.intro-bar',
+            bar,
             { scaleX: 0 },
             { scaleX: 1, duration: 1.5, transformOrigin: 'left center' },
             0,
           )
-          .to('.intro-bar', {
+          .to(bar, {
             scaleX: 0,
             transformOrigin: 'right center',
             duration: 0.35,
             ease: 'power3.in',
           })
-          .to('.intro-count', { yPercent: -110, duration: 0.5, ease: 'power4.in' }, '<')
+          .to(count, { yPercent: -110, duration: 0.5, ease: 'power4.in' }, '<')
           .to(root, { yPercent: -100, duration: 0.9, ease: 'expo.inOut' }, '-=0.1')
       })
 
@@ -98,12 +102,13 @@ export function Intro() {
     >
       <div className="page-pad pb-10">
         <span className="intro-count text-display u-wide text-text block">
-          {String(count).padStart(3, '0')}
+          000
         </span>
       </div>
       <span
         aria-hidden
-        className="intro-bar bg-accent block h-0.5 w-full origin-left scale-x-0"
+        className="intro-bar bg-accent block h-0.5 w-full origin-left"
+        style={{ transform: 'scaleX(0)' }}
       />
     </div>
   )

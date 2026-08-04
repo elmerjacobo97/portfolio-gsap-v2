@@ -41,11 +41,15 @@ export function Services({
 
   const { contextSafe } = useGSAP({ scope: rootRef })
 
-  const selectService = (next: number) => {
+  const selectService = (next: number, root: HTMLElement) => {
     if (next === active) return
 
-    const panels = gsap.utils.toArray<HTMLElement>('.service-panel')
-    const indicators = gsap.utils.toArray<HTMLElement>('.service-indicator')
+    const panels = gsap.utils.toArray<HTMLElement>(
+      root.querySelectorAll('.service-panel'),
+    )
+    const indicators = gsap.utils.toArray<HTMLElement>(
+      root.querySelectorAll('.service-indicator'),
+    )
     const outgoing = panels[active]
     const incoming = panels[next]
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -115,6 +119,28 @@ export function Services({
         },
         0,
       )
+      .from(
+        incoming.querySelectorAll('.service-panel-copy > *'),
+        {
+          opacity: 0,
+          y: 18,
+          stagger: 0.05,
+          duration: reduced ? 0 : DUR.fast,
+          ease: EASE.settle,
+        },
+        reduced ? 0 : 0.3,
+      )
+      .from(
+        incoming.querySelectorAll('.service-deliverable'),
+        {
+          opacity: 0,
+          x: 14,
+          stagger: 0.04,
+          duration: reduced ? 0 : DUR.fast,
+          ease: EASE.sweep,
+        },
+        reduced ? 0 : 0.42,
+      )
 
     transitionRef.current = timeline
     setActive(next)
@@ -149,7 +175,7 @@ export function Services({
         <SectionHeader index={dict.index} title={dict.title} lead={dict.lead} />
       </div>
 
-      <div className="grid-page mt-20 items-stretch">
+      <div className="grid-page mt-12 items-stretch md:mt-16 lg:mt-20">
         <div className="border-rule col-span-12 flex flex-col border-t lg:col-span-5">
           {services.map((service, index) => {
             const selected = index === active
@@ -162,17 +188,19 @@ export function Services({
                 type="button"
                 aria-pressed={selected}
                 aria-controls={panelId}
-                onClick={() => selectService(index)}
+                onClick={(event) =>
+                  selectService(index, event.currentTarget.closest('section')!)
+                }
                 onMouseEnter={(event) => enterTab(event.currentTarget)}
                 onMouseLeave={(event) => leaveTab(event.currentTarget)}
                 onFocus={(event) => enterTab(event.currentTarget)}
                 onBlur={(event) => leaveTab(event.currentTarget)}
-                className="border-rule group relative grid w-full flex-1 grid-cols-[3rem_1fr_auto] items-center gap-4 overflow-hidden border-b py-6 text-left md:grid-cols-[4rem_1fr_auto] lg:py-8"
+                className="border-rule group relative grid w-full flex-1 grid-cols-[3rem_1fr_auto] items-center gap-4 overflow-hidden border-b py-5 text-left md:grid-cols-[4rem_1fr_auto] lg:py-8"
               >
                 <span
                   aria-hidden
                   className="service-indicator bg-accent absolute inset-x-0 bottom-0 block h-0.5 origin-left"
-                  style={{ transform: `scaleX(${selected ? 1 : 0})` }}
+                  style={{ transform: `scaleX(${index === 0 ? 1 : 0})` }}
                 />
                 <span
                   className={cn(
@@ -204,7 +232,7 @@ export function Services({
           })}
         </div>
 
-        <div className="border-rule bg-ink-900 relative col-span-12 min-h-[42rem] overflow-hidden border-x border-b lg:col-span-7 lg:border-t lg:border-l-0">
+        <div className="border-rule bg-ink-900 relative col-span-12 grid overflow-hidden border-x border-b lg:col-span-7 lg:min-h-[42rem] lg:border-t lg:border-l-0">
           <span className="plate-bed absolute inset-0 opacity-40" />
           {services.map((service, index) => {
             const selected = index === active
@@ -215,9 +243,12 @@ export function Services({
                 id={`service-panel-${service.code}`}
                 aria-labelledby={`service-button-${service.code}`}
                 aria-hidden={!selected}
-                className="service-panel absolute inset-0 flex flex-col justify-between p-6 sm:p-10 lg:p-12"
+                className={cn(
+                  'service-panel col-start-1 row-start-1 flex flex-col justify-between p-6 sm:p-10 lg:p-12',
+                  selected ? 'pointer-events-auto' : 'pointer-events-none',
+                )}
               >
-                <div className="relative z-10">
+                <div className="service-panel-copy relative z-10">
                   <div className="flex items-start justify-between gap-6">
                     <p className="u-label text-accent">Service / {service.code}</p>
                     <span
@@ -236,13 +267,13 @@ export function Services({
                   </p>
                 </div>
 
-                <div className="relative z-10 mt-12 lg:grid lg:grid-cols-[8rem_1fr] lg:gap-8">
+                <div className="service-panel-deliverables relative z-10 mt-12 lg:grid lg:grid-cols-[8rem_1fr] lg:gap-8">
                   <p className="u-label mb-4 lg:mb-0">{dict.deliverables}</p>
                   <ul className="border-rule border-t">
                     {t(service.deliverables, locale).map((item) => (
                       <li
                         key={item}
-                        className="text-body text-chalk-200 border-rule flex gap-4 border-b py-3"
+                        className="service-deliverable text-body text-chalk-200 border-rule flex gap-4 border-b py-3"
                       >
                         <span aria-hidden className="text-accent">
                           /

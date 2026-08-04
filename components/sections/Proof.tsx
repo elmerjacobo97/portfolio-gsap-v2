@@ -1,10 +1,58 @@
+'use client'
+
+import { useRef } from 'react'
+
 import type { Dictionary } from '@/i18n/dictionary'
+import { gsap, useGSAP } from '@/lib/gsap'
+import { DUR, EASE, OK } from '@/lib/motion'
 
 export function Proof({ dict }: { dict: Dictionary['proof'] }) {
+  const rootRef = useRef<HTMLElement>(null)
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+      mm.add(OK, () => {
+        const timeline = gsap.timeline({
+          scrollTrigger: { trigger: rootRef.current, start: 'top 72%', once: true },
+        })
+
+        timeline
+          .from('.proof-copy > *', {
+            opacity: 0,
+            y: 20,
+            stagger: 0.08,
+            duration: DUR.base,
+            ease: EASE.settle,
+            immediateRender: false,
+          })
+          .from(
+            '.proof-row',
+            {
+              opacity: 0,
+              x: 24,
+              stagger: 0.1,
+              duration: DUR.base,
+              ease: EASE.brutal,
+              immediateRender: false,
+            },
+            '-=0.25',
+          )
+      })
+
+      return () => mm.revert()
+    },
+    { scope: rootRef },
+  )
+
   return (
-    <section className="border-rule border-y" aria-labelledby="proof-title">
+    <section
+      ref={rootRef}
+      className="border-rule border-t"
+      aria-labelledby="proof-title"
+    >
       <div className="grid-page py-[var(--spacing-section)]">
-        <div className="col-span-12 lg:col-span-4">
+        <div className="proof-copy col-span-12 lg:col-span-4">
           <p className="u-label text-accent mb-5">{dict.index}</p>
           <h2 id="proof-title" className="text-h1 u-wide max-w-[9ch]">
             {dict.title}

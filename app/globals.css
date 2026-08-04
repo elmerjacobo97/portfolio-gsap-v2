@@ -242,12 +242,26 @@
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+
+  .marquee-track {
+    width: 100%;
+    transform: none !important;
+  }
+
+  .marquee-copy-primary {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .marquee-copy-clone {
+    display: none;
+  }
 }
 
 /* Horizontal process exists only when its ScrollTrigger exists. Keeping these
  * mechanics out of `md:` utilities prevents reduced-motion desktop users from
  * receiving a 400vw track with no animation to bring later panels onscreen. */
-@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   .process-pin {
     height: 100svh;
     overflow: hidden;

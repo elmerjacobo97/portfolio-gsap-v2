@@ -38,6 +38,7 @@ export function Marquee({
           repeat: -1,
           duration,
           ease: 'none',
+          paused: true,
         })
 
         const setTimeScale = gsap.quickTo(loop, 'timeScale', {
@@ -46,6 +47,10 @@ export function Marquee({
         })
 
         const trigger = ScrollTrigger.create({
+          trigger: rootRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          onToggle: (self) => (self.isActive ? loop.play() : loop.pause()),
           onUpdate: (self) => setTimeScale(self.direction === 1 ? 1 : -1),
         })
 
@@ -63,8 +68,8 @@ export function Marquee({
   return (
     <div ref={rootRef} className={cn('overflow-hidden', className)}>
       <div className={cn('marquee-track flex w-max', trackClassName)}>
-        <div className="flex shrink-0 items-center">{children}</div>
-        <div aria-hidden className="flex shrink-0 items-center">
+        <div className="marquee-copy-primary flex shrink-0 items-center">{children}</div>
+        <div aria-hidden className="marquee-copy-clone flex shrink-0 items-center">
           {children}
         </div>
       </div>

@@ -5,8 +5,8 @@ import { useRef } from 'react'
 
 import type { Dictionary } from '@/i18n/dictionary'
 import { Counter } from '@/components/motion/Counter'
-import { gsap, SplitText, useGSAP } from '@/lib/gsap'
-import { OK } from '@/lib/motion'
+import { gsap, useGSAP } from '@/lib/gsap'
+import { DUR, EASE, OK } from '@/lib/motion'
 import { SectionHeader } from './SectionHeader'
 
 export function About({ dict }: { dict: Dictionary['about'] }) {
@@ -17,25 +17,29 @@ export function About({ dict }: { dict: Dictionary['about'] }) {
       const mm = gsap.matchMedia()
 
       mm.add(OK, () => {
-        const split = SplitText.create('.about-bio p', {
-          type: 'lines',
-          mask: 'lines',
-          autoSplit: true,
-          // 'auto' would add aria-label to a <p>, where it is prohibited.
-          // Safe to skip here: splitting by line keeps whole words in order,
-          // so the text still reads correctly.
-          aria: 'none',
-          onSplit(self) {
-            return gsap.from(self.lines, {
-              yPercent: 100,
-              autoAlpha: 0,
-              stagger: 0.06,
-              duration: 0.85,
-              ease: 'power3.out',
-              scrollTrigger: { trigger: '.about-bio', start: 'top 75%' },
-            })
-          },
+        const entrance = gsap.timeline({
+          scrollTrigger: { trigger: rootRef.current, start: 'top 72%', once: true },
         })
+
+        entrance
+          .from('.about-portrait', {
+            clipPath: 'inset(0% 0% 100% 0%)',
+            duration: DUR.slow,
+            ease: EASE.brutal,
+            immediateRender: false,
+          })
+          .from(
+            '.about-bio p',
+            {
+              opacity: 0,
+              y: 24,
+              stagger: 0.12,
+              duration: DUR.base,
+              ease: EASE.settle,
+              immediateRender: false,
+            },
+            '-=0.55',
+          )
 
         // Cross-fade only ever touches opacity — never `filter: grayscale()`,
         // which forces a full repaint of the layer on every frame on mobile.
@@ -50,7 +54,6 @@ export function About({ dict }: { dict: Dictionary['about'] }) {
           },
         })
 
-        return () => split.revert()
       })
 
       return () => mm.revert()
@@ -59,11 +62,15 @@ export function About({ dict }: { dict: Dictionary['about'] }) {
   )
 
   return (
-    <section id="about" ref={rootRef} className="py-[var(--spacing-section)]">
+    <section
+      id="about"
+      ref={rootRef}
+      className="border-rule border-t py-[var(--spacing-section)]"
+    >
       <div className="grid-page">
         <SectionHeader index={dict.index} title={dict.title} />
 
-        <div className="bg-ink-850 border-rule @container relative col-span-12 mt-16 aspect-4/5 overflow-hidden border sm:col-span-6 lg:col-span-5">
+        <div className="about-portrait bg-ink-850 border-rule @container relative col-span-12 mt-16 aspect-4/5 overflow-hidden border sm:col-span-8 sm:col-start-3 lg:col-span-5 lg:col-start-1">
           <Image
             src="/images/profile/elmer-jacobo-portrait.png"
             alt={dict.portraitAlt}
@@ -92,18 +99,20 @@ export function About({ dict }: { dict: Dictionary['about'] }) {
           {/* gap-x-10 and min-w-0: at three equal columns inside a six-column
               band, "100%" at text-h1 all but touched the next cell and pushed
               its own label into the page gutter. */}
-          <dl className="border-rule mt-14 grid grid-cols-3 gap-x-10 gap-y-8 border-t pt-10">
+          <dl className="border-rule mt-14 grid border-t sm:grid-cols-3 sm:gap-x-10 sm:gap-y-8 sm:pt-10">
             {dict.stats.map((stat) => (
-              <div key={stat.label} className="min-w-0">
-                <dt className="sr-only">{stat.label}</dt>
-                <dd>
+              <div
+                key={stat.label}
+                className="border-rule grid min-w-0 grid-cols-[6rem_1fr] items-baseline border-b py-5 sm:block sm:border-b-0 sm:py-0"
+              >
+                <dt className="u-label col-start-2 row-start-1 sm:mt-3 sm:block">
+                  {stat.label}
+                </dt>
+                <dd className="col-start-1 row-start-1">
                   <Counter
                     value={stat.value}
                     className="text-h2 u-wide text-accent block"
                   />
-                  <span className="u-label mt-3 block text-pretty">
-                    {stat.label}
-                  </span>
                 </dd>
               </div>
             ))}

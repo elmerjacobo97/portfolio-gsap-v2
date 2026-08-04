@@ -5,13 +5,13 @@
  */
 export const OK = '(prefers-reduced-motion: no-preference)'
 export const REDUCED = '(prefers-reduced-motion: reduce)'
-export const DESKTOP = '(min-width: 768px) and (prefers-reduced-motion: no-preference)'
+export const DESKTOP = '(min-width: 1024px) and (prefers-reduced-motion: no-preference)'
 /**
  * The reduced-motion clause is not optional here: this is the query the mobile
  * branch of a section pairs with DESKTOP, and without it the mobile branch is
  * the one hole through which animation reaches a user who asked for none.
  */
-export const MOBILE = '(max-width: 767px) and (prefers-reduced-motion: no-preference)'
+export const MOBILE = '(max-width: 1023px) and (prefers-reduced-motion: no-preference)'
 export const FINE = '(pointer: fine) and (prefers-reduced-motion: no-preference)'
 
 /**

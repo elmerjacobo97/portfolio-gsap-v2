@@ -25,8 +25,22 @@ export function Testimonials({
       mm.add(OK, () => {
         const rows = gsap.utils.toArray<HTMLElement>('.testimonial-row')
 
-        rows.forEach((row) => {
+        const header = rootRef.current?.querySelector('.testimonials-header')
+        if (header) {
+          gsap.from(header.children, {
+            opacity: 0,
+            y: 22,
+            stagger: 0.08,
+            duration: DUR.base,
+            ease: EASE.settle,
+            immediateRender: false,
+            scrollTrigger: { trigger: header, start: 'top 78%', once: true },
+          })
+        }
+
+        rows.forEach((row, index) => {
           const rule = row.querySelector('.testimonial-rule')
+          const mark = row.querySelector('.testimonial-mark')
           const quote = row.querySelector('.testimonial-quote')
           const attribution = row.querySelector('.testimonial-attribution')
 
@@ -43,10 +57,22 @@ export function Testimonials({
               immediateRender: false,
             })
             .from(
+              mark,
+              {
+                opacity: 0,
+                scale: 0.6,
+                duration: DUR.base,
+                ease: EASE.brutal,
+                immediateRender: false,
+              },
+              '-=0.45',
+            )
+            .from(
               quote,
               {
                 opacity: 0,
-                y: 48,
+                x: index % 2 === 0 ? -20 : 20,
+                y: 14,
                 duration: DUR.slow,
                 ease: EASE.brutal,
                 immediateRender: false,
@@ -77,14 +103,27 @@ export function Testimonials({
       id="testimonials"
       ref={rootRef}
       aria-labelledby="testimonials-title"
-      className="border-rule bg-ink-900 text-text relative overflow-hidden border-y"
+      className="border-rule bg-ink-900 text-text relative overflow-hidden border-t"
     >
-      <span
+      <div
         aria-hidden
-        className="plate-bed pointer-events-none absolute inset-0 opacity-15"
-      />
+        className="pointer-events-none absolute inset-0 flex justify-center"
+      >
+        <div className="grid-page h-full">
+          {Array.from({ length: 12 }, (_, index) => (
+            <span
+              key={index}
+              className={
+                index < 4
+                  ? 'border-ink-700/60 h-full border-r'
+                  : 'border-ink-700/60 hidden h-full border-r md:block'
+              }
+            />
+          ))}
+        </div>
+      </div>
 
-      <header className="grid-page relative py-[var(--spacing-section)]">
+      <header className="testimonials-header grid-page relative py-[var(--spacing-section)]">
         <div className="col-span-12 lg:col-span-7">
           <p className="u-label text-accent mb-5">{dict.index}</p>
           <h2 id="testimonials-title" className="text-h1 u-wide max-w-[12ch]">
@@ -111,12 +150,12 @@ export function Testimonials({
 
             <span
               aria-hidden
-              className="u-wide text-accent col-span-2 text-[clamp(4.5rem,10vw,10rem)] leading-[0.62] opacity-35"
+              className="testimonial-mark u-wide text-accent absolute top-14 left-[var(--spacing-gutter)] text-[4.5rem] leading-[0.62] opacity-35 md:static md:col-span-2 md:text-[clamp(4.5rem,10vw,10rem)]"
             >
               “
             </span>
 
-            <div className="col-span-10 md:col-span-9 lg:col-span-8 lg:col-start-4">
+            <div className="col-span-12 pl-14 md:col-span-9 md:pl-0 lg:col-span-8 lg:col-start-4">
               <blockquote>
                 <p className="testimonial-quote font-display text-[clamp(1.7rem,3.8vw,4.5rem)] leading-[1.03] font-semibold tracking-[-0.035em] text-balance">
                   {t(testimonial.quote, locale)}

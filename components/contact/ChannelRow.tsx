@@ -76,6 +76,8 @@ export function ChannelRow({
       onClick={handleClick}
       onMouseEnter={(e) => handleEnter(e.currentTarget)}
       onMouseLeave={(e) => handleLeave(e.currentTarget)}
+      onFocus={(e) => handleEnter(e.currentTarget)}
+      onBlur={(e) => handleLeave(e.currentTarget)}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       className="channel-row border-rule group relative block overflow-hidden border-t py-6"
     >
@@ -87,10 +89,10 @@ export function ChannelRow({
         style={{ transform: 'scaleX(0)', transformOrigin: 'left center' }}
       />
       <span className="relative block px-1">
-        <span className="u-label block transition-colors duration-300 group-hover:!text-ink-950/60">
+        <span className="u-label block transition-colors duration-300 group-hover:!text-ink-950/60 group-focus-visible:!text-ink-950/60">
           {label}
         </span>
-        <span className="text-h3 u-wide group-hover:text-ink-950 mt-2 flex items-baseline justify-between gap-3 break-all transition-colors duration-300">
+        <span className="text-h3 u-wide group-hover:text-ink-950 group-focus-visible:text-ink-950 mt-2 flex items-baseline justify-between gap-3 break-all transition-colors duration-300">
           {value}
           <span aria-hidden className="channel-arrow shrink-0">
             ↗

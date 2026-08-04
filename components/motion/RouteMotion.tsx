@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 
 import { gsap, ScrollSmoother, ScrollTrigger } from '@/lib/gsap'
+import { DUR, EASE, REDUCED } from '@/lib/motion'
 
 /**
  * Renders nothing. On every route change, wait for React and layout, refresh
@@ -20,11 +21,12 @@ export function RouteMotion() {
       return
     }
 
-    const smoother = ScrollSmoother.get()
+    let innerRaf = 0
 
-    const raf = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+    const outerRaf = requestAnimationFrame(() => {
+      innerRaf = requestAnimationFrame(() => {
         ScrollTrigger.refresh()
+        const smoother = ScrollSmoother.get()
         const hash = window.location.hash.slice(1)
         const target = hash ? document.getElementById(hash) : null
 
@@ -38,16 +40,26 @@ export function RouteMotion() {
 
         smoother?.paused(false)
 
-        gsap.to('.curtain', {
-          scaleY: 0,
-          transformOrigin: 'top',
-          duration: 0.55,
-          ease: 'expo.inOut',
-        })
+        const curtain = document.querySelector('.curtain')
+        const hidden = { scaleY: 0, transformOrigin: 'top' }
+
+        if (window.matchMedia(REDUCED).matches) {
+          gsap.set(curtain, hidden)
+        } else {
+          gsap.to(curtain, {
+            ...hidden,
+            duration: DUR.base,
+            ease: EASE.cut,
+            overwrite: 'auto',
+          })
+        }
       })
     })
 
-    return () => cancelAnimationFrame(raf)
+    return () => {
+      cancelAnimationFrame(outerRaf)
+      cancelAnimationFrame(innerRaf)
+    }
   }, [pathname])
 
   return null

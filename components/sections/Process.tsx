@@ -28,7 +28,9 @@ export function Process({
       mm.add(DESKTOP, () => {
         const pin = pinRef.current
         const panels = gsap.utils.toArray<HTMLElement>('.process-panel')
+        const progress = rootRef.current?.querySelector<HTMLElement>('.process-progress')
         if (!pin || panels.length < 2) return
+        const setProgress = progress ? gsap.quickSetter(progress, 'scaleX') : null
 
         // Function form for `end` + invalidateOnRefresh: the distance depends
         // on the pin width, which changes on resize. A static string would go
@@ -57,8 +59,7 @@ export function Process({
               // to whichever step is actually closest instead.
               inertia: false,
             },
-            onUpdate: (self) =>
-              gsap.set('.process-progress', { scaleX: self.progress }),
+            onUpdate: (self) => setProgress?.(self.progress),
           },
         })
 
@@ -195,7 +196,10 @@ export function Process({
           aria-hidden
           className="process-progress-shell bg-rule absolute inset-x-0 bottom-0 hidden h-0.5"
         >
-          <span className="process-progress bg-accent block h-full w-full origin-left scale-x-0" />
+          <span
+            className="process-progress bg-accent block h-full w-full origin-left"
+            style={{ transform: 'scaleX(0)' }}
+          />
         </div>
       </div>
     </section>

@@ -198,7 +198,8 @@ export function ContactForm({
             </span>
             <span
               aria-hidden
-              className="submit-progress bg-accent absolute inset-x-0 bottom-0 block h-0.5 origin-left scale-x-0"
+              className="submit-progress bg-accent absolute inset-x-0 bottom-0 block h-0.5 origin-left"
+              style={{ transform: 'scaleX(0)' }}
             />
           </button>
           <p className="u-label min-h-[1em] text-text-dim" aria-live="polite">

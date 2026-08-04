@@ -7,7 +7,7 @@ import { Rule } from '@/components/ui/Rule'
 import type { Dictionary } from '@/i18n/dictionary'
 import { gsap, SplitText, useGSAP } from '@/lib/gsap'
 import { introDone } from '@/lib/intro'
-import { OK } from '@/lib/motion'
+import { DUR, EASE, OK } from '@/lib/motion'
 
 export function Hero({ dict }: { dict: Dictionary['hero'] }) {
   const rootRef = useRef<HTMLElement>(null)
@@ -19,6 +19,10 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
       // Reduced-motion visitors get nothing in this branch at all — the
       // server-rendered lines stay exactly as painted, fully visible.
       mm.add(OK, () => {
+        const root = rootRef.current
+        const heading = root?.querySelector<HTMLElement>('.hero-name')
+        if (!root || !heading) return
+
         const entrance = gsap.timeline({ paused: true })
 
         entrance
@@ -69,6 +73,31 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
         // the headline would already be settled by the time it lifts.
         let split: SplitText | undefined
         let cancelled = false
+        let hasRevealed = false
+
+        const flipCharacter = (event: PointerEvent) => {
+          const character = (event.target as Element).closest<HTMLElement>('.hero-char')
+          if (!character || !heading.contains(character) || gsap.isTweening(character)) {
+            return
+          }
+
+          gsap
+            .timeline({
+              onComplete: () => gsap.set(character, { clearProps: 'rotationY,color' }),
+            })
+            .to(character, {
+              rotationY: 180,
+              color: 'var(--color-accent)',
+              duration: DUR.fast,
+              ease: EASE.cut,
+            })
+            .to(character, {
+              rotationY: 360,
+              color: 'var(--color-text)',
+              duration: DUR.base,
+              ease: EASE.brutal,
+            })
+        }
 
         introDone.then(() => {
           if (cancelled) return
@@ -76,9 +105,10 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
           // autoSplit re-splits (and re-runs onSplit) when Archivo finishes
           // loading or the line width changes — the documented fix for
           // SplitText measuring against a fallback font.
-          split = SplitText.create('.hero-line', {
+          split = SplitText.create(rootRef.current?.querySelectorAll('.hero-line') ?? [], {
             type: 'chars,words,lines',
             mask: 'lines',
+            charsClass: 'hero-char',
             autoSplit: true,
             // NOT 'auto': that puts `aria-label` on the split <span>, and a
             // span has no implicit role, so aria-label is prohibited there
@@ -86,22 +116,62 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
             // of the name instead, with the animated lines aria-hidden.
             aria: 'none',
             onSplit(self) {
-              return gsap.from(self.chars, {
-                yPercent: 110,
-                duration: 1.15,
-                stagger: { each: 0.022, from: 'start' },
-                ease: 'power4.out',
+              gsap.set(self.chars, {
+                transformPerspective: 900,
+                transformOrigin: '50% 50%',
+                backfaceVisibility: 'hidden',
               })
+
+              if (hasRevealed) {
+                gsap.set(self.chars, {
+                  yPercent: 0,
+                  rotationX: 0,
+                  opacity: 1,
+                  color: 'var(--color-text)',
+                })
+                return
+              }
+
+              hasRevealed = true
+              return gsap
+                .timeline()
+                .from(self.chars, {
+                  yPercent: (index) => (index % 2 === 0 ? 115 : -115),
+                  rotationX: (index) => (index % 2 === 0 ? -90 : 90),
+                  opacity: 0,
+                  duration: 1.15,
+                  stagger: { each: 0.028, from: 'start' },
+                  ease: 'power4.out',
+                })
+                .to(
+                  self.chars,
+                  {
+                    color: 'var(--color-accent)',
+                    duration: 0.12,
+                    stagger: { each: 0.025, from: 'start' },
+                  },
+                  '-=0.34',
+                )
+                .to(
+                  self.chars,
+                  {
+                    color: 'var(--color-text)',
+                    duration: 0.24,
+                    stagger: { each: 0.025, from: 'start' },
+                  },
+                  '<0.1',
+                )
             },
           })
 
+          heading.addEventListener('pointerover', flipCharacter)
           entrance.play()
         })
 
         gsap.to('.pill-dot', {
           scale: 2.2,
           opacity: 0,
-          repeat: -1,
+          repeat: 2,
           duration: 1.6,
           ease: 'power1.out',
         })
@@ -120,6 +190,8 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
 
         return () => {
           cancelled = true
+          heading.removeEventListener('pointerover', flipCharacter)
+          gsap.killTweensOf(heading.querySelectorAll('.hero-char'))
           split?.revert()
         }
       })
@@ -142,7 +214,7 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
          * overflows its box. Narrower here and the headline loses letters.
          */}
         <div className="col-span-12">
-          <h1 className="text-mega u-wide text-text">
+          <h1 className="hero-name text-mega u-wide text-text">
             {/* The only copy assistive tech reads: the split version below is
                 broken into per-character elements, which screen readers would
                 otherwise spell out letter by letter. */}
@@ -164,7 +236,7 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
           </h1>
         </div>
 
-        <div className="hero-meta col-span-12 mt-12 lg:col-span-3 lg:col-start-10 lg:text-right">
+        <div className="hero-meta order-2 col-span-12 mt-10 lg:order-none lg:col-span-3 lg:col-start-10 lg:mt-12 lg:text-right">
           <p className="u-label text-accent mb-4">{dict.role}</p>
           <ul className="u-meta text-text-dim space-y-1.5">
             {dict.meta.map((item) => (
@@ -173,11 +245,11 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
           </ul>
         </div>
 
-        <p className="text-lead text-chalk-200 col-span-12 mt-14 max-w-[24ch] lg:col-span-6">
+        <p className="text-lead text-chalk-200 order-1 col-span-12 mt-10 max-w-[24ch] lg:order-none lg:col-span-6 lg:mt-14">
           {dict.statement}
         </p>
 
-        <div className="hero-artifact border-rule bg-ink-900 col-span-12 mt-10 border lg:col-span-5 lg:col-start-8 lg:mt-14">
+        <div className="hero-artifact border-rule bg-ink-900 order-3 col-span-12 mt-10 border lg:order-none lg:col-span-5 lg:col-start-8 lg:mt-14">
           <div className="border-rule flex items-center justify-between border-b px-4 py-3">
             <span className="u-label text-accent">{dict.artifactLabel}</span>
             <span className="flex items-center gap-2 font-mono text-[10px] tracking-widest text-chalk-400 uppercase">

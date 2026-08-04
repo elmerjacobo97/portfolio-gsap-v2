@@ -16,6 +16,8 @@ const PLACEMENT = [
   'lg:col-span-10 lg:col-start-2',
   'lg:col-span-6 lg:col-start-1',
   'lg:col-span-6 lg:col-start-7',
+  'lg:col-span-6 lg:col-start-1',
+  'lg:col-span-6 lg:col-start-7',
 ] as const
 
 export function WorkCard({
@@ -129,7 +131,7 @@ export function WorkCard({
       onMouseEnter={(e) => handleEnter(e.currentTarget)}
       onMouseLeave={(e) => handleLeave(e.currentTarget)}
       className={cn(
-        'work-card col-span-12 mt-20 first:mt-0 lg:mt-0',
+        'work-card col-span-12',
         PLACEMENT[index % PLACEMENT.length],
       )}
     >
@@ -173,7 +175,7 @@ export function WorkCard({
           >
             {t(project.title, locale)}
           </h3>
-          <span className="u-label text-accent flex shrink-0 items-baseline gap-2 sm:self-auto">
+          <span className="work-close u-label text-accent flex shrink-0 items-baseline gap-2 sm:self-auto">
             {viewLabel}
             <span aria-hidden className="work-arrow inline-block">
               ↗
@@ -190,7 +192,7 @@ export function WorkCard({
           style={{ transform: 'scaleX(0)' }}
         />
 
-        <p className="text-body text-chalk-200 mt-4 max-w-[46ch]">
+        <p className="work-close text-body text-chalk-200 mt-4 max-w-[46ch]">
           {t(project.tagline, locale)}
         </p>
       </TransitionLink>

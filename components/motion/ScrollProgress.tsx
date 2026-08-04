@@ -17,10 +17,11 @@ export function ScrollProgress() {
     const bar = barRef.current
     if (!bar) return
 
+    const setProgress = gsap.quickSetter(bar, 'scaleX')
     const trigger = ScrollTrigger.create({
       start: 0,
       end: 'max',
-      onUpdate: (self) => gsap.set(bar, { scaleX: self.progress }),
+      onUpdate: (self) => setProgress(self.progress),
     })
 
     return () => trigger.kill()
@@ -33,7 +34,8 @@ export function ScrollProgress() {
     >
       <span
         ref={barRef}
-        className="bg-accent block h-full w-full origin-left scale-x-0"
+        className="bg-accent block h-full w-full origin-left"
+        style={{ transform: 'scaleX(0)' }}
       />
     </div>
   )

@@ -6,7 +6,7 @@ import { featured } from '@/data/projects'
 import type { Dictionary } from '@/i18n/dictionary'
 import type { Locale } from '@/i18n/config'
 import { WorkCard } from '@/components/work/WorkCard'
-import { gsap, SplitText, useGSAP } from '@/lib/gsap'
+import { gsap, useGSAP } from '@/lib/gsap'
 import { OK } from '@/lib/motion'
 import { SectionHeader } from './SectionHeader'
 
@@ -25,55 +25,56 @@ export function Work({
 
       mm.add(OK, () => {
         const cards = gsap.utils.toArray<HTMLElement>('.work-card')
-        const splits: SplitText[] = []
 
         cards.forEach((card) => {
+          const meta = card.querySelector<HTMLElement>('.work-meta')
           const media = card.querySelector<HTMLElement>('.work-media')
           const image = card.querySelector<HTMLImageElement>('.case-media')
           const title = card.querySelector<HTMLElement>('.work-title')
+          const close = card.querySelectorAll<HTMLElement>('.work-close')
 
           const tl = gsap.timeline({
             scrollTrigger: { trigger: card, start: 'top 78%' },
           })
+
+          if (meta) {
+            tl.from(meta, { opacity: 0, y: 12, duration: 0.45, ease: 'power3.out' })
+          }
 
           if (media) {
             tl.fromTo(
               media,
               { clipPath: 'inset(0% 0% 100% 0%)' },
               { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.1, ease: 'expo.out' },
+              0.08,
             )
           }
 
           // Real screenshots get a counter-zoom under the clip reveal; the
           // CSS-only placeholder plate has no inner image to zoom.
           if (image) {
-            tl.from(image, { scale: 1.18, duration: 1.4, ease: 'expo.out' }, '<')
+            tl.from(image, { scale: 1.18, duration: 1.4, ease: 'expo.out' }, 0.08)
           }
 
           if (title) {
-            splits.push(
-              SplitText.create(title, {
-                type: 'lines',
-                mask: 'lines',
-                autoSplit: true,
-                // Line splits keep whole words in order, so no aria-label is
-                // needed — and adding one to an <h3> is prohibited anyway.
-                aria: 'none',
-                onSplit(self) {
-                  return gsap.from(self.lines, {
-                    yPercent: 110,
-                    stagger: 0.08,
-                    duration: 0.9,
-                    ease: 'power4.out',
-                    scrollTrigger: { trigger: card, start: 'top 80%' },
-                  })
-                },
-              }),
+            tl.from(
+              title,
+              {
+                clipPath: 'inset(0% 0% 100% 0%)',
+                y: 28,
+                duration: 0.9,
+                ease: 'power4.out',
+              },
+              '-=0.55',
             )
           }
-        })
 
-        return () => splits.forEach((s) => s.revert())
+          tl.from(
+            close,
+            { opacity: 0, y: 12, stagger: 0.06, duration: 0.45, ease: 'power3.out' },
+            '-=0.45',
+          )
+        })
       })
 
       return () => mm.revert()
@@ -87,7 +88,10 @@ export function Work({
         <SectionHeader index={dict.index} title={dict.title} lead={dict.lead} />
       </div>
 
-      <div ref={containerRef} className="grid-page mt-20 gap-y-24 lg:gap-y-[12vh]">
+      <div
+        ref={containerRef}
+        className="grid-page mt-16 gap-y-16 md:mt-20 md:gap-y-24 lg:gap-y-[12vh]"
+      >
         {featured().map((project, i) => (
           <WorkCard
             key={project.slug}

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { gsap, ScrollSmoother, useGSAP } from '@/lib/gsap'
+import { DUR, EASE, REDUCED } from '@/lib/motion'
 
 /**
  * A <Link> that plays the curtain wipe before navigating.
@@ -38,6 +39,7 @@ export function TransitionLink({
     }
 
     e.preventDefault()
+    const reduced = window.matchMedia(REDUCED).matches
 
     // Links to the current document (the brand mark from /es#services back to
     // /es, for example) do not trigger RouteMotion because pathname is
@@ -59,16 +61,16 @@ export function TransitionLink({
       )
 
       if (smoother) {
-        smoother.scrollTo(target ?? 0, true, target ? 'top top' : undefined)
+        smoother.scrollTo(target ?? 0, !reduced, target ? 'top top' : undefined)
       } else if (target) {
-        target.scrollIntoView({ behavior: 'smooth' })
+        target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' })
       } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
       }
       return
     }
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (reduced) {
       router.push(href)
       return
     }
@@ -78,8 +80,9 @@ export function TransitionLink({
     gsap.to('.curtain', {
       scaleY: 1,
       transformOrigin: 'bottom',
-      duration: 0.55,
-      ease: 'expo.inOut',
+      duration: DUR.base,
+      ease: EASE.cut,
+      overwrite: 'auto',
       onComplete: () => router.push(href),
     })
   })
