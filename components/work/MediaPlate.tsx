@@ -5,11 +5,7 @@ import type { Locale } from '@/i18n/config'
 import { cn } from '@/lib/cn'
 import { ProjectPreview } from './ProjectPreview'
 
-/**
- * The media well for a project. Falls back to <PlateFill/> while
- * `project.cover` is undefined — swapping in a real screenshot is a
- * `data/projects.ts` edit, no JSX changes anywhere.
- */
+/** Project media with a CSS fallback for records without a screenshot. */
 export function MediaPlate({
   project,
   locale,
@@ -37,8 +33,12 @@ export function MediaPlate({
           width={project.cover.width}
           height={project.cover.height}
           alt={project.cover.alt[locale]}
+          loading={wide ? 'eager' : 'lazy'}
           sizes="(max-width: 768px) 100vw, 60vw"
-          className="case-media size-full object-cover"
+          className={cn(
+            'case-media size-full',
+            project.cover.fit === 'contain' ? 'object-contain' : 'object-cover',
+          )}
         />
       ) : (
         <ProjectPreview project={project} locale={locale} />

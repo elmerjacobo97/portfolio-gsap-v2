@@ -54,7 +54,7 @@ const en = {
     allProjects: 'All projects',
     role: 'Role',
     year: 'Year',
-    client: 'Client',
+    client: 'Context',
     stack: 'Stack',
     liveSite: 'Live site',
     repository: 'Repository',

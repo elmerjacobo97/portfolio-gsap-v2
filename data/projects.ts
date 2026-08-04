@@ -22,7 +22,13 @@ export type Project = {
   summary: Localized
   metrics: readonly { value: string; label: Localized }[]
   /** Undefined renders the CSS-only <MediaPlate/> instead of an <Image/>. */
-  cover?: { src: string; width: number; height: number; alt: Localized }
+  cover?: {
+    src: string
+    width: number
+    height: number
+    alt: Localized
+    fit?: 'cover' | 'contain'
+  }
   gallery: readonly {
     src: string
     width: number
@@ -32,101 +38,112 @@ export type Project = {
   body: readonly CaseBlock[]
 }
 
-/**
- * PLACEHOLDERS. Swapping in the real work (Tarjetly, the Flutter water app)
- * means editing this array — nothing about a project lives in JSX.
- */
 export const projects: readonly Project[] = [
   {
-    slug: 'plataforma-suscripciones',
+    slug: 'spec-flow-skills',
     featured: true,
     order: 1,
-    year: 2025,
-    client: 'Proyecto demo',
-    stack: ['Next.js', 'Laravel', 'PostgreSQL', 'Stripe', 'Tailwind'],
-    role: { es: 'Tech lead · Full stack', en: 'Tech lead · Full stack' },
-    title: {
-      es: 'Plataforma de suscripciones',
-      en: 'Subscription platform',
-    },
+    year: 2026,
+    client: 'Open source · Individual',
+    repoUrl: 'https://github.com/elmerjacobo97/spec-flow-skills',
+    stack: ['Claude Code', 'Agent Skills', 'Markdown', 'Cursor', 'Spec-driven'],
+    role: { es: 'Autor · Mantenedor', en: 'Author · Maintainer' },
+    title: { es: 'Spec Flow Skills', en: 'Spec Flow Skills' },
     tagline: {
-      es: 'SaaS multiusuario con cobros recurrentes y panel de métricas.',
-      en: 'Multi-tenant SaaS with recurring billing and a metrics dashboard.',
+      es: 'Diseño guiado por specs para agentes de código.',
+      en: 'Spec-driven design for coding agents.',
     },
     summary: {
-      es: 'Producto completo: registro, planes, cobro mensual con Stripe, panel administrativo y reportes de ingresos.',
-      en: 'A complete product: sign-up, plans, monthly billing through Stripe, an admin panel and revenue reporting.',
+      es: 'Dos skills open source que separan la planificación, aprobación humana e implementación para evitar decisiones improvisadas por el agente.',
+      en: 'Two open-source skills that separate planning, human approval, and implementation so agents cannot improvise product decisions.',
     },
     metrics: [
-      { value: '3', label: { es: 'meses a producción', en: 'months to production' } },
-      { value: '99.9%', label: { es: 'uptime', en: 'uptime' } },
-      { value: '<1s', label: { es: 'carga inicial', en: 'first load' } },
+      { value: '2', label: { es: 'skills', en: 'skills' } },
+      { value: '5+', label: { es: 'agentes', en: 'agents' } },
+      { value: 'MIT', label: { es: 'licencia', en: 'license' } },
     ],
+    cover: {
+      src: '/images/projects/spec-flow-skills.png',
+      width: 3796,
+      height: 1924,
+      alt: {
+        es: 'README de Spec Flow Skills con el flujo de especificación e implementación',
+        en: 'Spec Flow Skills README showing the specification and implementation flow',
+      },
+    },
     gallery: [],
     body: [
       {
         kind: 'heading',
-        text: { es: 'El problema', en: 'The problem' },
+        text: { es: 'Por qué existe', en: 'Why it exists' },
       },
       {
         kind: 'para',
         text: {
-          es: 'El cobro era manual: alguien revisaba transferencias a mano y activaba cuentas una por una. No escalaba y se perdía dinero en renovaciones olvidadas.',
-          en: 'Billing was manual: someone reviewed transfers by hand and activated accounts one at a time. It did not scale and money leaked through forgotten renewals.',
+          es: 'Un prompt amplio deja decenas de decisiones invisibles en el chat. En la siguiente sesión el agente puede olvidar esas decisiones o improvisar en otra dirección.',
+          en: 'A broad prompt leaves dozens of product decisions hidden in chat. In the next session, an agent can forget them or improvise in a different direction.',
         },
       },
       {
         kind: 'heading',
-        text: { es: 'Qué construí', en: 'What I built' },
+        text: { es: 'El contrato', en: 'The contract' },
       },
       {
         kind: 'list',
         items: [
           {
-            es: 'Autenticación con roles y control de acceso por plan',
-            en: 'Authentication with roles and per-plan access control',
+            es: '/spec hace preguntas, documenta decisiones y guarda un Draft versionado en git.',
+            en: '/spec asks questions, documents decisions, and saves a Draft versioned in git.',
           },
           {
-            es: 'Integración con Stripe para suscripciones y webhooks de estado',
-            en: 'Stripe integration for subscriptions and status webhooks',
+            es: 'La aprobación ocurre fuera del chat y requiere que una persona cambie el estado a Approved.',
+            en: 'Approval happens outside chat and requires a person to change the status to Approved.',
           },
           {
-            es: 'Panel administrativo con ingresos, churn y altas por periodo',
-            en: 'Admin panel with revenue, churn and sign-ups per period',
+            es: '/spec-impl valida ese estado, crea una rama e implementa con pausas para revisar cada diff.',
+            en: '/spec-impl validates that state, creates a branch, and implements with pauses to review each diff.',
           },
           {
-            es: 'API REST en Laravel con tests de integración en Pest',
-            en: 'Laravel REST API with integration tests in Pest',
+            es: 'El instalador cubre Claude Code, Cursor, Codex, Antigravity y OpenCode.',
+            en: 'The installer supports Claude Code, Cursor, Codex, Antigravity, and OpenCode.',
           },
         ],
       },
     ],
   },
   {
-    slug: 'panel-operaciones',
+    slug: 'driftwatch',
     featured: true,
     order: 2,
-    year: 2024,
-    client: 'Proyecto demo',
-    stack: ['React', 'TypeScript', 'Laravel', 'MySQL'],
-    role: { es: 'Full stack', en: 'Full stack' },
-    title: {
-      es: 'Panel de operaciones',
-      en: 'Operations dashboard',
-    },
+    year: 2026,
+    client: 'Open source · Individual',
+    liveUrl: 'https://www.npmjs.com/package/@codigoconelmer/driftwatch',
+    repoUrl: 'https://github.com/elmerjacobo97/driftwatch',
+    stack: ['TypeScript', 'Node.js', 'Telegram API', 'Slack API', 'Discord API', 'Docker'],
+    role: { es: 'Autor · Mantenedor', en: 'Author · Maintainer' },
+    title: { es: 'DriftWatch', en: 'DriftWatch' },
     tagline: {
-      es: 'Herramienta interna que reemplazó catorce hojas de cálculo.',
-      en: 'An internal tool that replaced fourteen spreadsheets.',
+      es: 'Detecta cambios de schema antes de que rompan tu app.',
+      en: 'Detect schema changes before they break your app.',
     },
     summary: {
-      es: 'Gestión de usuarios, inventario y reportes en un solo lugar, con permisos por área y exportación a Excel.',
-      en: 'User management, inventory and reporting in one place, with per-area permissions and Excel export.',
+      es: 'CLI y daemon que monitorea endpoints HTTP y alerta por Telegram, Slack o Discord cuando cambia la estructura de una respuesta.',
+      en: 'A CLI and daemon that monitors HTTP endpoints and alerts through Telegram, Slack, or Discord when a response structure changes.',
     },
     metrics: [
-      { value: '14', label: { es: 'hojas eliminadas', en: 'spreadsheets removed' } },
-      { value: '6h', label: { es: 'ahorradas por semana', en: 'saved per week' } },
-      { value: '40+', label: { es: 'usuarios internos', en: 'internal users' } },
+      { value: 'Node.js', label: { es: 'runtime', en: 'runtime' } },
+      { value: '3', label: { es: 'canales de alerta', en: 'alert channels' } },
+      { value: 'MIT', label: { es: 'licencia', en: 'license' } },
     ],
+    cover: {
+      src: '/images/projects/driftwatch.png',
+      width: 3782,
+      height: 1936,
+      alt: {
+        es: 'Documentación de DriftWatch con un ejemplo de alerta de schema drift',
+        en: 'DriftWatch documentation with a schema drift alert example',
+      },
+    },
     gallery: [],
     body: [
       {
@@ -136,69 +153,235 @@ export const projects: readonly Project[] = [
       {
         kind: 'para',
         text: {
-          es: 'Cada área tenía su propia hoja de cálculo y ninguna coincidía con las demás. Los reportes mensuales se armaban a mano y siempre llegaban tarde.',
-          en: 'Every area had its own spreadsheet and none of them agreed. Monthly reports were assembled by hand and always arrived late.',
+          es: 'Una API externa puede renombrar una key o cambiar un tipo sin aviso. La aplicación falla en producción antes de que el equipo se entere.',
+          en: 'An external API can rename a key or change a type without notice. The application fails in production before the team finds out.',
         },
       },
       {
         kind: 'heading',
-        text: { es: 'Qué construí', en: 'What I built' },
+        text: { es: 'Cómo funciona', en: 'How it works' },
       },
       {
         kind: 'list',
         items: [
           {
-            es: 'Modelo de datos único con migraciones versionadas',
-            en: 'A single data model with versioned migrations',
+            es: 'Extrae keys y tipos de cada respuesta, nunca sus valores.',
+            en: 'It extracts keys and types from each response, never their values.',
           },
           {
-            es: 'Permisos granulares por área y por acción',
-            en: 'Granular permissions per area and per action',
+            es: 'Compara snapshots y muestra exactamente qué se añadió, eliminó o cambió.',
+            en: 'It compares snapshots and shows exactly what was added, removed, or changed.',
           },
           {
-            es: 'Reportes generados en el servidor y exportables',
-            en: 'Server-generated, exportable reports',
+            es: 'Corre como daemon, proceso en background o contenedor Docker sin SDK en la app.',
+            en: 'It runs as a daemon, background process, or Docker container without an SDK in the app.',
+          },
+          {
+            es: 'Envía el diff por Telegram, Slack o Discord.',
+            en: 'It sends the diff through Telegram, Slack, or Discord.',
           },
         ],
       },
     ],
   },
   {
-    slug: 'app-movil-campo',
+    slug: 'tarjetly',
     featured: true,
     order: 3,
-    year: 2024,
-    client: 'Proyecto demo',
-    stack: ['Flutter', 'Laravel', 'PostgreSQL'],
-    role: { es: 'Desarrollo móvil', en: 'Mobile development' },
-    title: {
-      es: 'App móvil de campo',
-      en: 'Field mobile app',
-    },
+    year: 2025,
+    client: 'Tarjetly · SaaS B2B',
+    liveUrl: 'https://tarjetly.com',
+    stack: ['React', 'TypeScript', 'Laravel', 'MySQL', 'Groq', 'Stripe', 'GCP'],
+    role: { es: 'Full Stack Developer', en: 'Full Stack Developer' },
+    title: { es: 'Tarjetly', en: 'Tarjetly' },
     tagline: {
-      es: 'Cálculos técnicos sin señal, sincronizados al volver.',
-      en: 'Technical calculations offline, synced on return.',
+      es: 'Tarjetas digitales corporativas con pagos e IA aplicada.',
+      en: 'Corporate digital cards with payments and applied AI.',
     },
     summary: {
-      es: 'Aplicación para trabajo en zonas sin cobertura: guarda todo en el dispositivo y sincroniza con el servidor cuando hay red.',
-      en: 'An app for work in areas with no coverage: it stores everything on device and syncs with the server when the network returns.',
+      es: 'Dashboard para crear y gestionar tarjetas digitales, con suscripciones Stripe y generación de contenido mediante Groq a partir de datos reales.',
+      en: 'A dashboard for creating and managing digital cards, with Stripe subscriptions and Groq-powered content generated from real profile data.',
     },
     metrics: [
-      { value: '100%', label: { es: 'funcional sin red', en: 'functional offline' } },
-      { value: '2', label: { es: 'plataformas', en: 'platforms' } },
-      { value: '1', label: { es: 'base de código', en: 'codebase' } },
+      { value: '200+', label: { es: 'usuarios activos', en: 'active users' } },
+      { value: '2024', label: { es: 'en producción desde', en: 'in production since' } },
+      { value: '2', label: { es: 'integraciones clave', en: 'core integrations' } },
     ],
+    cover: {
+      src: '/images/projects/tarjetly.png',
+      width: 3800,
+      height: 1936,
+      alt: {
+        es: 'Página de Tarjetly mostrando el panel de prospectos de una tarjeta digital',
+        en: 'Tarjetly page showing the lead dashboard for a digital card',
+      },
+    },
     gallery: [],
     body: [
       {
         kind: 'heading',
-        text: { es: 'El problema', en: 'The problem' },
+        text: { es: 'Contexto', en: 'Context' },
       },
       {
         kind: 'para',
         text: {
-          es: 'El trabajo ocurre donde no hay señal. Las mediciones se anotaban en papel y se transcribían días después, con errores.',
-          en: 'The work happens where there is no signal. Measurements were written on paper and transcribed days later, with errors.',
+          es: 'Tarjetly permite a profesionales y empresas crear tarjetas digitales, administrar prospectos y reemplazar tarjetas físicas. Es un SaaS B2B con usuarios y pagos reales.',
+          en: 'Tarjetly lets professionals and companies create digital cards, manage leads, and replace physical cards. It is a B2B SaaS with real users and payments.',
+        },
+      },
+      {
+        kind: 'heading',
+        text: { es: 'Responsabilidad', en: 'Responsibility' },
+      },
+      {
+        kind: 'list',
+        items: [
+          {
+            es: 'Dashboard React y TypeScript con editor, onboarding y estados de checkout.',
+            en: 'React and TypeScript dashboard with an editor, onboarding, and checkout states.',
+          },
+          {
+            es: 'API Laravel con Sanctum, roles de equipo y webhooks idempotentes de Stripe.',
+            en: 'Laravel API with Sanctum, team roles, and idempotent Stripe webhooks.',
+          },
+          {
+            es: 'Groq usa datos estructurados del perfil para generar bios y sugerencias predecibles.',
+            en: 'Groq uses structured profile data to generate predictable bios and suggestions.',
+          },
+          {
+            es: 'Playwright cubre los caminos críticos de registro y pago.',
+            en: 'Playwright covers the critical registration and payment paths.',
+          },
+        ],
+      },
+      {
+        kind: 'heading',
+        text: { es: 'Resultado', en: 'Outcome' },
+      },
+      {
+        kind: 'para',
+        text: {
+          es: 'Más de 200 usuarios activos, suscripciones de punta a punta e IA aplicada a un problema concreto del producto.',
+          en: 'More than 200 active users, end-to-end subscriptions, and AI applied to a concrete product problem.',
+        },
+      },
+    ],
+  },
+  {
+    slug: 'gastly',
+    featured: true,
+    order: 4,
+    year: 2025,
+    client: 'Producto personal',
+    repoUrl: 'https://github.com/elmerjacobo97/Gastly',
+    stack: ['Next.js', 'React', 'TypeScript', 'Supabase', 'TanStack Query', 'Tailwind CSS', 'Recharts', 'Zod'],
+    role: { es: 'Solo founder · Full Stack', en: 'Solo founder · Full Stack' },
+    title: { es: 'Gastly', en: 'Gastly' },
+    tagline: {
+      es: 'Finanzas personales diseñadas alrededor de uso diario real.',
+      en: 'Personal finance designed around real daily use.',
+    },
+    summary: {
+      es: 'Aplicación para controlar transacciones, presupuestos, préstamos, cuotas, ahorro y pagos recurrentes en un solo sistema.',
+      en: 'An application for managing transactions, budgets, loans, installments, savings, and recurring payments in one system.',
+    },
+    metrics: [
+      { value: '11', label: { es: 'módulos financieros', en: 'finance modules' } },
+      { value: 'Vercel', label: { es: 'deploy', en: 'deployment' } },
+      { value: 'Diario', label: { es: 'frecuencia de uso', en: 'usage frequency' } },
+    ],
+    cover: {
+      src: '/images/projects/gastly.png',
+      width: 3794,
+      height: 1928,
+      alt: {
+        es: 'Dashboard oscuro de Gastly con resumen mensual, pagos y gráficos financieros',
+        en: 'Gastly dark dashboard with a monthly summary, payments, and finance charts',
+      },
+    },
+    gallery: [],
+    body: [
+      {
+        kind: 'heading',
+        text: { es: 'Motivación', en: 'Motivation' },
+      },
+      {
+        kind: 'para',
+        text: {
+          es: 'Las apps existentes requerían demasiada configuración o no representaban cómo organizo cuotas, préstamos, gastos fijos y presupuestos por categoría. Construí la herramienta que necesitaba usar.',
+          en: 'Existing apps required too much setup or did not match how I manage installments, loans, fixed expenses, and category budgets. I built the tool I needed to use.',
+        },
+      },
+      {
+        kind: 'heading',
+        text: { es: 'Arquitectura', en: 'Architecture' },
+      },
+      {
+        kind: 'list',
+        items: [
+          {
+            es: 'Next.js 16 con App Router y estructura feature-based por dominio.',
+            en: 'Next.js 16 with App Router and a domain-based feature structure.',
+          },
+          {
+            es: 'Supabase para base de datos y autenticación, separado entre browser, server y proxy.',
+            en: 'Supabase for database and authentication, split across browser, server, and proxy clients.',
+          },
+          {
+            es: 'TanStack Query para estado del servidor y Zod en formularios y acceso a datos.',
+            en: 'TanStack Query for server state and Zod in forms and the data-access layer.',
+          },
+          {
+            es: 'Sistema de diseño propio con tokens documentados para color, tipografía y espaciado.',
+            en: 'A custom design system with documented color, typography, and spacing tokens.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'sismol',
+    featured: true,
+    order: 5,
+    year: 2024,
+    client: 'ABEHA · Operaciones',
+    liveUrl: 'https://sismol.c2e.mx/',
+    stack: ['React', 'TypeScript', 'Laravel', 'PostgreSQL'],
+    role: { es: 'Full Stack Developer', en: 'Full Stack Developer' },
+    title: { es: 'Sismol', en: 'Sismol' },
+    tagline: {
+      es: 'Panel operativo para sistemas de captación de agua.',
+      en: 'Operations dashboard for water harvesting systems.',
+    },
+    summary: {
+      es: 'Dashboard interno con sensores, métricas, alertas y reportes para centralizar la operación del sistema de captación pluvial de ABEHA.',
+      en: 'An internal dashboard with sensors, metrics, alerts, and reports that centralizes operations for ABEHA rainwater harvesting systems.',
+    },
+    metrics: [
+      { value: 'Interno', label: { es: 'tipo de producto', en: 'product type' } },
+      { value: '4', label: { es: 'tecnologías núcleo', en: 'core technologies' } },
+      { value: 'Producción', label: { es: 'estado', en: 'status' } },
+    ],
+    cover: {
+      src: '/images/projects/sismol.png',
+      width: 1288,
+      height: 650,
+      alt: {
+        es: 'Dashboard de Sismol con tabla y mapa de sistemas de captación de agua',
+        en: 'Sismol dashboard with a table and map of water harvesting systems',
+      },
+    },
+    gallery: [],
+    body: [
+      {
+        kind: 'heading',
+        text: { es: 'Necesidad operativa', en: 'Operational need' },
+      },
+      {
+        kind: 'para',
+        text: {
+          es: 'El equipo técnico necesitaba una vista central de sensores, alertas, métricas de flujo y reportes por período. Mostrar datos no era suficiente: debían servir para tomar decisiones.',
+          en: 'The technical team needed one view of sensors, alerts, flow metrics, and period reports. Showing data was not enough: it had to support decisions.',
         },
       },
       {
@@ -209,16 +392,20 @@ export const projects: readonly Project[] = [
         kind: 'list',
         items: [
           {
-            es: 'Almacenamiento local y cola de sincronización',
-            en: 'Local storage and a sync queue',
+            es: 'Interfaz React y TypeScript para monitoreo operativo.',
+            en: 'A React and TypeScript interface for operational monitoring.',
           },
           {
-            es: 'Motor de cálculo validado contra la hoja original',
-            en: 'A calculation engine validated against the original spreadsheet',
+            es: 'API Laravel con alertas configurables por umbral.',
+            en: 'A Laravel API with configurable threshold alerts.',
           },
           {
-            es: 'Publicación en Google Play y builds firmados',
-            en: 'Google Play release and signed builds',
+            es: 'Reportes exportables por fechas y sensor.',
+            en: 'Reports exportable by date range and sensor.',
+          },
+          {
+            es: 'Autenticación por roles para diferentes niveles del equipo.',
+            en: 'Role-based authentication for different team access levels.',
           },
         ],
       },

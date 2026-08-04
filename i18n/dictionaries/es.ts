@@ -52,7 +52,7 @@ const es = {
     allProjects: 'Todos los proyectos',
     role: 'Rol',
     year: 'Año',
-    client: 'Cliente',
+    client: 'Contexto',
     stack: 'Stack',
     liveSite: 'Sitio en vivo',
     repository: 'Repositorio',
