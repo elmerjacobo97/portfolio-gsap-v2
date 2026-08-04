@@ -1,11 +1,10 @@
 'use client'
 
+import Image from 'next/image'
 import { useRef } from 'react'
 
-import { site } from '@/data/site'
 import type { Dictionary } from '@/i18n/dictionary'
 import { Counter } from '@/components/motion/Counter'
-import { PlateFill } from '@/components/ui/PlateFill'
 import { gsap, SplitText, useGSAP } from '@/lib/gsap'
 import { OK } from '@/lib/motion'
 import { SectionHeader } from './SectionHeader'
@@ -64,17 +63,21 @@ export function About({ dict }: { dict: Dictionary['about'] }) {
       <div className="grid-page">
         <SectionHeader index={dict.index} title={dict.title} />
 
-        {/* Portrait well. Same composed stand-in as the project plates, with a
-            colour wash that fades in on scroll. CSS-only until there's a photo. */}
-        <div
-          aria-hidden
-          className="bg-ink-850 border-rule @container relative col-span-12 mt-16 aspect-4/5 overflow-hidden border sm:col-span-6 lg:col-span-5"
-        >
-          <PlateFill
-            lines={site.stack.slice(0, 4)}
-            meta={`${site.city}, ${site.country}`}
+        <div className="bg-ink-850 border-rule @container relative col-span-12 mt-16 aspect-4/5 overflow-hidden border sm:col-span-6 lg:col-span-5">
+          <Image
+            src="/images/profile/elmer-jacobo-portrait.png"
+            alt={dict.portraitAlt}
+            fill
+            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 42vw"
+            className="object-cover grayscale"
           />
-          <span className="about-portrait-color bg-accent/10 absolute inset-0 opacity-0" />
+          <Image
+            src="/images/profile/elmer-jacobo-portrait.png"
+            alt=""
+            fill
+            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 42vw"
+            className="about-portrait-color object-cover opacity-0"
+          />
         </div>
 
         <div className="col-span-12 mt-12 lg:col-span-6 lg:col-start-7 lg:mt-16">
