@@ -88,7 +88,6 @@ const es = {
     index: '04',
     title: 'Cómo trabajo',
     lead: 'Un proceso corto y honesto. Sabes en qué punto estamos en todo momento.',
-    jumpTo: 'Ir al paso',
   },
 
   about: {

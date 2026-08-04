@@ -268,10 +268,6 @@
     padding-block: 13vh;
   }
 
-  .process-step-nav {
-    display: flex;
-  }
-
   .process-progress-shell {
     display: block;
   }

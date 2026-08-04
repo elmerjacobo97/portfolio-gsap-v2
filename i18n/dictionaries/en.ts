@@ -90,7 +90,6 @@ const en = {
     index: '04',
     title: 'How I work',
     lead: 'A short, honest process. You always know exactly where we are.',
-    jumpTo: 'Go to step',
   },
 
   about: {
