@@ -28,54 +28,65 @@ export function SectionHeader({
         const title = root.querySelector('.section-header-title')
         const leadCopy = root.querySelector('.section-header-lead')
         const rule = root.querySelector('.section-header-rule')
+
+        // Hash navigation can place a section in view before this setup runs.
+        // In that case, preserve the server-painted content instead of hiding it.
+        if (root.getBoundingClientRect().top <= window.innerHeight) return
+
+        gsap.set(index, { opacity: 0, y: 10 })
+        gsap.set(title, {
+          clipPath: 'inset(0% 0% 100% 0%)',
+          y: 24,
+        })
+        if (leadCopy) gsap.set(leadCopy, { opacity: 0, y: 14 })
+        gsap.set(rule, {
+          scaleX: 0,
+          transformOrigin: 'left center',
+        })
+
         const timeline = gsap.timeline({
-          scrollTrigger: { trigger: root, start: 'top 82%', once: true },
+          scrollTrigger: { trigger: root, start: 'top 80%', once: true },
         })
 
         timeline
-          .from(index, {
-            opacity: 0,
-            y: 12,
+          .to(index, {
+            opacity: 1,
+            y: 0,
             duration: DUR.fast,
             ease: EASE.settle,
-            immediateRender: false,
           })
-          .from(
+          .to(
             title,
             {
-              clipPath: 'inset(0% 0% 100% 0%)',
-              y: 32,
+              clipPath: 'inset(0% 0% 0% 0%)',
+              y: 0,
               duration: DUR.slow,
               ease: EASE.brutal,
-              immediateRender: false,
             },
             0.08,
           )
 
         if (leadCopy) {
-          timeline.from(
+          timeline.to(
             leadCopy,
             {
-              opacity: 0,
-              y: 18,
+              opacity: 1,
+              y: 0,
               duration: DUR.base,
               ease: EASE.settle,
-              immediateRender: false,
             },
-            0.28,
+            0.24,
           )
         }
 
-        timeline.from(
+        timeline.to(
           rule,
           {
-            scaleX: 0,
-            transformOrigin: 'left center',
+            scaleX: 1,
             duration: DUR.slow,
             ease: EASE.brutal,
-            immediateRender: false,
           },
-          0.2,
+          0.18,
         )
       })
 
