@@ -84,14 +84,22 @@ const es = {
     ],
   },
 
-  process: {
+  testimonials: {
     index: '04',
+    title: 'Validación externa',
+    lead: 'La mejor prueba no la escribo yo. Estas citas marcan el lugar que ocuparán referencias reales, concretas y verificables.',
+    draftLabel: 'Contenido de muestra · reemplazar antes de publicar',
+    pendingLabel: 'Referencia pendiente',
+  },
+
+  process: {
+    index: '05',
     title: 'Cómo trabajo',
     lead: 'Un proceso corto y honesto. Sabes en qué punto estamos en todo momento.',
   },
 
   about: {
-    index: '05',
+    index: '06',
     title: 'Sobre mí',
     bio: [
       'Llevo más de cuatro años construyendo aplicaciones web y móviles que viven en producción, con usuarios reales y dinero real de por medio.',
@@ -107,7 +115,7 @@ const es = {
   },
 
   contact: {
-    index: '06',
+    index: '07',
     title: 'Hablemos',
     lead: 'Cuéntame qué quieres construir. Respondo en menos de 24 horas.',
     channelsTitle: 'Canales directos',

@@ -86,14 +86,22 @@ const en = {
     ],
   },
 
-  process: {
+  testimonials: {
     index: '04',
+    title: 'External validation',
+    lead: 'The strongest proof should not come from me. These drafts reserve the space for real, specific, and verifiable references.',
+    draftLabel: 'Sample content · replace before publishing',
+    pendingLabel: 'Reference pending',
+  },
+
+  process: {
+    index: '05',
     title: 'How I work',
     lead: 'A short, honest process. You always know exactly where we are.',
   },
 
   about: {
-    index: '05',
+    index: '06',
     title: 'About',
     bio: [
       'For over four years I have been building web and mobile applications that live in production, with real users and real money on the line.',
@@ -109,7 +117,7 @@ const en = {
   },
 
   contact: {
-    index: '06',
+    index: '07',
     title: "Let's talk",
     lead: 'Tell me what you want to build. I reply within 24 hours.',
     channelsTitle: 'Direct channels',

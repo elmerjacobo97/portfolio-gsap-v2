@@ -9,6 +9,7 @@ import { Process } from '@/components/sections/Process'
 import { Proof } from '@/components/sections/Proof'
 import { Services } from '@/components/sections/Services'
 import { Ticker } from '@/components/sections/Ticker'
+import { Testimonials } from '@/components/sections/Testimonials'
 import { Work } from '@/components/sections/Work'
 
 export default async function Home({
@@ -28,6 +29,7 @@ export default async function Home({
       <Services dict={dict.services} locale={locale} />
       <Work dict={dict.work} locale={locale} />
       <Proof dict={dict.proof} />
+      <Testimonials dict={dict.testimonials} locale={locale} />
       <Process dict={dict.process} locale={locale} />
       <About dict={dict.about} />
       <Contact
