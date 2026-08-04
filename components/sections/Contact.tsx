@@ -27,38 +27,45 @@ export function Contact({
     () => {
       const mm = gsap.matchMedia()
       mm.add(OK, () => {
+        const root = rootRef.current
+        if (!root || root.getBoundingClientRect().top <= window.innerHeight) return
+
+        const title = root.querySelector('.contact-title')
+        const lead = root.querySelector('.contact-lead')
+        const columns = root.querySelectorAll('.contact-column')
+
+        gsap.set(title, { yPercent: 108 })
+        gsap.set(lead, { opacity: 0, y: 14 })
+        gsap.set(columns, { opacity: 0, y: 20 })
+
         const timeline = gsap.timeline({
-          scrollTrigger: { trigger: rootRef.current, start: 'top 74%', once: true },
+          scrollTrigger: { trigger: root, start: 'top 76%', once: true },
         })
 
         timeline
-          .from('.contact-title', {
-            clipPath: 'inset(0% 0% 100% 0%)',
-            y: 48,
+          .to(title, {
+            yPercent: 0,
             duration: DUR.slow,
             ease: EASE.brutal,
-            immediateRender: false,
           })
-          .from(
-            '.contact-lead',
+          .to(
+            lead,
             {
-              opacity: 0,
-              y: 18,
+              opacity: 1,
+              y: 0,
               duration: DUR.base,
               ease: EASE.settle,
-              immediateRender: false,
             },
             '-=0.55',
           )
-          .from(
-            '.contact-column',
+          .to(
+            columns,
             {
-              opacity: 0,
-              y: 24,
+              opacity: 1,
+              y: 0,
               stagger: 0.12,
               duration: DUR.base,
               ease: EASE.settle,
-              immediateRender: false,
             },
             '-=0.3',
           )
@@ -77,7 +84,11 @@ export function Contact({
     >
       <div className="col-span-12">
         <p className="u-label text-accent mb-5">{dict.index}</p>
-        <h2 className="contact-title text-mega u-wide">{dict.title}</h2>
+        <div className="contact-title-mask -mb-[0.14em] overflow-hidden pb-[0.14em]">
+          <h2 className="contact-title u-wide text-[clamp(3.25rem,11.8vw,14rem)] leading-[0.82] tracking-[-0.045em]">
+            {dict.title}
+          </h2>
+        </div>
         <p className="contact-lead text-lead text-chalk-200 mt-8 max-w-[42ch]">
           {dict.lead}
         </p>
