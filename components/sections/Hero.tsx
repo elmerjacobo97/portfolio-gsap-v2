@@ -1,11 +1,11 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, type RefObject } from 'react'
 
 import { Pill } from '@/components/ui/Pill'
 import { Rule } from '@/components/ui/Rule'
 import type { Dictionary } from '@/i18n/dictionary'
-import { gsap, SplitText, useGSAP } from '@/lib/gsap'
+import { gsap, ScrollTrigger, SplitText, useGSAP } from '@/lib/gsap'
 import { introDone } from '@/lib/intro'
 import { DUR, EASE, OK } from '@/lib/motion'
 
@@ -20,8 +20,7 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
       // server-rendered lines stay exactly as painted, fully visible.
       mm.add(OK, () => {
         const root = rootRef.current
-        const heading = root?.querySelector<HTMLElement>('.hero-name')
-        if (!root || !heading) return
+        if (!root) return
 
         const entrance = gsap.timeline({ paused: true })
 
@@ -72,31 +71,64 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
         // earlier would run the onSplit tween behind the intro overlay, and
         // the headline would already be settled by the time it lifts.
         let split: SplitText | undefined
+        let ambient: gsap.core.Timeline | undefined
         let cancelled = false
         let hasRevealed = false
+        let heroVisible = true
 
-        const flipCharacter = (event: PointerEvent) => {
-          const character = (event.target as Element).closest<HTMLElement>('.hero-char')
-          if (!character || !heading.contains(character) || gsap.isTweening(character)) {
-            return
-          }
+        const visibilityTrigger = ScrollTrigger.create({
+          trigger: root,
+          start: 'top bottom',
+          end: 'bottom top',
+          onToggle: (self) => {
+            heroVisible = self.isActive
+            if (self.isActive) ambient?.play()
+            else ambient?.pause()
+          },
+        })
+        heroVisible = visibilityTrigger.isActive
 
-          gsap
+        const restingY = (index: number) => {
+          const offset = window.innerWidth < 768 ? 3 : 7
+          return index % 2 === 0 ? -offset : offset
+        }
+
+        const startAmbientMotion = (characters: Element[]) => {
+          ambient?.kill()
+          gsap.set(characters, {
+            y: restingY,
+            yPercent: 0,
+            scaleY: 1,
+          })
+
+          ambient = gsap
             .timeline({
-              onComplete: () => gsap.set(character, { clearProps: 'rotationY,color' }),
+              paused: !heroVisible,
+              repeat: -1,
+              repeatDelay: 1.6,
+              delay: 0.8,
             })
-            .to(character, {
-              rotationY: 180,
-              color: 'var(--color-accent)',
-              duration: DUR.fast,
-              ease: EASE.cut,
+            .to(characters, {
+              y: (index) => {
+                const offset = window.innerWidth < 768 ? 5 : 11
+                return index % 2 === 0 ? -offset : offset
+              },
+              scaleY: 1.012,
+              duration: 0.42,
+              stagger: { each: 0.055, from: 'start' },
+              ease: 'sine.inOut',
             })
-            .to(character, {
-              rotationY: 360,
-              color: 'var(--color-text)',
-              duration: DUR.base,
-              ease: EASE.brutal,
-            })
+            .to(
+              characters,
+              {
+                y: restingY,
+                scaleY: 1,
+                duration: DUR.base,
+                stagger: { each: 0.045, from: 'start' },
+                ease: EASE.brutal,
+              },
+              '>-0.12',
+            )
         }
 
         introDone.then(() => {
@@ -116,6 +148,10 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
             // of the name instead, with the animated lines aria-hidden.
             aria: 'none',
             onSplit(self) {
+              ambient?.kill()
+              self.chars.forEach((character) => {
+                character.setAttribute('data-char', character.textContent ?? '')
+              })
               gsap.set(self.chars, {
                 transformPerspective: 900,
                 transformOrigin: '50% 50%',
@@ -124,16 +160,18 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
 
               if (hasRevealed) {
                 gsap.set(self.chars, {
+                  y: restingY,
                   yPercent: 0,
                   rotationX: 0,
                   opacity: 1,
                   color: 'var(--color-text)',
                 })
+                startAmbientMotion(self.chars)
                 return
               }
 
               hasRevealed = true
-              return gsap
+              const reveal = gsap
                 .timeline()
                 .from(self.chars, {
                   yPercent: (index) => (index % 2 === 0 ? 115 : -115),
@@ -161,10 +199,22 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
                   },
                   '<0.1',
                 )
+                .to(
+                  self.chars,
+                  {
+                    y: restingY,
+                    duration: DUR.fast,
+                    stagger: { each: 0.025, from: 'start' },
+                    ease: EASE.settle,
+                  },
+                  '<',
+                )
+
+              reveal.call(() => startAmbientMotion(self.chars))
+              return reveal
             },
           })
 
-          heading.addEventListener('pointerover', flipCharacter)
           entrance.play()
         })
 
@@ -190,8 +240,9 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
 
         return () => {
           cancelled = true
-          heading.removeEventListener('pointerover', flipCharacter)
-          gsap.killTweensOf(heading.querySelectorAll('.hero-char'))
+          visibilityTrigger.kill()
+          ambient?.kill()
+          gsap.killTweensOf(root.querySelectorAll('.hero-char'))
           split?.revert()
         }
       })
@@ -201,6 +252,16 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
     { scope: rootRef, dependencies: [] },
   )
 
+  return <HeroView dict={dict} rootRef={rootRef} />
+}
+
+function HeroView({
+  dict,
+  rootRef,
+}: {
+  dict: Dictionary['hero']
+  rootRef: RefObject<HTMLElement | null>
+}) {
   return (
     <section
       ref={rootRef}

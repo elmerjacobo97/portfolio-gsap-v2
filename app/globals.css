@@ -226,6 +226,25 @@
     transform: scaleY(0);
     transform-origin: bottom center;
   }
+
+  .hero-char {
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero-char::after {
+    content: attr(data-char);
+    position: absolute;
+    inset: 0;
+    color: var(--color-accent);
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 360ms var(--ease-brutal);
+    pointer-events: none;
+  }
+
+  .hero-char:hover::after {
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 /*
