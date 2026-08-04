@@ -1,36 +1,43 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import type { NavLink } from './Nav'
 
 export function MobileMenu({
   open,
   onClose,
+  onNavigate,
   links,
+  label,
   closeLabel,
 }: {
   open: boolean
   onClose: () => void
+  onNavigate: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void
   links: readonly NavLink[]
+  label: string
   closeLabel: string
 }) {
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+  const dialogRef = useRef<HTMLDialogElement>(null)
 
-  if (!open) return null
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+
+    if (open && !dialog.open) dialog.showModal()
+    if (!open && dialog.open) dialog.close()
+  }, [open])
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="bg-accent text-ink-950 fixed inset-0 z-[60] flex flex-col md:hidden"
+    <dialog
+      ref={dialogRef}
+      aria-label={label}
+      onCancel={(e) => {
+        e.preventDefault()
+        onClose()
+      }}
+      className="bg-accent text-ink-950 fixed inset-0 z-[60] m-0 h-dvh max-h-none w-full max-w-none flex-col p-0 backdrop:bg-ink-950/80 open:flex md:hidden"
     >
       <div className="grid-page items-center py-4">
         <button
@@ -50,7 +57,7 @@ export function MobileMenu({
           <a
             key={link.href}
             href={link.href}
-            onClick={onClose}
+            onClick={(e) => onNavigate(e, link.href)}
             className="text-h1 u-wide flex items-baseline gap-4"
           >
             <span className="u-label !text-ink-950/60 shrink-0">
@@ -60,6 +67,6 @@ export function MobileMenu({
           </a>
         ))}
       </nav>
-    </div>
+    </dialog>
   )
 }

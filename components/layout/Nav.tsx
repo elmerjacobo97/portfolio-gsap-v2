@@ -26,6 +26,7 @@ function handleAnchor(
   if (!target) return
 
   e.preventDefault()
+  window.history.replaceState(null, '', href)
   const smoother = ScrollSmoother.get()
 
   if (smoother) {
@@ -101,7 +102,12 @@ export function Nav({
       <MobileMenu
         open={open}
         onClose={() => setOpen(false)}
+        onNavigate={(e, href) => {
+          handleAnchor(e, href)
+          setOpen(false)
+        }}
         links={links}
+        label={menuLabel}
         closeLabel={closeLabel}
       />
     </>
