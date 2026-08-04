@@ -11,31 +11,54 @@ export function CaseBody({
 }) {
   return (
     <div className="grid-page py-[var(--spacing-section)]">
-      <div className="col-span-12 lg:col-span-7 lg:col-start-4">
+      <div className="col-span-12">
         {project.body.map((block, i) => {
+          const blockKey =
+            block.kind === 'list'
+              ? `list-${block.items.map((item) => item.es).join('|')}`
+              : `${block.kind}-${block.text.es}`
+
           if (block.kind === 'heading') {
+            const section = project.body
+              .slice(0, i + 1)
+              .filter((item) => item.kind === 'heading').length
+
             return (
-              <h2
-                key={i}
-                className="text-h2 u-wide mt-16 first:mt-0"
+              <div
+                key={blockKey}
+                className="border-rule mt-20 grid grid-cols-12 gap-x-[var(--spacing-gutter)] border-t pt-8 first:mt-0"
               >
-                {block.text[locale]}
-              </h2>
+                <span className="u-meta text-accent col-span-2 lg:col-span-1">
+                  {String(section).padStart(2, '0')}
+                </span>
+                <h2 className="text-h2 u-wide col-span-10 lg:col-span-7 lg:col-start-4">
+                  {block.text[locale]}
+                </h2>
+              </div>
             )
           }
 
           if (block.kind === 'para') {
             return (
-              <p key={i} className="text-lead text-chalk-200 mt-6">
+              <p
+                key={blockKey}
+                className="text-lead text-chalk-200 mt-6 lg:ml-[25%] lg:max-w-[52ch]"
+              >
                 {block.text[locale]}
               </p>
             )
           }
 
           return (
-            <ul key={i} className="text-body text-chalk-200 mt-6 space-y-3">
+            <ul
+              key={blockKey}
+              className="text-body text-chalk-200 mt-8 space-y-0 lg:ml-[25%] lg:max-w-[58ch]"
+            >
               {block.items.map((item) => (
-                <li key={item[locale]} className="flex gap-3">
+                <li
+                  key={item[locale]}
+                  className="border-rule flex gap-4 border-t py-4"
+                >
                   <span aria-hidden className="text-accent shrink-0">
                     /
                   </span>

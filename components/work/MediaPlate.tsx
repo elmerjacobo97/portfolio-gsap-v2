@@ -2,9 +2,8 @@ import Image from 'next/image'
 
 import type { Project } from '@/data/projects'
 import type { Locale } from '@/i18n/config'
-import { PlateFill } from '@/components/ui/PlateFill'
-import { t } from '@/i18n/t'
 import { cn } from '@/lib/cn'
+import { ProjectPreview } from './ProjectPreview'
 
 /**
  * The media well for a project. Falls back to <PlateFill/> while
@@ -15,17 +14,20 @@ export function MediaPlate({
   project,
   locale,
   className,
+  wide = false,
 }: {
   project: Project
   locale: Locale
   className?: string
+  wide?: boolean
 }) {
   return (
     <div
       className={cn(
         // @container: PlateFill sizes its type against the plate's own width,
         // which tracks the card's column span rather than the viewport.
-        'bg-ink-850 border-rule @container relative aspect-16/10 overflow-hidden border',
+        'bg-ink-850 border-rule @container relative overflow-hidden border',
+        wide ? 'aspect-[16/8]' : 'aspect-16/10',
         className,
       )}
     >
@@ -39,10 +41,7 @@ export function MediaPlate({
           className="case-media size-full object-cover"
         />
       ) : (
-        <PlateFill
-          lines={project.stack.slice(0, 4)}
-          meta={`${project.year} · ${t(project.role, locale)}`}
-        />
+        <ProjectPreview project={project} locale={locale} />
       )}
     </div>
   )

@@ -1,24 +1,15 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { services } from '@/data/services'
 import type { Dictionary } from '@/i18n/dictionary'
 import type { Locale } from '@/i18n/config'
 import { t } from '@/i18n/t'
-import { Rule } from '@/components/ui/Rule'
 import { cn } from '@/lib/cn'
-import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
+import { gsap, useGSAP } from '@/lib/gsap'
 import { DUR, EASE, hoverDuration } from '@/lib/motion'
 import { SectionHeader } from './SectionHeader'
-
-/**
- * When a row counts as lit. Must stay identical to the selector in
- * globals.css that turns `.svc-ink` to ink — the acid fill lives in GSAP and
- * the ink colour lives in CSS, and the two disagreeing is what produced black
- * text on a black row.
- */
-const LIT = ':hover, :has(:focus-visible)'
 
 export function Services({
   dict,
@@ -27,273 +18,244 @@ export function Services({
   dict: Dictionary['services']
   locale: Locale
 }) {
-  const [open, setOpen] = useState<string | null>(services[0]?.code ?? null)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const accordionRef = useRef<gsap.core.Timeline | null>(null)
+  const [active, setActive] = useState(0)
+  const rootRef = useRef<HTMLElement>(null)
+  const transitionRef = useRef<gsap.core.Timeline | null>(null)
 
-  /**
-   * Reconciles every row's hover styling against what is really under the
-   * pointer.
-   *
-   * Opening a panel moves the rows below it while the pointer stays put, and a
-   * row that slides out from under the cursor never receives `mouseleave` —
-   * its acid fill stays swept in over a row nobody is pointing at.
-   *
-   * The ink colour is CSS `:hover` (see globals.css) precisely so it cannot
-   * desync. The fill has to stay in GSAP because it flips transform-origin
-   * between enter and leave, so it gets reconciled here instead: `:hover` is
-   * the browser's own answer to "what is under the pointer", which beats
-   * inferring it from events that did not fire.
-   */
-  const syncHoverState = useCallback(() => {
-    const rows = containerRef.current?.querySelectorAll<HTMLElement>('.svc-row')
-
-    rows?.forEach((row) => {
-      if (row.matches(LIT)) return
-
-      const fill = row.querySelector('.svc-fill')
-      const index = row.querySelector<HTMLElement>('.svc-index')
-
-      gsap.set(fill, { scaleX: 0, transformOrigin: 'right center' })
-
-      if (index) {
-        gsap.killTweensOf(index)
-        index.textContent = row.dataset.code ?? index.textContent
-      }
-    })
-  }, [])
-
-  // Panels stay mounted so interrupted transitions can continue from their
-  // current height instead of reconciling entering/leaving DOM nodes.
   useGSAP(
     () => {
-      const panels = gsap.utils.toArray<HTMLElement>(
-        '.svc-panel',
-        containerRef.current,
-      )
-
-      panels.forEach((panel) => {
-        const isOpen = panel.dataset.code === open
-        gsap.set(panel, { height: isOpen ? 'auto' : 0 })
-        gsap.set(panel.querySelector('.svc-body'), {
-          autoAlpha: isOpen ? 1 : 0,
-          y: 0,
+      const panels = gsap.utils.toArray<HTMLElement>('.service-panel')
+      panels.forEach((panel, index) => {
+        gsap.set(panel, {
+          autoAlpha: index === 0 ? 1 : 0,
+          clipPath:
+            index === 0 ? 'inset(0% 0% 0% 0%)' : 'inset(100% 0% 0% 0%)',
+          zIndex: index === 0 ? 2 : 1,
         })
       })
 
-      return () => accordionRef.current?.kill()
+      return () => transitionRef.current?.kill()
     },
-    { scope: containerRef },
+    { scope: rootRef },
   )
 
-  // contextSafe: handlers that CREATE tweens must be registered with the
-  // GSAP context, otherwise those tweens survive unmount and leak.
-  const { contextSafe } = useGSAP({ scope: containerRef })
+  const { contextSafe } = useGSAP({ scope: rootRef })
 
-  const handleToggle = (code: string) => {
-    const next = open === code ? null : code
-    const panels = gsap.utils.toArray<HTMLElement>(
-      '.svc-panel',
-      containerRef.current,
-    )
+  const selectService = (next: number) => {
+    if (next === active) return
 
-    accordionRef.current?.kill()
+    const panels = gsap.utils.toArray<HTMLElement>('.service-panel')
+    const indicators = gsap.utils.toArray<HTMLElement>('.service-indicator')
+    const outgoing = panels[active]
+    const incoming = panels[next]
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const reduced = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches
+    if (!outgoing || !incoming) return
+    transitionRef.current?.kill()
+    panels.forEach((panel, index) => {
+      if (index === active || index === next) return
+      gsap.set(panel, {
+        autoAlpha: 0,
+        clipPath: 'inset(100% 0% 0% 0%)',
+        clearProps: 'transform',
+        zIndex: 1,
+      })
+    })
+
     const timeline = gsap.timeline({
-      defaults: { ease: EASE.cut, overwrite: 'auto' },
+      defaults: { overwrite: 'auto' },
       onComplete: () => {
-        panels.forEach((panel) => {
-          const body = panel.querySelector('.svc-body')
-          if (panel.dataset.code === next) {
-            gsap.set(panel, { height: 'auto' })
-            gsap.set(body, { clearProps: 'opacity,visibility,transform' })
-          } else {
-            gsap.set(panel, { height: 0 })
-            gsap.set(body, { autoAlpha: 0, y: 0 })
-          }
+        panels.forEach((panel, index) => {
+          if (index === next) return
+          gsap.set(panel, {
+            autoAlpha: 0,
+            clipPath: 'inset(100% 0% 0% 0%)',
+            clearProps: 'transform',
+            zIndex: 1,
+          })
         })
-        syncHoverState()
-        requestAnimationFrame(() => ScrollTrigger.refresh())
+        gsap.set(incoming, { clearProps: 'transform', zIndex: 2 })
       },
     })
 
-    panels.forEach((panel) => {
-      const body = panel.querySelector('.svc-body')
-      const isNext = panel.dataset.code === next
-
-      timeline.to(
-        panel,
+    timeline
+      .set(incoming, {
+        autoAlpha: 1,
+        clipPath: 'inset(100% 0% 0% 0%)',
+        y: 22,
+        zIndex: 3,
+      })
+      .to(
+        outgoing,
         {
-          height: isNext ? 'auto' : 0,
-          duration: reduced ? 0 : isNext ? 0.45 : DUR.fast,
+          clipPath: 'inset(0% 0% 100% 0%)',
+          y: -18,
+          duration: reduced ? 0 : DUR.fast + 0.05,
+          ease: EASE.retreat,
         },
         0,
       )
-      timeline.to(
-        body,
+      .to(
+        incoming,
         {
-          autoAlpha: isNext ? 1 : 0,
-          y: isNext ? 0 : -8,
-          duration: reduced ? 0 : isNext ? DUR.fast + 0.05 : DUR.fast,
+          clipPath: 'inset(0% 0% 0% 0%)',
+          y: 0,
+          duration: reduced ? 0 : DUR.base + 0.1,
+          ease: EASE.brutal,
         },
-        isNext ? 0.05 : 0,
+        reduced ? 0 : 0.12,
       )
-    })
+      .to(
+        indicators,
+        {
+          scaleX: (index) => (index === next ? 1 : 0),
+          transformOrigin: (index) => (index === next ? 'left center' : 'right center'),
+          duration: reduced ? 0 : DUR.fast,
+          ease: EASE.sweep,
+        },
+        0,
+      )
 
-    accordionRef.current = timeline
-    setOpen(next)
+    transitionRef.current = timeline
+    setActive(next)
   }
 
-  const handleEnter = contextSafe((row: HTMLElement, code: string) => {
-    gsap.to(row.querySelector('.svc-fill'), {
-      scaleX: 1,
-      transformOrigin: 'left center',
-      duration: hoverDuration(DUR.base - 0.1),
+  const enterTab = contextSafe((button: HTMLButtonElement) => {
+    if (button.getAttribute('aria-pressed') === 'true') return
+    gsap.to(button.querySelector('.service-title'), {
+      x: 8,
+      duration: hoverDuration(DUR.fast),
       ease: EASE.sweep,
       overwrite: 'auto',
     })
-    gsap.to(row.querySelector('.svc-index'), {
-      duration: hoverDuration(DUR.fast + 0.05),
-      scrambleText: { text: code, chars: '0123456789/', speed: 0.6 },
-      overwrite: 'auto',
-    })
   })
 
-  const handleLeave = contextSafe((row: HTMLElement, code: string) => {
-    // The pointer leaving does not un-light a row the keyboard is still on,
-    // and blurring does not un-light one the pointer is still over. Without
-    // this the fill retracted while the CSS rule kept the ink, which is the
-    // black-on-black state again.
-    if (row.matches(LIT)) return
-
-    gsap.to(row.querySelector('.svc-fill'), {
-      scaleX: 0,
-      transformOrigin: 'right center',
+  const leaveTab = contextSafe((button: HTMLButtonElement) => {
+    gsap.to(button.querySelector('.service-title'), {
+      x: 0,
       duration: hoverDuration(DUR.fast),
-      ease: EASE.retreat,
+      ease: EASE.sweep,
       overwrite: 'auto',
     })
-    // The scramble is a one-way tween with no reverse. Leaving mid-flight used
-    // to let it keep chewing on an element the pointer had already left, so
-    // the index could sit on a garbage frame; kill it and restore the code.
-    const index = row.querySelector('.svc-index')
-    if (index) {
-      gsap.killTweensOf(index)
-      index.textContent = code
-    }
   })
 
   return (
-    <section id="services" className="py-[var(--spacing-section)]">
+    <section
+      id="services"
+      ref={rootRef}
+      className="py-[var(--spacing-section)]"
+    >
       <div className="grid-page">
         <SectionHeader index={dict.index} title={dict.title} lead={dict.lead} />
       </div>
 
-      <div ref={containerRef} className="mt-20">
-        {services.map((service) => {
-          const isOpen = open === service.code
-          const panelId = `svc-panel-${service.code}`
-          const buttonId = `svc-button-${service.code}`
+      <div className="grid-page mt-20 items-stretch">
+        <div className="border-rule col-span-12 flex flex-col border-t lg:col-span-5">
+          {services.map((service, index) => {
+            const selected = index === active
+            const panelId = `service-panel-${service.code}`
 
-          return (
-            <div
-              key={service.code}
-              data-code={service.code}
-              className="svc-row relative"
-              onMouseEnter={(e) => handleEnter(e.currentTarget, service.code)}
-              onMouseLeave={(e) => handleLeave(e.currentTarget, service.code)}
-            >
-              <Rule className="svc-rule" />
-
-              <h3>
-                <button
-                  id={buttonId}
-                  type="button"
-                  aria-expanded={isOpen}
-                  aria-controls={panelId}
-                  onClick={() => handleToggle(service.code)}
-                  // Keyboard gets the same fill as the pointer. Without these
-                  // the row was the only affordance in the section that a
-                  // tabbing user could not see reacting.
-                  onFocus={(e) =>
-                    handleEnter(e.currentTarget.closest('.svc-row')!, service.code)
-                  }
-                  onBlur={(e) =>
-                    handleLeave(e.currentTarget.closest('.svc-row')!, service.code)
-                  }
-                  className="relative w-full py-8 text-left"
+            return (
+              <button
+                key={service.code}
+                id={`service-button-${service.code}`}
+                type="button"
+                aria-pressed={selected}
+                aria-controls={panelId}
+                onClick={() => selectService(index)}
+                onMouseEnter={(event) => enterTab(event.currentTarget)}
+                onMouseLeave={(event) => leaveTab(event.currentTarget)}
+                onFocus={(event) => enterTab(event.currentTarget)}
+                onBlur={(event) => leaveTab(event.currentTarget)}
+                className="border-rule group relative grid w-full flex-1 grid-cols-[3rem_1fr_auto] items-center gap-4 overflow-hidden border-b py-6 text-left md:grid-cols-[4rem_1fr_auto] lg:py-8"
+              >
+                <span
+                  aria-hidden
+                  className="service-indicator bg-accent absolute inset-x-0 bottom-0 block h-0.5 origin-left"
+                  style={{ transform: `scaleX(${selected ? 1 : 0})` }}
+                />
+                <span
+                  className={cn(
+                    'u-meta transition-colors duration-300',
+                    selected ? 'text-accent' : 'text-text-dim',
+                  )}
                 >
-                  <span
-                    aria-hidden
-                    className="svc-fill bg-accent absolute inset-0 origin-left scale-x-0"
-                  />
-                  <span className="grid-page relative items-center">
-                    <span className="u-label svc-index svc-ink col-span-2 md:col-span-1">
+                  {service.code}
+                </span>
+                <span
+                  className={cn(
+                    'service-title text-h3 u-wide transition-colors duration-300',
+                    selected ? 'text-text' : 'text-chalk-200 group-hover:text-text',
+                  )}
+                >
+                  {t(service.title, locale)}
+                </span>
+                <span
+                  aria-hidden
+                  className={cn(
+                    'u-meta transition-transform duration-500',
+                    selected ? 'text-accent rotate-45' : 'text-text-dim',
+                  )}
+                >
+                  ↗
+                </span>
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="border-rule bg-ink-900 relative col-span-12 min-h-[42rem] overflow-hidden border-x border-b lg:col-span-7 lg:border-t lg:border-l-0">
+          <span className="plate-bed absolute inset-0 opacity-40" />
+          {services.map((service, index) => {
+            const selected = index === active
+
+            return (
+              <article
+                key={service.code}
+                id={`service-panel-${service.code}`}
+                aria-labelledby={`service-button-${service.code}`}
+                aria-hidden={!selected}
+                className="service-panel absolute inset-0 flex flex-col justify-between p-6 sm:p-10 lg:p-12"
+              >
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between gap-6">
+                    <p className="u-label text-accent">Service / {service.code}</p>
+                    <span
+                      aria-hidden
+                      className="u-wide text-[clamp(4rem,12cqw,9rem)] leading-[0.7] text-transparent [-webkit-text-stroke:1px_var(--color-ink-600)]"
+                    >
                       {service.code}
                     </span>
-                    <span className="text-h2 u-wide svc-ink col-span-8 md:col-span-8">
-                      {t(service.title, locale)}
-                    </span>
-                    {/*
-                     * The accordion's whole affordance used to be a 13px "+"
-                     * glyph in the gutter. Two rules that cross and uncross
-                     * read at a glance and animate; `bg-current` keeps them on
-                     * the same `:hover` colour rule as `.svc-ink`.
-                     */}
-                    <span className="col-span-2 flex justify-end md:col-span-3">
-                      <span
-                        aria-hidden
-                        className="svc-ink relative block size-6 md:size-8"
-                      >
-                        <span className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-current" />
-                        <span
-                          className={cn(
-                            'absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-current transition-transform duration-500 ease-(--ease-brutal)',
-                            isOpen ? 'rotate-0' : 'rotate-90',
-                          )}
-                        />
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </h3>
+                  </div>
 
-              <div
-                id={panelId}
-                role="region"
-                aria-labelledby={buttonId}
-                aria-hidden={!isOpen}
-                data-code={service.code}
-                className="svc-panel overflow-hidden"
-              >
-                {/* Pitch and deliverables share the title's column band. */}
-                <div className="grid-page svc-body pb-14">
-                  <p className="text-lead text-chalk-200 col-span-12 max-w-[46ch] md:col-span-5 md:col-start-2">
+                  <h3 className="text-h1 u-wide mt-12 max-w-[13ch]">
+                    {t(service.title, locale)}
+                  </h3>
+                  <p className="text-lead text-chalk-200 mt-6 max-w-[42ch]">
                     {t(service.pitch, locale)}
                   </p>
-
-                  <div className="col-span-12 mt-8 md:col-span-4 md:col-start-8 md:mt-0">
-                    <p className="u-label mb-4">{dict.deliverables}</p>
-                    <ul className="text-body text-chalk-200 space-y-2">
-                      {t(service.deliverables, locale).map((item) => (
-                        <li key={item} className="flex gap-3">
-                          <span aria-hidden className="text-accent">
-                            /
-                          </span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
                 </div>
-              </div>
-            </div>
-          )
-        })}
-        <Rule />
+
+                <div className="relative z-10 mt-12 lg:grid lg:grid-cols-[8rem_1fr] lg:gap-8">
+                  <p className="u-label mb-4 lg:mb-0">{dict.deliverables}</p>
+                  <ul className="border-rule border-t">
+                    {t(service.deliverables, locale).map((item) => (
+                      <li
+                        key={item}
+                        className="text-body text-chalk-200 border-rule flex gap-4 border-b py-3"
+                      >
+                        <span aria-hidden className="text-accent">
+                          /
+                        </span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            )
+          })}
+        </div>
       </div>
     </section>
   )

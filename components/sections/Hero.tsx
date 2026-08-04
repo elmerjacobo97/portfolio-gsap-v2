@@ -43,6 +43,26 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
             },
             0.5,
           )
+          .from(
+            '.hero-artifact',
+            {
+              clipPath: 'inset(100% 0% 0% 0%)',
+              duration: 0.9,
+              ease: 'expo.out',
+            },
+            0.58,
+          )
+          .from(
+            '.hero-artifact-step',
+            {
+              xPercent: -18,
+              autoAlpha: 0,
+              stagger: 0.07,
+              duration: 0.5,
+              ease: 'power3.out',
+            },
+            0.72,
+          )
 
         // The split is created only once the preloader is gone. Creating it
         // earlier would run the onSplit tween behind the intro overlay, and
@@ -156,6 +176,35 @@ export function Hero({ dict }: { dict: Dictionary['hero'] }) {
         <p className="text-lead text-chalk-200 col-span-12 mt-14 max-w-[24ch] lg:col-span-6">
           {dict.statement}
         </p>
+
+        <div className="hero-artifact border-rule bg-ink-900 col-span-12 mt-10 border lg:col-span-5 lg:col-start-8 lg:mt-14">
+          <div className="border-rule flex items-center justify-between border-b px-4 py-3">
+            <span className="u-label text-accent">{dict.artifactLabel}</span>
+            <span className="flex items-center gap-2 font-mono text-[10px] tracking-widest text-chalk-400 uppercase">
+              <span className="bg-accent block size-1.5 rounded-full" /> Live
+            </span>
+          </div>
+          <ol className="grid grid-cols-2 md:grid-cols-4">
+            {dict.artifactSteps.map((step, index) => (
+              <li
+                key={step}
+                className="hero-artifact-step border-rule relative border-r border-b p-4 last:border-r-0 md:border-b-0"
+              >
+                <span className="u-label text-ink-600 block">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="u-meta mt-8 block">{step}</span>
+                <span
+                  aria-hidden
+                  className="bg-accent absolute right-3 bottom-3 block size-1.5 rounded-full"
+                />
+              </li>
+            ))}
+          </ol>
+          <p className="u-label border-rule text-chalk-400 border-t px-4 py-3">
+            {dict.artifactStatus}
+          </p>
+        </div>
       </div>
 
       <div className="grid-page">

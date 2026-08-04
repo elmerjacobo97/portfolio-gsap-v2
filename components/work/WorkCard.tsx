@@ -13,9 +13,9 @@ import { MediaPlate } from './MediaPlate'
 
 /** Column placement alternates so the grid never reads as a table of cards. */
 const PLACEMENT = [
-  'lg:col-span-7 lg:col-start-1',
-  'lg:col-span-7 lg:col-start-6 lg:mt-[12vh]',
-  'lg:col-span-8 lg:col-start-1',
+  'lg:col-span-10 lg:col-start-2',
+  'lg:col-span-6 lg:col-start-1',
+  'lg:col-span-6 lg:col-start-7',
 ] as const
 
 export function WorkCard({
@@ -57,6 +57,12 @@ export function WorkCard({
       ease: EASE.brutal,
       overwrite: 'auto',
     })
+    gsap.to(card.querySelectorAll('.preview-chrome'), {
+      y: -8,
+      duration: hoverDuration(DUR.base),
+      ease: EASE.sweep,
+      overwrite: 'auto',
+    })
     // The mass sweeps right over the meta line; it has to change ink with it.
     gsap.to(card.querySelectorAll('.plate-meta'), {
       color: 'var(--color-ink-950)',
@@ -89,6 +95,12 @@ export function WorkCard({
       scaleX: 0.26,
       duration: hoverDuration(DUR.fast + 0.05),
       ease: EASE.retreat,
+      overwrite: 'auto',
+    })
+    gsap.to(card.querySelectorAll('.preview-chrome'), {
+      y: 0,
+      duration: hoverDuration(DUR.fast + 0.1),
+      ease: EASE.sweep,
       overwrite: 'auto',
     })
     gsap.to(card.querySelectorAll('.plate-meta'), {
@@ -145,17 +157,23 @@ export function WorkCard({
         <MediaPlate
           project={project}
           locale={locale}
+          wide={index === 0}
           className="work-media mt-5"
         />
 
         {/* items-end, not items-baseline: on a two-line title the label used
             to sit against the first line, floating in the middle of the card
             with nothing under it. It belongs to the last line. */}
-        <div className="mt-6 flex items-end justify-between gap-6">
-          <h3 className="text-h2 u-wide work-title group-hover:text-accent transition-colors duration-300">
+        <div className="mt-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end sm:gap-6">
+          <h3
+            className={cn(
+              'u-wide work-title group-hover:text-accent min-w-0 transition-colors duration-300',
+              index === 0 ? 'text-h1' : 'text-h2',
+            )}
+          >
             {t(project.title, locale)}
           </h3>
-          <span className="u-label text-accent flex shrink-0 items-baseline gap-2">
+          <span className="u-label text-accent flex shrink-0 items-baseline gap-2 sm:self-auto">
             {viewLabel}
             <span aria-hidden className="work-arrow inline-block">
               ↗

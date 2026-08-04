@@ -26,6 +26,9 @@ const es = {
     meta: ['Trujillo, PE', '+4 años', 'React — Next — Laravel'],
     available: 'Disponible para proyectos',
     scroll: 'Scroll',
+    artifactLabel: 'Ruta a producción',
+    artifactStatus: 'Sistema entregado, medido y mantenible',
+    artifactSteps: ['Producto', 'Arquitectura', 'Código', 'Deploy'],
   },
 
   ticker: {
@@ -57,14 +60,39 @@ const es = {
     backHome: 'Volver al inicio',
   },
 
-  process: {
+  proof: {
     index: '03',
+    title: 'Evidencia de producción',
+    lead: 'Sin logos prestados ni cifras decorativas. Responsabilidades que ya sostienen producto real.',
+    facts: [
+      {
+        label: 'Liderazgo técnico',
+        detail: 'Revisión de PR, decisiones de arquitectura y coordinación directa con liderazgo técnico.',
+      },
+      {
+        label: 'Laravel 9 → 12',
+        detail: 'Migración de backend y rediseño de arquitectura sin detener la evolución del producto.',
+      },
+      {
+        label: 'Stripe recurrente',
+        detail: 'Suscripciones, estados de pago y paneles administrativos conectados al negocio.',
+      },
+      {
+        label: '4+ años',
+        detail: 'Aplicaciones web y móviles en producción, con usuarios y dinero real de por medio.',
+      },
+    ],
+  },
+
+  process: {
+    index: '04',
     title: 'Cómo trabajo',
     lead: 'Un proceso corto y honesto. Sabes en qué punto estamos en todo momento.',
+    jumpTo: 'Ir al paso',
   },
 
   about: {
-    index: '04',
+    index: '05',
     title: 'Sobre mí',
     bio: [
       'Llevo más de cuatro años construyendo aplicaciones web y móviles que viven en producción, con usuarios reales y dinero real de por medio.',
@@ -80,7 +108,7 @@ const es = {
   },
 
   contact: {
-    index: '05',
+    index: '06',
     title: 'Hablemos',
     lead: 'Cuéntame qué quieres construir. Respondo en menos de 24 horas.',
     channelsTitle: 'Canales directos',
@@ -104,8 +132,11 @@ const es = {
       message: 'Cuéntame del proyecto',
       submit: 'Enviar',
       sending: 'Enviando',
+      sendingHint: 'Envío seguro en curso',
       successTitle: 'Mensaje enviado',
       successBody: 'Te respondo en menos de 24 horas. Gracias por escribir.',
+      responseLabel: 'Siguiente paso',
+      responseValue: 'Recibirás una respuesta personal, no una secuencia automática.',
       errorGeneric: 'Algo falló al enviar. Escríbeme por WhatsApp o email.',
       errors: {
         nameMin: 'Escribe tu nombre',

@@ -1,13 +1,14 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 import { processSteps } from '@/data/process'
 import type { Dictionary } from '@/i18n/dictionary'
 import type { Locale } from '@/i18n/config'
 import { t } from '@/i18n/t'
+import { cn } from '@/lib/cn'
 import { Numeral } from '@/components/ui/Numeral'
-import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
+import { gsap, ScrollSmoother, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { DESKTOP, DUR, EASE, MOBILE } from '@/lib/motion'
 import { SectionHeader } from './SectionHeader'
 
@@ -20,6 +21,8 @@ export function Process({
 }) {
   const rootRef = useRef<HTMLElement>(null)
   const pinRef = useRef<HTMLDivElement>(null)
+  const trackTweenRef = useRef<gsap.core.Tween | null>(null)
+  const [activeStep, setActiveStep] = useState(0)
 
   useGSAP(
     () => {
@@ -58,9 +61,14 @@ export function Process({
               inertia: false,
             },
             onUpdate: (self) =>
-              gsap.set('.process-progress', { scaleX: self.progress }),
+              {
+                gsap.set('.process-progress', { scaleX: self.progress })
+                const next = Math.round(self.progress * (panels.length - 1))
+                setActiveStep((current) => (current === next ? current : next))
+              },
           },
         })
+        trackTweenRef.current = track
 
         // containerAnimation is mandatory for any ScrollTrigger whose trigger
         // lives inside a horizontally-scrolled container — without it the
@@ -111,6 +119,7 @@ export function Process({
           panelTriggers.forEach((st) => st.kill())
           track.scrollTrigger?.kill()
           track.kill()
+          trackTweenRef.current = null
         }
       })
 
@@ -137,6 +146,21 @@ export function Process({
     { scope: rootRef },
   )
 
+  const handleStep = (index: number) => {
+    const trigger = trackTweenRef.current?.scrollTrigger
+    if (!trigger) return
+
+    const progress = index / (processSteps.length - 1)
+    const destination = trigger.start + (trigger.end - trigger.start) * progress
+    const smoother = ScrollSmoother.get()
+
+    if (smoother) {
+      smoother.scrollTo(destination, true)
+    } else {
+      window.scrollTo({ top: destination, behavior: 'smooth' })
+    }
+  }
+
   return (
     <section
       id="process"
@@ -150,9 +174,9 @@ export function Process({
 
       <div
         ref={pinRef}
-        className="process-pin relative md:h-svh md:overflow-hidden"
+        className="process-pin relative"
       >
-        <div className="process-track md:flex md:h-full md:flex-nowrap">
+        <div className="process-track">
           {processSteps.map((step) => (
             /*
              * Numeral and copy share one column band. They used to sit at
@@ -164,7 +188,7 @@ export function Process({
              */
             <article
               key={step.code}
-              className="process-panel border-rule grid-page border-t py-14 md:h-full md:w-screen md:shrink-0 md:content-between md:border-t-0 md:py-[13vh]"
+              className="process-panel border-rule grid-page border-t py-14"
             >
               <div className="col-span-12 md:col-span-8 md:col-start-2">
                 <Numeral className="process-numeral leading-none">
@@ -189,11 +213,34 @@ export function Process({
           ))}
         </div>
 
+        <nav
+          aria-label={dict.jumpTo}
+          className="process-step-nav border-rule bg-canvas/90 absolute top-6 right-[var(--spacing-gutter)] z-10 hidden border backdrop-blur-sm"
+        >
+          {processSteps.map((step, index) => (
+            <button
+              key={step.code}
+              type="button"
+              aria-label={`${dict.jumpTo} ${step.code}`}
+              aria-current={activeStep === index ? 'step' : undefined}
+              onClick={() => handleStep(index)}
+              className={cn(
+                'u-meta border-rule min-h-11 min-w-12 border-r px-3 transition-colors last:border-r-0',
+                activeStep === index
+                  ? 'bg-accent text-ink-950'
+                  : 'text-text-dim hover:text-text',
+              )}
+            >
+              {step.code}
+            </button>
+          ))}
+        </nav>
+
         {/* 2px, not the usual hairline: pinned to the very bottom edge of the
             viewport, 1px reads as an artifact rather than a readout. */}
         <div
           aria-hidden
-          className="bg-rule absolute inset-x-0 bottom-0 hidden h-0.5 md:block"
+          className="process-progress-shell bg-rule absolute inset-x-0 bottom-0 hidden h-0.5"
         >
           <span className="process-progress bg-accent block h-full w-full origin-left scale-x-0" />
         </div>

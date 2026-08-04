@@ -87,7 +87,7 @@ export function Work({
         <SectionHeader index={dict.index} title={dict.title} lead={dict.lead} />
       </div>
 
-      <div ref={containerRef} className="grid-page mt-20 lg:gap-y-[14vh]">
+      <div ref={containerRef} className="grid-page mt-20 gap-y-24 lg:gap-y-[12vh]">
         {featured().map((project, i) => (
           <WorkCard
             key={project.slug}

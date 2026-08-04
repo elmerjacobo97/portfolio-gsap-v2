@@ -74,7 +74,7 @@ export default async function CaseStudy({
       <CaseHeader project={project} locale={locale} dict={dict.work} />
 
       <div className="page-pad">
-        <MediaPlate project={project} locale={locale} />
+        <MediaPlate project={project} locale={locale} wide />
       </div>
 
       <div className="mt-[var(--spacing-section)]">

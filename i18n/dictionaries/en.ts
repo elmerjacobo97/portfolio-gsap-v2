@@ -28,6 +28,9 @@ const en = {
     meta: ['Trujillo, PE', '4+ years', 'React — Next — Laravel'],
     available: 'Available for work',
     scroll: 'Scroll',
+    artifactLabel: 'Path to production',
+    artifactStatus: 'A shipped, measured, maintainable system',
+    artifactSteps: ['Product', 'Architecture', 'Code', 'Deploy'],
   },
 
   ticker: {
@@ -59,14 +62,39 @@ const en = {
     backHome: 'Back home',
   },
 
-  process: {
+  proof: {
     index: '03',
+    title: 'Production evidence',
+    lead: 'No borrowed logos or decorative numbers. Responsibilities already supporting a real product.',
+    facts: [
+      {
+        label: 'Technical leadership',
+        detail: 'PR reviews, architecture decisions, and direct coordination with technical leadership.',
+      },
+      {
+        label: 'Laravel 9 → 12',
+        detail: 'Backend migration and architecture redesign without stopping product development.',
+      },
+      {
+        label: 'Recurring Stripe',
+        detail: 'Subscriptions, payment states, and admin dashboards connected to the business.',
+      },
+      {
+        label: '4+ years',
+        detail: 'Web and mobile applications in production, with real users and real money involved.',
+      },
+    ],
+  },
+
+  process: {
+    index: '04',
     title: 'How I work',
     lead: 'A short, honest process. You always know exactly where we are.',
+    jumpTo: 'Go to step',
   },
 
   about: {
-    index: '04',
+    index: '05',
     title: 'About',
     bio: [
       'For over four years I have been building web and mobile applications that live in production, with real users and real money on the line.',
@@ -82,7 +110,7 @@ const en = {
   },
 
   contact: {
-    index: '05',
+    index: '06',
     title: "Let's talk",
     lead: 'Tell me what you want to build. I reply within 24 hours.',
     channelsTitle: 'Direct channels',
@@ -106,8 +134,11 @@ const en = {
       message: 'Tell me about the project',
       submit: 'Send',
       sending: 'Sending',
+      sendingHint: 'Secure delivery in progress',
       successTitle: 'Message sent',
       successBody: 'I will get back to you within 24 hours. Thanks for writing.',
+      responseLabel: 'Next step',
+      responseValue: 'You will receive a personal reply, not an automated sequence.',
       errorGeneric: 'Something went wrong. Reach me on WhatsApp or email.',
       errors: {
         nameMin: 'Enter your name',

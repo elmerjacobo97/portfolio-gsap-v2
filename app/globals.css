@@ -229,38 +229,6 @@
 }
 
 /*
- * Ink-on-acid for a hovered service row.
- *
- * CSS and not a GSAP tween on purpose. Driven from mouseenter/mouseleave it
- * got stuck: opening a panel moves the rows under a stationary pointer, and a
- * row that slides out from under the cursor never receives its mouseleave, so
- * it kept an inline `color: ink-950` and sat black on a black canvas. `:hover`
- * is recomputed from where the pointer actually is, so it cannot desync from
- * reality no matter which events were missed.
- *
- * Unlayered, also on purpose: inside `@layer base` this loses to `u-label`,
- * which Tailwind compiles into the utilities layer and which sets its own
- * colour. Unlayered rules outrank every layer.
- *
- * `:focus-visible` rather than `:focus-within`: clicking a row focuses its
- * button, and a plain focus selector would leave the row lit long after the
- * pointer had wandered off, which reads as stuck rather than as feedback.
- *
- * The acid fill itself stays in GSAP — it flips transform-origin between enter
- * and leave, which one CSS transition cannot express. Every place that decides
- * whether a row is lit uses this same `:hover, :has(:focus-visible)` test, so
- * the fill and the ink can never disagree.
- */
-.svc-row:hover .svc-ink,
-.svc-row:has(:focus-visible) .svc-ink {
-  color: var(--color-ink-950);
-}
-
-.svc-ink {
-  transition: color 300ms var(--ease-brutal);
-}
-
-/*
  * Belt to the JavaScript braces: every section already branches on
  * gsap.matchMedia, this catches CSS transitions and any keyframe animation
  * added later.
@@ -273,5 +241,38 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Horizontal process exists only when its ScrollTrigger exists. Keeping these
+ * mechanics out of `md:` utilities prevents reduced-motion desktop users from
+ * receiving a 400vw track with no animation to bring later panels onscreen. */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .process-pin {
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .process-track {
+    display: flex;
+    height: 100%;
+    flex-wrap: nowrap;
+  }
+
+  .process-panel {
+    width: 100vw;
+    height: 100%;
+    flex-shrink: 0;
+    align-content: space-between;
+    border-top-width: 0;
+    padding-block: 13vh;
+  }
+
+  .process-step-nav {
+    display: flex;
+  }
+
+  .process-progress-shell {
+    display: block;
   }
 }

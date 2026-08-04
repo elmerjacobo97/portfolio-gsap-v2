@@ -23,12 +23,19 @@ export function CaseHeader({
 
   return (
     <header className="grid-page pt-40 pb-16">
+      <p className="u-label text-accent col-span-12 mb-6">
+        Case / {project.slug}
+      </p>
       <h1 className="text-display u-wide col-span-12">
         {t(project.title, locale)}
       </h1>
 
       <p className="text-lead text-chalk-200 col-span-12 mt-8 max-w-[46ch] lg:col-span-6">
         {t(project.tagline, locale)}
+      </p>
+
+      <p className="u-wide col-span-12 mt-8 text-right text-[clamp(4rem,12vw,11rem)] leading-[0.72] text-transparent [-webkit-text-stroke:1px_var(--color-ink-600)] lg:col-span-5 lg:col-start-8 lg:mt-0">
+        {String(project.year).slice(-2)}
       </p>
 
       <Rule className="col-span-12 mt-16" />

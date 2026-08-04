@@ -15,6 +15,7 @@ export function Field({
   name,
   label,
   type = 'text',
+  autoComplete,
   required,
   textarea,
   options,
@@ -25,6 +26,7 @@ export function Field({
   name: string
   label: string
   type?: string
+  autoComplete?: string
   required?: boolean
   textarea?: boolean
   options?: readonly string[]
@@ -43,11 +45,11 @@ export function Field({
       const mm = gsap.matchMedia()
 
       mm.add(OK, () => {
-        gsap.fromTo(
-          rootRef.current,
-          { x: -6 },
-          { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' },
-        )
+        gsap.fromTo(rootRef.current, { x: -4 }, {
+          x: 0,
+          duration: 0.28,
+          ease: 'power2.out',
+        })
       })
 
       return () => mm.revert()
@@ -102,6 +104,7 @@ export function Field({
           id={id}
           name={name}
           type={type}
+          autoComplete={autoComplete}
           required={required}
           defaultValue={defaultValue}
           aria-invalid={error ? true : undefined}
