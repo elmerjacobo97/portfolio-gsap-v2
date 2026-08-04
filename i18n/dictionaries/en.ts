@@ -59,7 +59,7 @@ const en = {
     liveSite: 'Live site',
     repository: 'Repository',
     nextCase: 'Next case',
-    backHome: 'Back home',
+    backWork: 'Back to work',
   },
 
   proof: {

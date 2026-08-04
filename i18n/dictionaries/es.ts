@@ -57,7 +57,7 @@ const es = {
     liveSite: 'Sitio en vivo',
     repository: 'Repositorio',
     nextCase: 'Siguiente caso',
-    backHome: 'Volver al inicio',
+    backWork: 'Volver a trabajo',
   },
 
   proof: {

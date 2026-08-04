@@ -84,8 +84,8 @@ export default async function CaseStudy({
       <CaseBody project={project} locale={locale} />
 
       <div className="grid-page pb-[var(--spacing-section)]">
-        <ArrowLink href={`/${locale}`} className="u-meta col-span-12">
-          {dict.work.backHome}
+        <ArrowLink href={`/${locale}#work`} className="u-meta col-span-12">
+          {dict.work.backWork}
         </ArrowLink>
       </div>
 
