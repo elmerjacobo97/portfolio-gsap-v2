@@ -131,7 +131,7 @@ export default async function RootLayout({
          * the first paint — without JS to dismiss it, it must not render.
          */}
         <noscript>
-          <style>{`.anim-clip{visibility:visible!important}.intro{display:none!important}`}</style>
+          <style>{`.intro{display:none!important}`}</style>
         </noscript>
 
         {/*

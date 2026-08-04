@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 
 import { gsap, useGSAP } from '@/lib/gsap'
+import { DUR, EASE, hoverDuration } from '@/lib/motion'
 
 /**
  * Label above value, not beside it — a long value (the email) would otherwise
@@ -31,14 +32,16 @@ export function ChannelRow({
     gsap.to(row.querySelectorAll('.channel-fill'), {
       scaleX: 1,
       transformOrigin: 'left center',
-      duration: 0.5,
-      ease: 'power3.out',
+      duration: hoverDuration(DUR.base - 0.1),
+      ease: EASE.sweep,
+      overwrite: 'auto',
     })
     gsap.to(row.querySelectorAll('.channel-arrow'), {
-      x: 6,
-      y: -6,
-      duration: 0.35,
-      ease: 'power3.out',
+      x: 8,
+      y: -8,
+      duration: hoverDuration(DUR.fast),
+      ease: EASE.sweep,
+      overwrite: 'auto',
     })
   })
 
@@ -46,14 +49,16 @@ export function ChannelRow({
     gsap.to(row.querySelectorAll('.channel-fill'), {
       scaleX: 0,
       transformOrigin: 'right center',
-      duration: 0.4,
-      ease: 'power3.in',
+      duration: hoverDuration(DUR.fast),
+      ease: EASE.retreat,
+      overwrite: 'auto',
     })
     gsap.to(row.querySelectorAll('.channel-arrow'), {
       x: 0,
       y: 0,
-      duration: 0.35,
-      ease: 'power3.out',
+      duration: hoverDuration(DUR.fast),
+      ease: EASE.sweep,
+      overwrite: 'auto',
     })
   })
 

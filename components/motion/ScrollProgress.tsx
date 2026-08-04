@@ -4,6 +4,12 @@ import { useRef } from 'react'
 
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
 
+/**
+ * Deliberately NOT gated behind prefers-reduced-motion. The bar has no
+ * duration and no easing — it is a 1:1 readout of scroll position, the same
+ * category as the native scrollbar. Hiding it from users who asked for less
+ * motion would remove orientation feedback, not animation.
+ */
 export function ScrollProgress() {
   const barRef = useRef<HTMLSpanElement>(null)
 

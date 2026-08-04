@@ -92,7 +92,6 @@
 
   /* ── MOTION ─────────────────────────────────────────────────────────── */
   --ease-brutal: cubic-bezier(0.16, 1, 0.3, 1); /* CSS twin of expo.out */
-  --ease-cut: cubic-bezier(0.85, 0, 0.15, 1); /* CSS twin of expo.inOut */
 }
 
 /* ── UTILITIES ────────────────────────────────────────────────────────── */
@@ -114,6 +113,25 @@
   max-width: var(--container-page);
   margin-inline: auto;
   padding-inline: var(--spacing-gutter);
+}
+
+/*
+ * Hairline bed for placeholder plates. Same 1px language as GridOverlay but a
+ * coarser rhythm (quarters, thirds) so it reads as the texture inside a well
+ * rather than competing with the page grid showing through behind it.
+ */
+@utility plate-bed {
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--color-rule) 0 1px,
+      transparent 1px 25%
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--color-rule) 0 1px,
+      transparent 1px 33.333%
+    );
 }
 
 /* The hard horizontal rule motif. */
@@ -199,11 +217,6 @@
     border-radius: 0;
   }
 
-  /* The one pre-animation state. GSAP flips it via autoAlpha. */
-  .anim-clip {
-    visibility: hidden;
-  }
-
   /*
    * Hidden via `transform`, NOT Tailwind's `scale-y-0` — that utility compiles
    * to the independent CSS `scale` property, which composes on top of whatever
@@ -215,13 +228,12 @@
   }
 }
 
+/*
+ * Belt to the JavaScript braces: every section already branches on
+ * gsap.matchMedia, this catches CSS transitions and any keyframe animation
+ * added later.
+ */
 @media (prefers-reduced-motion: reduce) {
-  .anim-clip {
-    visibility: visible !important;
-    transform: none !important;
-    opacity: 1 !important;
-  }
-
   *,
   *::before,
   *::after {

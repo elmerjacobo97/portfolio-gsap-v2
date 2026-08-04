@@ -2,11 +2,14 @@ import Image from 'next/image'
 
 import type { Project } from '@/data/projects'
 import type { Locale } from '@/i18n/config'
+import { PlateFill } from '@/components/ui/PlateFill'
+import { t } from '@/i18n/t'
 import { cn } from '@/lib/cn'
 
 /**
- * CSS-only stand-in while `project.cover` is undefined. Swapping in a real
- * screenshot is a `data/projects.ts` edit — no JSX changes anywhere.
+ * The media well for a project. Falls back to <PlateFill/> while
+ * `project.cover` is undefined — swapping in a real screenshot is a
+ * `data/projects.ts` edit, no JSX changes anywhere.
  */
 export function MediaPlate({
   project,
@@ -20,7 +23,9 @@ export function MediaPlate({
   return (
     <div
       className={cn(
-        'bg-ink-850 border-rule relative aspect-16/10 overflow-hidden border',
+        // @container: PlateFill sizes its type against the plate's own width,
+        // which tracks the card's column span rather than the viewport.
+        'bg-ink-850 border-rule @container relative aspect-16/10 overflow-hidden border',
         className,
       )}
     >
@@ -34,22 +39,10 @@ export function MediaPlate({
           className="case-media size-full object-cover"
         />
       ) : (
-        <>
-          <span
-            aria-hidden
-            className="bg-accent/70 absolute top-1/2 -left-1/4 h-px w-[150%] origin-center -rotate-12"
-          />
-          {/* Caption on the placeholder plate. aria-hidden is the honest
-              semantic (it is not content), but axe still audits its contrast,
-              so it uses chalk-400 — ~5.4:1 on ink-850 — rather than a faint
-              watermark tone. Goes away entirely once real covers land. */}
-          <span
-            aria-hidden
-            className="u-meta text-chalk-400 absolute right-5 bottom-5"
-          >
-            {project.slug}
-          </span>
-        </>
+        <PlateFill
+          lines={project.stack.slice(0, 4)}
+          meta={`${project.year} · ${t(project.role, locale)}`}
+        />
       )}
     </div>
   )

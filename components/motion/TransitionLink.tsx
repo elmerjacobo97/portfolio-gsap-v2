@@ -17,11 +17,16 @@ export function TransitionLink({
   children,
   className,
   prefetch = true,
+  onFocus,
+  onBlur,
 }: {
   href: string
   children: React.ReactNode
   className?: string
   prefetch?: boolean
+  /** Callers that animate on hover pass these to mirror the state on focus. */
+  onFocus?: React.FocusEventHandler<HTMLAnchorElement>
+  onBlur?: React.FocusEventHandler<HTMLAnchorElement>
 }) {
   const router = useRouter()
   const { contextSafe } = useGSAP()
@@ -56,6 +61,8 @@ export function TransitionLink({
       prefetch={prefetch}
       onClick={handleClick}
       onPointerEnter={() => router.prefetch(href)}
+      onFocus={onFocus}
+      onBlur={onBlur}
       className={className}
     >
       {children}

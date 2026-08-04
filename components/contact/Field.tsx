@@ -74,7 +74,14 @@ export function Field({
           defaultValue={defaultValue}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
-          className={control}
+          /*
+           * The native resize grabber is the one un-styleable widget on the
+           * page and it sat in the corner of an otherwise hairline-only form.
+           * field-sizing-content grows the box with the text instead, so
+           * nothing is lost by turning the handle off; `rows` stays as the
+           * floor and as the fallback where field-sizing isn't supported.
+           */
+          className={cn(control, 'resize-none field-sizing-content')}
         />
       ) : options ? (
         <select

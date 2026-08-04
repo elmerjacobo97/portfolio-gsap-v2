@@ -6,6 +6,7 @@ import type { Project } from '@/data/projects'
 import type { Locale } from '@/i18n/config'
 import { t } from '@/i18n/t'
 import { gsap, useGSAP } from '@/lib/gsap'
+import { DUR, EASE, hoverDuration } from '@/lib/motion'
 import { TransitionLink } from '@/components/motion/TransitionLink'
 
 export function NextProject({
@@ -23,16 +24,18 @@ export function NextProject({
   const handleEnter = contextSafe((el: HTMLElement) => {
     gsap.to(el.querySelectorAll('.next-title'), {
       x: 16,
-      duration: 0.5,
-      ease: 'power3.out',
+      duration: hoverDuration(DUR.base - 0.1),
+      ease: EASE.sweep,
+      overwrite: 'auto',
     })
   })
 
   const handleLeave = contextSafe((el: HTMLElement) => {
     gsap.to(el.querySelectorAll('.next-title'), {
       x: 0,
-      duration: 0.5,
-      ease: 'power3.out',
+      duration: hoverDuration(DUR.base - 0.1),
+      ease: EASE.sweep,
+      overwrite: 'auto',
     })
   })
 

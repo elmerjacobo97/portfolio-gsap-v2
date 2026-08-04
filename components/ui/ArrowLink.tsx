@@ -25,7 +25,16 @@ export function ArrowLink({
   const content = (
     <>
       <span>{children}</span>
-      <span aria-hidden className="arrow inline-block">
+      {/*
+       * The arrow used to carry a `.arrow` class with no rule and no tween
+       * behind it, so this — the site's most repeated affordance — was the one
+       * that never moved. CSS rather than GSAP: it is a two-property hover on
+       * a link, and the global reduced-motion block already neutralises it.
+       */}
+      <span
+        aria-hidden
+        className="arrow inline-block transition-transform duration-300 ease-(--ease-brutal) group-hover:translate-x-1 group-hover:-translate-y-1 group-focus-visible:translate-x-1 group-focus-visible:-translate-y-1"
+      >
         ↗
       </span>
     </>

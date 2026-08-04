@@ -6,18 +6,18 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { SplitText } from 'gsap/SplitText'
 import { Flip } from 'gsap/Flip'
-import { Observer } from 'gsap/Observer'
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 
 // Module-level registration, deep imports only — never `gsap/all`, which
 // would pull every plugin (including ones we don't use) into the bundle.
+// Same rule applies to this list: a plugin lands here when a component
+// imports it, not before.
 gsap.registerPlugin(
   useGSAP,
   ScrollTrigger,
   ScrollSmoother,
   SplitText,
   Flip,
-  Observer,
   ScrambleTextPlugin,
 )
 
@@ -38,6 +38,5 @@ export {
   ScrollSmoother,
   SplitText,
   Flip,
-  Observer,
   ScrambleTextPlugin,
 }

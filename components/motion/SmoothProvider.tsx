@@ -34,7 +34,12 @@ export function SmoothProvider({ children }: { children: React.ReactNode }) {
             content: '#smooth-content',
             smooth: 1.2,
             smoothTouch: 0, // native scroll on touch — keeps iOS momentum
-            effects: true, // enables data-speed / data-lag parallax attrs
+            // Off, and it should stay off until something actually carries a
+            // data-speed/data-lag attribute: with it on, ScrollSmoother walks
+            // the content on every refresh looking for effect targets and
+            // finds none. Parallax on this site comes from ScrollTrigger
+            // scrubs, which do not need it.
+            effects: false,
             ignoreMobileResize: true,
           })
 

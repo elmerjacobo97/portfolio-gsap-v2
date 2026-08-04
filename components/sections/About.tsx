@@ -5,6 +5,7 @@ import { useRef } from 'react'
 import { site } from '@/data/site'
 import type { Dictionary } from '@/i18n/dictionary'
 import { Counter } from '@/components/motion/Counter'
+import { PlateFill } from '@/components/ui/PlateFill'
 import { gsap, SplitText, useGSAP } from '@/lib/gsap'
 import { OK } from '@/lib/motion'
 import { SectionHeader } from './SectionHeader'
@@ -63,17 +64,17 @@ export function About({ dict }: { dict: Dictionary['about'] }) {
       <div className="grid-page">
         <SectionHeader index={dict.index} title={dict.title} />
 
-        {/* Portrait well. Grayscale plate under a colour plate that fades in
-            on scroll — both CSS-only placeholders until there is a photo. */}
+        {/* Portrait well. Same composed stand-in as the project plates, with a
+            colour wash that fades in on scroll. CSS-only until there's a photo. */}
         <div
           aria-hidden
-          className="bg-ink-850 border-rule relative col-span-12 mt-16 aspect-4/5 overflow-hidden border sm:col-span-6 lg:col-span-5"
+          className="bg-ink-850 border-rule @container relative col-span-12 mt-16 aspect-4/5 overflow-hidden border sm:col-span-6 lg:col-span-5"
         >
-          <span className="bg-accent/70 absolute top-1/2 -left-1/4 h-px w-[150%] origin-center -rotate-45" />
+          <PlateFill
+            lines={site.stack.slice(0, 4)}
+            meta={`${site.city}, ${site.country}`}
+          />
           <span className="about-portrait-color bg-accent/10 absolute inset-0 opacity-0" />
-          <span className="u-meta text-chalk-400 absolute right-5 bottom-5">
-            {site.city}, {site.country}
-          </span>
         </div>
 
         <div className="col-span-12 mt-12 lg:col-span-6 lg:col-start-7 lg:mt-16">
@@ -85,16 +86,21 @@ export function About({ dict }: { dict: Dictionary['about'] }) {
             ))}
           </div>
 
-          <dl className="border-rule mt-14 grid grid-cols-3 gap-6 border-t pt-10">
+          {/* gap-x-10 and min-w-0: at three equal columns inside a six-column
+              band, "100%" at text-h1 all but touched the next cell and pushed
+              its own label into the page gutter. */}
+          <dl className="border-rule mt-14 grid grid-cols-3 gap-x-10 gap-y-8 border-t pt-10">
             {dict.stats.map((stat) => (
-              <div key={stat.label}>
+              <div key={stat.label} className="min-w-0">
                 <dt className="sr-only">{stat.label}</dt>
                 <dd>
                   <Counter
                     value={stat.value}
-                    className="text-h1 u-wide text-accent block"
+                    className="text-h2 u-wide text-accent block"
                   />
-                  <span className="u-label mt-2 block">{stat.label}</span>
+                  <span className="u-label mt-3 block text-pretty">
+                    {stat.label}
+                  </span>
                 </dd>
               </div>
             ))}
