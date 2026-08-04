@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { services } from '@/data/services'
 import type { Dictionary } from '@/i18n/dictionary'
@@ -8,9 +8,17 @@ import type { Locale } from '@/i18n/config'
 import { t } from '@/i18n/t'
 import { Rule } from '@/components/ui/Rule'
 import { cn } from '@/lib/cn'
-import { gsap, ScrollTrigger, Flip, useGSAP } from '@/lib/gsap'
-import { DUR, EASE, OK, REDUCED, hoverDuration } from '@/lib/motion'
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
+import { DUR, EASE, hoverDuration } from '@/lib/motion'
 import { SectionHeader } from './SectionHeader'
+
+/**
+ * When a row counts as lit. Must stay identical to the selector in
+ * globals.css that turns `.svc-ink` to ink — the acid fill lives in GSAP and
+ * the ink colour lives in CSS, and the two disagreeing is what produced black
+ * text on a black row.
+ */
+const LIT = ':hover, :has(:focus-visible)'
 
 export function Services({
   dict,
@@ -21,103 +29,123 @@ export function Services({
 }) {
   const [open, setOpen] = useState<string | null>(services[0]?.code ?? null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const flipStateRef = useRef<ReturnType<typeof Flip.getState> | null>(null)
+  const accordionRef = useRef<gsap.core.Timeline | null>(null)
 
-  // Group entrance: one ScrollTrigger.batch instead of one trigger per row,
-  // so rows entering the viewport together read as a single reveal.
+  /**
+   * Reconciles every row's hover styling against what is really under the
+   * pointer.
+   *
+   * Opening a panel moves the rows below it while the pointer stays put, and a
+   * row that slides out from under the cursor never receives `mouseleave` —
+   * its acid fill stays swept in over a row nobody is pointing at.
+   *
+   * The ink colour is CSS `:hover` (see globals.css) precisely so it cannot
+   * desync. The fill has to stay in GSAP because it flips transform-origin
+   * between enter and leave, so it gets reconciled here instead: `:hover` is
+   * the browser's own answer to "what is under the pointer", which beats
+   * inferring it from events that did not fire.
+   */
+  const syncHoverState = useCallback(() => {
+    const rows = containerRef.current?.querySelectorAll<HTMLElement>('.svc-row')
+
+    rows?.forEach((row) => {
+      if (row.matches(LIT)) return
+
+      const fill = row.querySelector('.svc-fill')
+      const index = row.querySelector<HTMLElement>('.svc-index')
+
+      gsap.set(fill, { scaleX: 0, transformOrigin: 'right center' })
+
+      if (index) {
+        gsap.killTweensOf(index)
+        index.textContent = row.dataset.code ?? index.textContent
+      }
+    })
+  }, [])
+
+  // Panels stay mounted so interrupted transitions can continue from their
+  // current height instead of reconciling entering/leaving DOM nodes.
   useGSAP(
     () => {
-      const mm = gsap.matchMedia()
+      const panels = gsap.utils.toArray<HTMLElement>(
+        '.svc-panel',
+        containerRef.current,
+      )
 
-      mm.add(OK, () => {
-        const rows = gsap.utils.toArray<HTMLElement>('.svc-row')
-
-        const triggers = ScrollTrigger.batch(rows, {
-          start: 'top 85%',
-          onEnter: (batch) => {
-            gsap.from(batch, {
-              yPercent: 8,
-              autoAlpha: 0,
-              duration: DUR.base + 0.2,
-              stagger: 0.09,
-              ease: EASE.sweep,
-              overwrite: true,
-            })
-            // The rule draws with its own row. Previously this ran once on
-            // mount for every rule at once, so rows still below the fold had
-            // already spent their reveal by the time they were seen.
-            gsap.from(
-              batch.map((row) => row.querySelector('.svc-rule')),
-              {
-                scaleX: 0,
-                transformOrigin: 'left center',
-                duration: DUR.slow,
-                ease: EASE.brutal,
-                stagger: 0.09,
-                overwrite: true,
-              },
-            )
-          },
+      panels.forEach((panel) => {
+        const isOpen = panel.dataset.code === open
+        gsap.set(panel, { height: isOpen ? 'auto' : 0 })
+        gsap.set(panel.querySelector('.svc-body'), {
+          autoAlpha: isOpen ? 1 : 0,
+          y: 0,
         })
-
-        return () => triggers.forEach((st) => st.kill())
       })
 
-      return () => mm.revert()
+      return () => accordionRef.current?.kill()
     },
     { scope: containerRef },
   )
 
-  // Flip captures the "before" DOM state synchronously in the click handler
-  // (handleToggle), then this effect plays the transition to the new layout.
-  useGSAP(
-    () => {
-      const state = flipStateRef.current
-      if (!state) return
-      flipStateRef.current = null
-
-      const mm = gsap.matchMedia()
-
-      mm.add(OK, () => {
-        Flip.from(state, {
-          duration: DUR.base + 0.05,
-          ease: EASE.cut,
-          absolute: true,
-          nested: true,
-          onEnter: (els) =>
-            gsap.from(els, {
-              autoAlpha: 0,
-              y: 24,
-              stagger: 0.04,
-              duration: DUR.fast + 0.15,
-            }),
-          onLeave: (els) =>
-            gsap.to(els, { autoAlpha: 0, y: -16, duration: DUR.fast }),
-          // The accordion changes page height — every other ScrollTrigger's
-          // start/end values are stale until this runs.
-          onComplete: () => ScrollTrigger.refresh(),
-        })
-      })
-
-      // Reduced motion still needs the layout measured again: React already
-      // swapped the panel in, the animation is the only thing being skipped.
-      mm.add(REDUCED, () => {
-        ScrollTrigger.refresh()
-      })
-
-      return () => mm.revert()
-    },
-    { scope: containerRef, dependencies: [open], revertOnUpdate: true },
-  )
-
-  const handleToggle = (code: string) => {
-    flipStateRef.current = Flip.getState('.svc-row, .svc-body')
-    setOpen((prev) => (prev === code ? null : code))
-  }
-
   // contextSafe: handlers that CREATE tweens must be registered with the
   // GSAP context, otherwise those tweens survive unmount and leak.
   const { contextSafe } = useGSAP({ scope: containerRef })
+
+  const handleToggle = (code: string) => {
+    const next = open === code ? null : code
+    const panels = gsap.utils.toArray<HTMLElement>(
+      '.svc-panel',
+      containerRef.current,
+    )
+
+    accordionRef.current?.kill()
+
+    const reduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+    const timeline = gsap.timeline({
+      defaults: { ease: EASE.cut, overwrite: 'auto' },
+      onComplete: () => {
+        panels.forEach((panel) => {
+          const body = panel.querySelector('.svc-body')
+          if (panel.dataset.code === next) {
+            gsap.set(panel, { height: 'auto' })
+            gsap.set(body, { clearProps: 'opacity,visibility,transform' })
+          } else {
+            gsap.set(panel, { height: 0 })
+            gsap.set(body, { autoAlpha: 0, y: 0 })
+          }
+        })
+        syncHoverState()
+        requestAnimationFrame(() => ScrollTrigger.refresh())
+      },
+    })
+
+    panels.forEach((panel) => {
+      const body = panel.querySelector('.svc-body')
+      const isNext = panel.dataset.code === next
+
+      timeline.to(
+        panel,
+        {
+          height: isNext ? 'auto' : 0,
+          duration: reduced ? 0 : isNext ? 0.45 : DUR.fast,
+        },
+        0,
+      )
+      timeline.to(
+        body,
+        {
+          autoAlpha: isNext ? 1 : 0,
+          y: isNext ? 0 : -8,
+          duration: reduced ? 0 : isNext ? DUR.fast + 0.05 : DUR.fast,
+        },
+        isNext ? 0.05 : 0,
+      )
+    })
+
+    accordionRef.current = timeline
+    setOpen(next)
+  }
 
   const handleEnter = contextSafe((row: HTMLElement, code: string) => {
     gsap.to(row.querySelector('.svc-fill'), {
@@ -125,11 +153,6 @@ export function Services({
       transformOrigin: 'left center',
       duration: hoverDuration(DUR.base - 0.1),
       ease: EASE.sweep,
-      overwrite: 'auto',
-    })
-    gsap.to(row.querySelectorAll('.svc-ink'), {
-      color: 'var(--color-ink-950)',
-      duration: hoverDuration(DUR.fast - 0.05),
       overwrite: 'auto',
     })
     gsap.to(row.querySelector('.svc-index'), {
@@ -140,16 +163,17 @@ export function Services({
   })
 
   const handleLeave = contextSafe((row: HTMLElement, code: string) => {
+    // The pointer leaving does not un-light a row the keyboard is still on,
+    // and blurring does not un-light one the pointer is still over. Without
+    // this the fill retracted while the CSS rule kept the ink, which is the
+    // black-on-black state again.
+    if (row.matches(LIT)) return
+
     gsap.to(row.querySelector('.svc-fill'), {
       scaleX: 0,
       transformOrigin: 'right center',
       duration: hoverDuration(DUR.fast),
       ease: EASE.retreat,
-      overwrite: 'auto',
-    })
-    gsap.to(row.querySelectorAll('.svc-ink'), {
-      color: '',
-      duration: hoverDuration(DUR.fast - 0.05),
       overwrite: 'auto',
     })
     // The scramble is a one-way tween with no reverse. Leaving mid-flight used
@@ -172,10 +196,12 @@ export function Services({
         {services.map((service) => {
           const isOpen = open === service.code
           const panelId = `svc-panel-${service.code}`
+          const buttonId = `svc-button-${service.code}`
 
           return (
             <div
               key={service.code}
+              data-code={service.code}
               className="svc-row relative"
               onMouseEnter={(e) => handleEnter(e.currentTarget, service.code)}
               onMouseLeave={(e) => handleLeave(e.currentTarget, service.code)}
@@ -184,6 +210,7 @@ export function Services({
 
               <h3>
                 <button
+                  id={buttonId}
                   type="button"
                   aria-expanded={isOpen}
                   aria-controls={panelId}
@@ -214,7 +241,7 @@ export function Services({
                      * The accordion's whole affordance used to be a 13px "+"
                      * glyph in the gutter. Two rules that cross and uncross
                      * read at a glance and animate; `bg-current` keeps them on
-                     * the same colour tween as `.svc-ink`.
+                     * the same `:hover` colour rule as `.svc-ink`.
                      */}
                     <span className="col-span-2 flex justify-end md:col-span-3">
                       <span
@@ -234,13 +261,16 @@ export function Services({
                 </button>
               </h3>
 
-              {isOpen ? (
-                /*
-                 * Pitch and deliverables sit side by side under the title
-                 * rather than pinned to opposite gutters — the old 2/9 split
-                 * left columns 5–8 empty across the widest part of the row.
-                 */
-                <div id={panelId} className="grid-page svc-body pb-14">
+              <div
+                id={panelId}
+                role="region"
+                aria-labelledby={buttonId}
+                aria-hidden={!isOpen}
+                data-code={service.code}
+                className="svc-panel overflow-hidden"
+              >
+                {/* Pitch and deliverables share the title's column band. */}
+                <div className="grid-page svc-body pb-14">
                   <p className="text-lead text-chalk-200 col-span-12 max-w-[46ch] md:col-span-5 md:col-start-2">
                     {t(service.pitch, locale)}
                   </p>
@@ -259,7 +289,7 @@ export function Services({
                     </ul>
                   </div>
                 </div>
-              ) : null}
+              </div>
             </div>
           )
         })}
