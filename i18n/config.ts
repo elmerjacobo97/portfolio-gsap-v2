@@ -13,8 +13,3 @@ export const localeTag: Record<Locale, string> = {
   es: 'es-PE',
   en: 'en-US',
 }
-
-export const localeLabel: Record<Locale, string> = {
-  es: 'Español',
-  en: 'English',
-}

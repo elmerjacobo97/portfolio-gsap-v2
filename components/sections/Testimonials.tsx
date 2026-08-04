@@ -26,69 +26,75 @@ export function Testimonials({
         const rows = gsap.utils.toArray<HTMLElement>('.testimonial-row')
 
         const header = rootRef.current?.querySelector('.testimonials-header')
-        if (header) {
-          gsap.from(header.children, {
-            opacity: 0,
-            y: 22,
-            stagger: 0.08,
+        if (header && header.getBoundingClientRect().top > window.innerHeight) {
+          gsap.set(header.children, { opacity: 0, y: 18 })
+          gsap.to(header.children, {
+            opacity: 1,
+            y: 0,
+            stagger: 0.07,
             duration: DUR.base,
             ease: EASE.settle,
-            immediateRender: false,
-            scrollTrigger: { trigger: header, start: 'top 78%', once: true },
+            scrollTrigger: { trigger: header, start: 'top 80%', once: true },
           })
         }
 
-        rows.forEach((row, index) => {
+        rows.forEach((row) => {
+          // Direct hash navigation can place a row in view before setup. Leave
+          // visible content untouched instead of hiding it after arrival.
+          if (row.getBoundingClientRect().top <= window.innerHeight) return
+
           const rule = row.querySelector('.testimonial-rule')
           const mark = row.querySelector('.testimonial-mark')
           const quote = row.querySelector('.testimonial-quote')
           const attribution = row.querySelector('.testimonial-attribution')
 
+          gsap.set(rule, { scaleX: 0, transformOrigin: 'left center' })
+          gsap.set(mark, { opacity: 0, y: 14 })
+          gsap.set(quote, {
+            clipPath: 'inset(0% 0% 100% 0%)',
+            y: 22,
+          })
+          gsap.set(attribution, { opacity: 0, y: 12 })
+
           const timeline = gsap.timeline({
-            scrollTrigger: { trigger: row, start: 'top 82%' },
+            scrollTrigger: { trigger: row, start: 'top 78%', once: true },
           })
 
           timeline
-            .from(rule, {
-              scaleX: 0,
-              transformOrigin: 'left center',
-              duration: DUR.base,
-              ease: EASE.sweep,
-              immediateRender: false,
+            .to(rule, {
+              scaleX: 1,
+              duration: DUR.slow,
+              ease: EASE.brutal,
             })
-            .from(
+            .to(
               mark,
               {
-                opacity: 0,
-                scale: 0.6,
-                duration: DUR.base,
-                ease: EASE.brutal,
-                immediateRender: false,
-              },
-              '-=0.45',
-            )
-            .from(
-              quote,
-              {
-                opacity: 0,
-                x: index % 2 === 0 ? -20 : 20,
-                y: 14,
-                duration: DUR.slow,
-                ease: EASE.brutal,
-                immediateRender: false,
-              },
-              '-=0.35',
-            )
-            .from(
-              attribution,
-              {
-                opacity: 0,
-                y: 16,
+                opacity: 0.35,
+                y: 0,
                 duration: DUR.base,
                 ease: EASE.settle,
-                immediateRender: false,
               },
               '-=0.65',
+            )
+            .to(
+              quote,
+              {
+                clipPath: 'inset(0% 0% 0% 0%)',
+                y: 0,
+                duration: DUR.slow,
+                ease: EASE.brutal,
+              },
+              '-=0.55',
+            )
+            .to(
+              attribution,
+              {
+                opacity: 1,
+                y: 0,
+                duration: DUR.base,
+                ease: EASE.settle,
+              },
+              '-=0.45',
             )
         })
       })

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 
-import { site } from '@/data/site'
 import { defaultLocale, locales, type Locale } from '@/i18n/config'
 
 /**
@@ -15,8 +14,4 @@ export function buildAlternates(locale: Locale, path = ''): Metadata['alternates
       'x-default': `/${defaultLocale}${path}`,
     },
   }
-}
-
-export function absoluteUrl(path: string) {
-  return new URL(path, site.url).toString()
 }

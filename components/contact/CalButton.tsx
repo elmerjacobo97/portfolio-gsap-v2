@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 import { site } from '@/data/site'
@@ -18,26 +18,26 @@ const CalEmbed = dynamic(() => import('./CalEmbed'), { ssr: false })
 
 export function CalButton({ label, closeLabel }: { label: string; closeLabel: string }) {
   const [open, setOpen] = useState(false)
+  const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
     if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
+    const dialog = dialogRef.current
+    if (dialog && !dialog.open) dialog.showModal()
   }, [open])
 
   const dialog = (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="bg-canvas/95 fixed inset-0 z-[95] flex flex-col backdrop-blur-md"
+    <dialog
+      ref={dialogRef}
+      aria-label={label}
+      onClose={() => setOpen(false)}
+      className="bg-canvas/95 text-text m-0 h-dvh max-h-none w-screen max-w-none border-0 p-0 backdrop:bg-canvas/70 backdrop:backdrop-blur-md open:flex open:flex-col"
     >
       <div className="page-pad flex justify-end py-5">
         <button
           type="button"
-          onClick={() => setOpen(false)}
+          autoFocus
+          onClick={() => dialogRef.current?.close()}
           className="u-meta text-text hover:text-accent transition-colors duration-200"
         >
           {closeLabel} ✕
@@ -46,7 +46,7 @@ export function CalButton({ label, closeLabel }: { label: string; closeLabel: st
       <div className="page-pad flex-1 overflow-auto pb-8">
         <CalEmbed />
       </div>
-    </div>
+    </dialog>
   )
 
   return (

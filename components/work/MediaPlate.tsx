@@ -20,7 +20,7 @@ export function MediaPlate({
   return (
     <div
       className={cn(
-        // @container: PlateFill sizes its type against the plate's own width,
+        // @container: ProjectPreview sizes its type against the plate's own width,
         // which tracks the card's column span rather than the viewport.
         'bg-ink-850 border-rule @container relative overflow-hidden border',
         wide ? 'aspect-16/10 sm:aspect-[16/8]' : 'aspect-16/10',

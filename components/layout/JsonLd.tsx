@@ -4,6 +4,13 @@ import type { Locale } from '@/i18n/config'
 import { localeTag } from '@/i18n/config'
 import { t } from '@/i18n/t'
 
+function serializeJsonLd(value: unknown) {
+  return JSON.stringify(value)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+}
+
 /**
  * Person + ProfessionalService. Emitted as one @graph so both entities can
  * cross-reference each other by @id instead of being duplicated.
@@ -59,14 +66,15 @@ export function JsonLd({
       },
     },
   ]
+  const serializedGraph = serializeJsonLd({
+    '@context': 'https://schema.org',
+    '@graph': graph,
+  })
 
   return (
     <script
       type="application/ld+json"
-      // Data is authored by us in data/*, never user input.
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }),
-      }}
+      dangerouslySetInnerHTML={{ __html: serializedGraph }}
     />
   )
 }
