@@ -321,16 +321,15 @@ function HeroView({
             {dict.artifactSteps.map((step, index) => (
               <li
                 key={step}
-                className="hero-artifact-step border-rule relative border-r border-b p-4 last:border-r-0 md:border-b-0"
+                className="hero-artifact-step border-rule flex flex-col border-r border-b p-4 last:border-r-0 md:border-b-0"
               >
                 <span className="u-label text-ink-600 block">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <span className="u-meta mt-8 block">{step}</span>
-                <span
-                  aria-hidden
-                  className="bg-accent absolute right-3 bottom-3 block size-1.5 rounded-full"
-                />
+                <span className="mt-8 flex items-end justify-between gap-3">
+                  <span className="u-meta">{step}</span>
+                  <span aria-hidden className="bg-accent mb-0.5 block size-1.5 shrink-0 rounded-full" />
+                </span>
               </li>
             ))}
           </ol>
