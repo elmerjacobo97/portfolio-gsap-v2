@@ -1,17 +1,39 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 import { site } from '@/data/site'
 import type { Locale } from '@/i18n/config'
 import { cn } from '@/lib/cn'
-import { gsap, ScrollSmoother, ScrollTrigger, useGSAP } from '@/lib/gsap'
-import { OK } from '@/lib/motion'
+import { ScrollSmoother } from '@/lib/gsap'
 import { TransitionLink } from '@/components/motion/TransitionLink'
 import { LocaleSwitcher } from './LocaleSwitcher'
 import { MobileMenu } from './MobileMenu'
 
 export type NavLink = { href: string; label: string }
+
+// ScrollSmoother owns scrolling, so native anchor jumps would fight it. If the
+// section is absent (for example, on a case-study route), leave navigation to
+// the browser so the absolute href returns to the home page.
+function handleAnchor(
+  e: React.MouseEvent<HTMLAnchorElement>,
+  href: string,
+) {
+  const hashIndex = href.indexOf('#')
+  if (hashIndex === -1) return
+
+  const target = document.getElementById(href.slice(hashIndex + 1))
+  if (!target) return
+
+  e.preventDefault()
+  const smoother = ScrollSmoother.get()
+
+  if (smoother) {
+    smoother.scrollTo(target, true, 'top top')
+  } else {
+    target.scrollIntoView()
+  }
+}
 
 export function Nav({
   locale,
@@ -27,53 +49,10 @@ export function Nav({
   closeLabel: string
 }) {
   const [open, setOpen] = useState(false)
-  const headerRef = useRef<HTMLElement>(null)
-
-  useGSAP(() => {
-    const mm = gsap.matchMedia()
-
-    mm.add(OK, () => {
-      const header = headerRef.current
-      if (!header) return
-
-      const trigger = ScrollTrigger.create({
-        onUpdate: (self) =>
-          gsap.to(header, {
-            yPercent: self.direction === 1 && self.scroll() > 240 ? -100 : 0,
-            duration: 0.4,
-            ease: 'power3.out',
-            overwrite: true,
-          }),
-      })
-
-      return () => trigger.kill()
-    })
-
-    return () => mm.revert()
-  })
-
-  // ScrollSmoother owns scrolling, so native anchor jumps would fight it.
-  // If the section is not on this page (a case study, say), we do nothing and
-  // let the browser follow the absolute href back to the home page.
-  const handleAnchor = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    const hash = href.slice(href.indexOf('#'))
-    const target = document.querySelector(hash)
-    if (!target) return
-
-    e.preventDefault()
-    const smoother = ScrollSmoother.get()
-
-    if (smoother) {
-      smoother.scrollTo(target, true, 'top top')
-    } else {
-      target.scrollIntoView()
-    }
-  }
 
   return (
     <>
       <header
-        ref={headerRef}
         data-nav
         className="bg-canvas/80 border-rule fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md"
       >
