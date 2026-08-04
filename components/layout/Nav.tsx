@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 
-import { site } from '@/data/site'
 import type { Locale } from '@/i18n/config'
 import { cn } from '@/lib/cn'
 import { ScrollSmoother } from '@/lib/gsap'
 import { TransitionLink } from '@/components/motion/TransitionLink'
+import { BrandMark } from './BrandMark'
 import { LocaleSwitcher } from './LocaleSwitcher'
 import { MobileMenu } from './MobileMenu'
 
@@ -62,9 +62,9 @@ export function Nav({
               hit box, under the 24px minimum touch target (axe: target-size). */}
           <TransitionLink
             href={`/${locale}`}
-            className="u-meta text-text hover:text-accent col-span-6 inline-flex items-center py-2 transition-colors duration-200 md:col-span-4"
+            className="group col-span-6 inline-flex w-fit items-center py-1 md:col-span-4"
           >
-            {site.shortName}
+            <BrandMark />
           </TransitionLink>
 
           <nav

@@ -1,5 +1,5 @@
 export const site = {
-  name: 'Elmer Jacobo Otiniano',
+  name: 'Elmer Augusto Jacobo Otiniano',
   shortName: 'Elmer Jacobo',
   role: 'Full Stack Developer',
   email: 'contacto@elmerjacobo.dev',

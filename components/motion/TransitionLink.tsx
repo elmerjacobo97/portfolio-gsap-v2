@@ -39,6 +39,35 @@ export function TransitionLink({
 
     e.preventDefault()
 
+    // Links to the current document (the brand mark from /es#services back to
+    // /es, for example) do not trigger RouteMotion because pathname is
+    // unchanged. Handle them in place; otherwise the curtain would cover the
+    // page and never receive the route-change signal that retracts it.
+    const sameDocument =
+      e.currentTarget.pathname === window.location.pathname &&
+      e.currentTarget.search === window.location.search
+
+    if (sameDocument) {
+      const hash = e.currentTarget.hash.slice(1)
+      const target = hash ? document.getElementById(hash) : null
+      const smoother = ScrollSmoother.get()
+
+      window.history.replaceState(
+        null,
+        '',
+        `${e.currentTarget.pathname}${e.currentTarget.search}${e.currentTarget.hash}`,
+      )
+
+      if (smoother) {
+        smoother.scrollTo(target ?? 0, true, target ? 'top top' : undefined)
+      } else if (target) {
+        target.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+      return
+    }
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       router.push(href)
       return
