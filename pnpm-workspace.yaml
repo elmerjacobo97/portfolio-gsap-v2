@@ -1,4 +1,6 @@
 minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+  - '@napi-rs/wasm-runtime'
 trustPolicy: no-downgrade
 blockExoticSubdeps: true
 

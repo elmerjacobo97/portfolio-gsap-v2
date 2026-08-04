@@ -1,12 +1,13 @@
 'use client'
 
 import { useActionState, useEffect, useRef } from 'react'
+import { toast } from 'sonner'
 
 import { submitContact } from '@/actions/contact'
 import { initialContactState } from '@/actions/contact-state'
 import type { Locale } from '@/i18n/config'
 import type { Dictionary } from '@/i18n/dictionary'
-import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
+import { gsap, useGSAP } from '@/lib/gsap'
 import { OK, REDUCED } from '@/lib/motion'
 import { Field } from './Field'
 
@@ -23,6 +24,8 @@ export function ContactForm({
   )
   const rootRef = useRef<HTMLDivElement>(null)
   const mountedAtRef = useRef<HTMLInputElement>(null)
+  const hasSubmittedRef = useRef(false)
+  const lastReportedStateRef = useRef(initialContactState)
 
   // Written straight to the DOM, not through state: a one-way write to an
   // external system needs no re-render (and setState in an effect would
@@ -38,34 +41,18 @@ export function ContactForm({
     }
   }, [state])
 
-  useGSAP(
-    () => {
-      if (!state.ok) return
-      const mm = gsap.matchMedia()
+  useEffect(() => {
+    if (!hasSubmittedRef.current || lastReportedStateRef.current === state) return
+    lastReportedStateRef.current = state
 
-      mm.add(OK, () => {
-        gsap.from('.success-panel', {
-          autoAlpha: 0,
-          y: 24,
-          duration: 0.6,
-          ease: 'power3.out',
-        })
-        gsap.from('.success-rule', {
-          scaleX: 0,
-          transformOrigin: 'left center',
-          duration: 0.8,
-          ease: 'expo.out',
-        })
-      })
+    if (state.ok) {
+      toast.success(dict.successTitle, { description: dict.successBody })
+      return
+    }
 
-      // The panel swap changes page height — every ScrollTrigger below this
-      // point is measuring against the old layout until this runs.
-      ScrollTrigger.refresh()
-
-      return () => mm.revert()
-    },
-    { scope: rootRef, dependencies: [state.ok] },
-  )
+    const detail = state.formError ?? Object.values(state.errors ?? {})[0]
+    if (detail) toast.error(dict.errorGeneric, { description: detail })
+  }, [dict.errorGeneric, dict.successBody, dict.successTitle, state])
 
   useGSAP(
     () => {
@@ -103,26 +90,14 @@ export function ContactForm({
 
   return (
     <div ref={rootRef}>
-      {state.ok ? (
-        <div className="success-panel" role="status">
-          <span aria-hidden className="success-rule bg-accent block h-px w-full" />
-          <h3 className="text-h2 u-wide mt-8">{dict.successTitle}</h3>
-          <p className="text-lead text-chalk-200 mt-4 max-w-[38ch]">
-            {dict.successBody}
-          </p>
-          <div className="border-rule mt-8 grid grid-cols-[auto_1fr] gap-5 border-t pt-6">
-            <span className="u-label text-accent">{dict.responseLabel}</span>
-            <p className="text-body text-chalk-200 max-w-[42ch]">
-              {dict.responseValue}
-            </p>
-          </div>
-        </div>
-      ) : (
-        <form
-          action={formAction}
-          aria-busy={pending}
-          className="form-panel space-y-8"
-        >
+      <form
+        action={formAction}
+        onSubmit={() => {
+          hasSubmittedRef.current = true
+        }}
+        aria-busy={pending}
+        className="form-panel space-y-8"
+      >
           <input type="hidden" name="locale" value={locale} />
           <input ref={mountedAtRef} type="hidden" name="mountedAt" defaultValue="" />
 
@@ -182,12 +157,6 @@ export function ContactForm({
             defaultValue={state.values?.message}
           />
 
-          {state.formError ? (
-            <p role="alert" className="u-label text-alert-500">
-              {state.formError}
-            </p>
-          ) : null}
-
           <button
             type="submit"
             disabled={pending}
@@ -205,8 +174,7 @@ export function ContactForm({
           <p className="u-label min-h-[1em] text-text-dim" aria-live="polite">
             {pending ? dict.sendingHint : ''}
           </p>
-        </form>
-      )}
+      </form>
     </div>
   )
 }

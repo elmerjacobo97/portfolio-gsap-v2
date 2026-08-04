@@ -19,6 +19,7 @@ import { Intro } from '@/components/motion/Intro'
 import { RouteMotion } from '@/components/motion/RouteMotion'
 import { ScrollProgress } from '@/components/motion/ScrollProgress'
 import { SmoothProvider } from '@/components/motion/SmoothProvider'
+import { Toaster } from 'sonner'
 
 /**
  * Archivo carries the whole display voice. It is one of the very few Google
@@ -165,6 +166,7 @@ export default async function RootLayout({
         </SmoothProvider>
 
         <RouteMotion />
+        <Toaster theme="dark" position="bottom-right" closeButton />
       </body>
     </html>
   )
