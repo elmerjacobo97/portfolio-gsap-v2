@@ -9,7 +9,7 @@ export const site = {
   timeZone: 'America/Lima',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://elmerjacobo.dev',
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '51927347691',
-  calLink: process.env.NEXT_PUBLIC_CAL_LINK ?? 'elmerjacobo/30min',
+  calLink: process.env.NEXT_PUBLIC_CAL_LINK ?? 'elmer-jacobo-ck9x20/30min',
   social: [
     { label: 'LinkedIn', href: 'https://linkedin.com/in/elmerjacobo97' },
     { label: 'GitHub', href: 'https://github.com/elmerjacobo97' },

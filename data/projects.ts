@@ -92,16 +92,16 @@ export const projects: readonly Project[] = [
         kind: 'list',
         items: [
           {
-            es: '/spec hace preguntas, documenta decisiones y guarda un Draft versionado en git.',
-            en: '/spec asks questions, documents decisions, and saves a Draft versioned in git.',
+            es: 'spec hace preguntas, documenta decisiones y guarda un Draft versionado en git.',
+            en: 'spec asks questions, documents decisions, and saves a Draft versioned in git.',
           },
           {
             es: 'La aprobación ocurre fuera del chat y requiere que una persona cambie el estado a Approved.',
             en: 'Approval happens outside chat and requires a person to change the status to Approved.',
           },
           {
-            es: '/spec-impl valida ese estado, crea una rama e implementa con pausas para revisar cada diff.',
-            en: '/spec-impl validates that state, creates a branch, and implements with pauses to review each diff.',
+            es: 'spec-impl valida ese estado, crea una rama e implementa con pausas para revisar cada diff.',
+            en: 'spec-impl validates that state, creates a branch, and implements with pauses to review each diff.',
           },
           {
             es: 'El instalador cubre Claude Code, Cursor, Codex, Antigravity y OpenCode.',
