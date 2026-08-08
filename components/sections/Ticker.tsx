@@ -1,3 +1,5 @@
+import { Asterisk } from 'lucide-react'
+
 import { site } from '@/data/site'
 import { Marquee } from '@/components/motion/Marquee'
 
@@ -8,9 +10,14 @@ export function Ticker() {
         {site.stack.map((item) => (
           <span key={item} className="u-meta text-text-dim flex items-center">
             <span className="px-6">{item}</span>
-            <span aria-hidden className="text-accent">
-              ✳
-            </span>
+            <Asterisk
+              aria-hidden
+              size={14}
+              strokeWidth={1.5}
+              strokeLinecap="square"
+              strokeLinejoin="miter"
+              className="text-accent"
+            />
           </span>
         ))}
       </Marquee>

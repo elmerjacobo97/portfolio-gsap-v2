@@ -1,5 +1,6 @@
 'use client'
 
+import { Mail } from 'lucide-react'
 import { useRef } from 'react'
 
 import { site } from '@/data/site'
@@ -107,6 +108,7 @@ export function Contact({
           label="Email"
           value={site.email}
           href={`mailto:${site.email}`}
+          icon={Mail}
         />
         <span className="rule-h" />
       </div>

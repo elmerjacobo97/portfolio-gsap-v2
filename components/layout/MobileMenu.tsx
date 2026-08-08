@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { X } from 'lucide-react'
 
 import type { NavLink } from './Nav'
 
@@ -43,9 +44,16 @@ export function MobileMenu({
         <button
           type="button"
           onClick={onClose}
-          className="u-label col-span-12 text-right !text-current"
+          className="u-label col-span-12 inline-flex items-center justify-end gap-2 text-right !text-current"
         >
           {closeLabel}
+          <X
+            aria-hidden
+            size={16}
+            strokeWidth={1.5}
+            strokeLinecap="square"
+            strokeLinejoin="miter"
+          />
         </button>
       </div>
 

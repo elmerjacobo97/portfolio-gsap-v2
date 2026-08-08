@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { CalendarDays, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -38,9 +39,16 @@ export function CalButton({ label, closeLabel }: { label: string; closeLabel: st
           type="button"
           autoFocus
           onClick={() => dialogRef.current?.close()}
-          className="u-meta text-text hover:text-accent transition-colors duration-200"
+          className="u-meta text-text hover:text-accent inline-flex items-center gap-2 transition-colors duration-200"
         >
-          {closeLabel} ✕
+          {closeLabel}
+          <X
+            aria-hidden
+            size={16}
+            strokeWidth={1.5}
+            strokeLinecap="square"
+            strokeLinejoin="miter"
+          />
         </button>
       </div>
       <div className="page-pad flex-1 overflow-auto pb-8">
@@ -55,6 +63,7 @@ export function CalButton({ label, closeLabel }: { label: string; closeLabel: st
         label={label}
         value="cal.com"
         href={`https://cal.com/${site.calLink}`}
+        icon={CalendarDays}
         onActivate={() => setOpen(true)}
       />
 

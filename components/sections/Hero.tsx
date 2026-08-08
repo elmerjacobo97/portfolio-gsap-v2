@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, type RefObject } from 'react'
+import { ArrowDown } from 'lucide-react'
 
 import { Pill } from '@/components/ui/Pill'
 import { Rule } from '@/components/ui/Rule'
@@ -345,7 +346,13 @@ function HeroView({
           <Pill>{dict.available}</Pill>
           <span className="u-label flex items-center gap-2">
             {dict.scroll}
-            <span aria-hidden>↓</span>
+            <ArrowDown
+              aria-hidden
+              size={14}
+              strokeWidth={1.5}
+              strokeLinecap="square"
+              strokeLinejoin="miter"
+            />
           </span>
         </div>
       </div>

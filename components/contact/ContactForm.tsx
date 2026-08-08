@@ -1,5 +1,6 @@
 'use client'
 
+import { ArrowUpRight } from 'lucide-react'
 import { useActionState, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 
@@ -163,7 +164,15 @@ export function ContactForm({
             className="u-meta border-accent text-accent hover:bg-accent hover:text-ink-950 relative overflow-hidden border px-8 py-4 transition-colors duration-300 disabled:cursor-wait disabled:opacity-70"
           >
             <span className="relative z-10">
-              {pending ? dict.sending : dict.submit} <span aria-hidden>↗</span>
+              {pending ? dict.sending : dict.submit}
+              <ArrowUpRight
+                aria-hidden
+                size={16}
+                strokeWidth={1.5}
+                strokeLinecap="square"
+                strokeLinejoin="miter"
+                className="ml-1 inline-block align-[-0.2em]"
+              />
             </span>
             <span
               aria-hidden

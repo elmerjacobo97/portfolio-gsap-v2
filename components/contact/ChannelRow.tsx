@@ -1,6 +1,8 @@
 'use client'
 
 import { useRef } from 'react'
+import { ArrowUpRight } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 import { gsap, useGSAP } from '@/lib/gsap'
 import { DUR, EASE, hoverDuration } from '@/lib/motion'
@@ -16,12 +18,14 @@ export function ChannelRow({
   label,
   value,
   href,
+  icon: Icon,
   external,
   onActivate,
 }: {
   label: string
   value: string
   href: string
+  icon?: LucideIcon
   external?: boolean
   onActivate?: () => void
 }) {
@@ -89,14 +93,29 @@ export function ChannelRow({
         style={{ transform: 'scaleX(0)', transformOrigin: 'left center' }}
       />
       <span className="relative block px-1">
-        <span className="u-label block transition-colors duration-300 group-hover:!text-ink-950/60 group-focus-visible:!text-ink-950/60">
+        <span className="u-label flex items-center gap-2 transition-colors duration-300 group-hover:!text-ink-950/60 group-focus-visible:!text-ink-950/60">
+          {Icon ? (
+            <Icon
+              aria-hidden
+              size={14}
+              strokeWidth={1.5}
+              strokeLinecap="square"
+              strokeLinejoin="miter"
+              className="shrink-0"
+            />
+          ) : null}
           {label}
         </span>
         <span className="text-h3 u-wide group-hover:text-ink-950 group-focus-visible:text-ink-950 mt-2 flex items-baseline justify-between gap-3 break-all transition-colors duration-300">
           {value}
-          <span aria-hidden className="channel-arrow shrink-0">
-            ↗
-          </span>
+          <ArrowUpRight
+            aria-hidden
+            size={16}
+            strokeWidth={1.5}
+            strokeLinecap="square"
+            strokeLinejoin="miter"
+            className="channel-arrow shrink-0"
+          />
         </span>
       </span>
     </a>

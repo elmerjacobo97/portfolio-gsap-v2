@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { ArrowUpRight } from 'lucide-react'
 
 import { services } from '@/data/services'
 import type { Dictionary } from '@/i18n/dictionary'
@@ -218,15 +219,17 @@ export function Services({
                 >
                   {t(service.title, locale)}
                 </span>
-                <span
+                <ArrowUpRight
                   aria-hidden
+                  size={16}
+                  strokeWidth={1.5}
+                  strokeLinecap="square"
+                  strokeLinejoin="miter"
                   className={cn(
-                    'u-meta transition-transform duration-500',
+                    'transition-transform duration-500',
                     selected ? 'text-accent rotate-45' : 'text-text-dim',
                   )}
-                >
-                  ↗
-                </span>
+                />
               </button>
             )
           })}

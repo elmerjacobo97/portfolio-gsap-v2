@@ -1,3 +1,5 @@
+import { ArrowUpRight, Asterisk } from 'lucide-react'
+
 import { site } from '@/data/site'
 import type { Locale } from '@/i18n/config'
 import type { Dictionary } from '@/i18n/dictionary'
@@ -19,9 +21,14 @@ export function Footer({
             {[0, 1, 2, 3].map((i) => (
               <span key={i} className="text-h1 u-wide flex items-center">
                 <span className="px-8">{dict.marquee}</span>
-                <span aria-hidden className="text-accent">
-                  ✳
-                </span>
+                <Asterisk
+                  aria-hidden
+                  size={24}
+                  strokeWidth={1.5}
+                  strokeLinecap="square"
+                  strokeLinejoin="miter"
+                  className="text-accent"
+                />
               </span>
             ))}
           </Marquee>
@@ -44,7 +51,15 @@ export function Footer({
                   rel="noopener noreferrer"
                   className="u-meta text-text-dim hover:text-accent inline-flex items-center py-2 transition-colors duration-200"
                 >
-                  {item.label} <span aria-hidden>↗</span>
+                  {item.label}
+                  <ArrowUpRight
+                    aria-hidden
+                    size={16}
+                    strokeWidth={1.5}
+                    strokeLinecap="square"
+                    strokeLinejoin="miter"
+                    className="ml-1 inline-block align-[-0.2em]"
+                  />
                 </a>
               </li>
             ))}

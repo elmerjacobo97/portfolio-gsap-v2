@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Menu } from 'lucide-react'
 
 import type { Locale } from '@/i18n/config'
 import { cn } from '@/lib/cn'
@@ -90,10 +91,17 @@ export function Nav({
               onClick={() => setOpen(true)}
               aria-expanded={open}
               className={cn(
-                'u-label text-text hover:text-accent inline-flex items-center py-2 transition-colors duration-200 md:hidden',
+                'u-label text-text hover:text-accent inline-flex items-center gap-2 py-2 transition-colors duration-200 md:hidden',
               )}
             >
               {menuLabel}
+              <Menu
+                aria-hidden
+                size={14}
+                strokeWidth={1.5}
+                strokeLinecap="square"
+                strokeLinejoin="miter"
+              />
             </button>
           </div>
         </div>

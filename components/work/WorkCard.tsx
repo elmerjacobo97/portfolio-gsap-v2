@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
+import { ArrowUpRight } from 'lucide-react'
 
 import type { Project } from '@/data/projects'
 import type { Locale } from '@/i18n/config'
@@ -177,9 +178,14 @@ export function WorkCard({
           </h3>
           <span className="work-close u-label text-accent flex shrink-0 items-baseline gap-2 sm:self-auto">
             {viewLabel}
-            <span aria-hidden className="work-arrow inline-block">
-              ↗
-            </span>
+            <ArrowUpRight
+              aria-hidden
+              size={16}
+              strokeWidth={1.5}
+              strokeLinecap="square"
+              strokeLinejoin="miter"
+              className="work-arrow inline-block"
+            />
           </span>
         </div>
 

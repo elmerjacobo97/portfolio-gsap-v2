@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 
 import { defaultLocale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/get-dictionary'
@@ -23,7 +24,15 @@ export default async function NotFound() {
           href={`/${defaultLocale}`}
           className="u-meta text-accent mt-10 inline-block hover:underline"
         >
-          {dict.notFound.cta} ↗
+          {dict.notFound.cta}
+          <ArrowUpRight
+            aria-hidden
+            size={16}
+            strokeWidth={1.5}
+            strokeLinecap="square"
+            strokeLinejoin="miter"
+            className="ml-1 inline-block align-[-0.2em]"
+          />
         </Link>
       </div>
     </main>

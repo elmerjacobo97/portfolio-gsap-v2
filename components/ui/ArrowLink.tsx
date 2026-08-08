@@ -1,3 +1,5 @@
+import { ArrowUpRight } from 'lucide-react'
+
 import { cn } from '@/lib/cn'
 import { TransitionLink } from '@/components/motion/TransitionLink'
 
@@ -31,12 +33,14 @@ export function ArrowLink({
        * that never moved. CSS rather than GSAP: it is a two-property hover on
        * a link, and the global reduced-motion block already neutralises it.
        */}
-      <span
+      <ArrowUpRight
         aria-hidden
+        size={16}
+        strokeWidth={1.5}
+        strokeLinecap="square"
+        strokeLinejoin="miter"
         className="arrow inline-block transition-transform duration-300 ease-(--ease-brutal) group-hover:translate-x-1 group-hover:-translate-y-1 group-focus-visible:translate-x-1 group-focus-visible:-translate-y-1"
-      >
-        ↗
-      </span>
+      />
     </>
   )
 

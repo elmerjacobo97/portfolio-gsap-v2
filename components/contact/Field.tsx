@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
+import { ChevronDown } from 'lucide-react'
 
 import { cn } from '@/lib/cn'
 import { gsap, useGSAP } from '@/lib/gsap'
@@ -59,6 +60,7 @@ export function Field({
 
   const control =
     'peer text-body text-text placeholder:text-chalk-600 w-full bg-transparent pt-2 pb-3 outline-none'
+  const isSelect = Boolean(options)
 
   return (
     <div ref={rootRef} className={cn('field group relative', className)}>
@@ -91,7 +93,7 @@ export function Field({
           name={name}
           required={required}
           defaultValue={defaultValue || undefined}
-          className={cn(control, 'appearance-none')}
+          className={cn(control, 'appearance-none pr-8')}
         >
           {options.map((option) => (
             <option key={option} value={option} className="bg-ink-850">
@@ -112,6 +114,17 @@ export function Field({
           className={control}
         />
       )}
+
+      {isSelect ? (
+        <ChevronDown
+          aria-hidden
+          size={16}
+          strokeWidth={1.5}
+          strokeLinecap="square"
+          strokeLinejoin="miter"
+          className="pointer-events-none absolute right-0 bottom-3 text-text-dim"
+        />
+      ) : null}
 
       <span
         aria-hidden
