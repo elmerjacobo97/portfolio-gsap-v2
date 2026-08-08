@@ -98,25 +98,89 @@ export async function submitContact(
 
   const { name, email, company, scope, message } = parsed.data
 
-  const rows = [
+  const details = [
     ['Nombre', name],
     ['Email', email],
     ['Empresa', company || '—'],
     ['Tipo', scope || '—'],
     ['Idioma', locale],
   ]
-    .map(([k, v]) => `<tr><td><strong>${k}</strong></td><td>${escapeHtml(v)}</td></tr>`)
+    .map(([label, value]) => {
+      const safeValue = escapeHtml(value)
+      const renderedValue =
+        label === 'Email'
+          ? `<a href="mailto:${safeValue}" style="color:#d4ff3f;text-decoration:underline">${safeValue}</a>`
+          : safeValue
+
+      return `<tr>
+        <td width="120" valign="top" style="box-sizing:border-box;padding:14px 24px 14px 0;border-bottom:1px solid #242424;color:#8a8a82;font-family:monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;vertical-align:top;width:120px">${label}</td>
+        <td valign="top" style="padding:14px 0;border-bottom:1px solid #242424;color:#f7f7f2;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.5;vertical-align:top">${renderedValue}</td>
+      </tr>`
+    })
     .join('')
 
+  const safeMessage = escapeHtml(message).replace(/\n/g, '<br />')
+  const replyUrl = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(`Re: tu consulta para ${name}`)}`
+  const text = `NUEVO CONTACTO\n\nNombre: ${name}\nEmail: ${email}\nEmpresa: ${company || '—'}\nTipo: ${scope || '—'}\nIdioma: ${locale}\n\nMENSAJE\n${message}`
+  const html = `<!doctype html>
+<html lang="${locale}">
+  <body style="margin:0;padding:0;background:#050505;color:#f7f7f2">
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">Nuevo contacto de ${escapeHtml(name)} desde el portfolio.</div>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#050505;margin:0;padding:0;width:100%">
+      <tr>
+        <td style="padding:32px 16px">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#101010;border:1px solid #242424;margin:0 auto;max-width:640px;width:100%">
+            <tr>
+              <td style="background:#d4ff3f;padding:8px 28px;color:#050505;font-family:monospace;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase">Elmer Jacobo / Contacto</td>
+            </tr>
+            <tr>
+              <td style="padding:32px 28px 24px">
+                <p style="color:#8a8a82;font-family:monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;margin:0 0 14px;text-transform:uppercase">Nuevo mensaje / ${locale.toUpperCase()}</p>
+                <h1 style="color:#f7f7f2;font-family:Arial,Helvetica,sans-serif;font-size:30px;font-weight:700;letter-spacing:-0.7px;line-height:1.05;margin:0">${escapeHtml(name)} quiere conversar.</h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0 28px">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="table-layout:fixed">${details}</table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:28px">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#161616;border-left:3px solid #d4ff3f">
+                  <tr>
+                    <td style="padding:20px 22px">
+                      <p style="color:#8a8a82;font-family:monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;margin:0 0 12px;text-transform:uppercase">Mensaje</p>
+                      <p style="color:#f7f7f2;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;margin:0">${safeMessage}</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0 28px 32px">
+                <a href="${replyUrl}" style="background:#d4ff3f;color:#050505;display:inline-block;font-family:monospace;font-size:12px;font-weight:700;letter-spacing:1px;padding:14px 18px;text-decoration:none;text-transform:uppercase">Responder a ${escapeHtml(name)}</a>
+              </td>
+            </tr>
+            <tr>
+              <td style="border-top:1px solid #242424;padding:18px 28px">
+                <p style="color:#55554f;font-family:monospace;font-size:10px;letter-spacing:1px;line-height:1.5;margin:0;text-transform:uppercase">Enviado desde el formulario de elmerjacobo.dev</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`
+
   try {
-    // Plain HTML string, no @react-email/render — Resend declares it as an
-    // optional peer, so we skip the dependency entirely.
     const { error } = await new Resend(apiKey).emails.send({
       from,
       to,
       replyTo: email,
       subject: `Nuevo contacto — ${name}`,
-      html: `<table>${rows}</table><hr><p>${escapeHtml(message).replace(/\n/g, '<br>')}</p>`,
+      html,
+      text,
     })
 
     if (error) {
