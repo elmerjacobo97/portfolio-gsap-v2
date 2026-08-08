@@ -67,9 +67,8 @@ export function Footer({
 
           <div className="u-label col-span-12 md:col-span-3 md:text-right">
             <span className="block">
-              © {new Date().getFullYear()} {site.name}
+              &copy; {new Date().getFullYear()} {site.shortName}
             </span>
-            <span className="mt-1 block">{dict.builtWith}</span>
           </div>
         </div>
       </div>
