@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
 import { Archivo, Space_Mono } from 'next/font/google'
-import { notFound } from 'next/navigation'
-
 import '../globals.css'
 
 import { getDictionary } from '@/i18n/get-dictionary'
-import { hasLocale, locales, localeTag } from '@/i18n/config'
+import { defaultLocale, hasLocale, locales, localeTag } from '@/i18n/config'
 import { site } from '@/data/site'
 import { Footer } from '@/components/layout/Footer'
 import { GridOverlay } from '@/components/layout/GridOverlay'
@@ -98,9 +96,11 @@ export default async function RootLayout({
   children: React.ReactNode
   params: Promise<{ locale: string }>
 }) {
-  const { locale } = await params
-  if (!hasLocale(locale)) notFound()
+  const { locale: requestedLocale } = await params
 
+  // Keep this root layout renderable for an invalid locale. The page or
+  // catch-all below can then throw `notFound()` and reach `[locale]/not-found`.
+  const locale = hasLocale(requestedLocale) ? requestedLocale : defaultLocale
   const dict = await getDictionary(locale)
 
   // Absolute, not bare hashes: on a case-study page `#services` does not

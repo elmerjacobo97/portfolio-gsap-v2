@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
     ]
   },
   experimental: {
+    // The root layout is `[locale]`, so invalid locale paths can throw
+    // `notFound()` before that segment's `not-found.tsx` is mounted.
+    globalNotFound: true,
     serverActions: {
       // A text contact form never needs the 1 MB default.
       bodySizeLimit: '64kb',
