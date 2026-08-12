@@ -1,175 +1,218 @@
-import type { Dictionary } from '../dictionary'
+import type { Dictionary } from "../dictionary";
 
 const en = {
-  meta: {
-    title: 'Elmer Jacobo — Full Stack Developer',
-    description:
-      'I design and build web products that make money: end-to-end SaaS with authentication, Stripe subscriptions, admin dashboards and deployment. React, Next.js and Laravel.',
-    ogAlt: 'Elmer Jacobo — Full Stack Developer',
-  },
+	meta: {
+		title: "Elmer Jacobo — Product engineer · Full stack",
+		description:
+			"I build digital products that make it to production. I work across frontend, backend, payments, and deployment.",
+		ogAlt: "Elmer Jacobo — Product engineer · Full stack",
+	},
 
-  nav: {
-    services: 'Services',
-    work: 'Work',
-    process: 'Process',
-    about: 'About',
-    contact: 'Contact',
-    menu: 'Menu',
-    close: 'Close',
-    skipToContent: 'Skip to content',
-    switchTo: 'View in Spanish',
-  },
+	nav: {
+		services: "What I build",
+		work: "Work",
+		now: "Now",
+		process: "How I work",
+		about: "About",
+		contact: "Contact",
+		collaborate: "Collaborate",
+		menu: "Menu",
+		close: "Close",
+		skipToContent: "Skip to content",
+		switchTo: "View in Spanish",
+	},
 
-  hero: {
-    lineOne: 'Elmer',
-    lineTwo: 'Jacobo',
-    role: 'Full Stack Developer',
-    statement: 'I build web products that make money.',
-    meta: ['Trujillo, PE', '4+ years', 'React — Next — Laravel'],
-    available: 'Available for work',
-    scroll: 'Scroll',
-    artifactLabel: 'Path to production',
-    artifactStatus: 'A shipped, measured, maintainable system',
-    artifactSteps: ['Product', 'Architecture', 'Code', 'Deploy'],
-  },
+	hero: {
+		lineOne: "Elmer",
+		lineTwo: "Jacobo",
+		role: "Product engineer · Full stack",
+		statement: "I build digital products that make it to production.",
+		supporting:
+			"I work across frontend, backend, payments, and deployment. The point is to make the product work after it stops being a demo.",
+		meta: ["Trujillo, PE", "4+ years", "React · Next.js · Laravel"],
+		available: "Let's talk about your product",
+		projectsCta: "View projects",
+		contactCta: "Tell me about your project",
+		scroll: "Explore",
+		artifactLabel: "From problem to deploy",
+		artifactKind: "Method",
+		artifactStatus: "Each step leaves a visible decision",
+		artifactSteps: ["Problem", "Decision", "Code", "Deploy"],
+	},
 
-  ticker: {
-    label: 'Stack',
-  },
+	ticker: {
+		label: "Stack",
+	},
 
-  services: {
-    index: '01',
-    title: 'Services',
-    lead: 'Four ways to work together. No templates, no agency middleman — you talk straight to the person writing the code.',
-    expand: 'See deliverables',
-    collapse: 'Close',
-    deliverables: 'Includes',
-  },
+	work: {
+		index: "01",
+		title: "Selected work",
+		lead: "These are products I have built, maintained, or taken to production. Each case explains what I did and why I made those decisions.",
+		viewCase: "View case",
+		role: "Role",
+		year: "Year",
+		client: "Context",
+		stack: "Stack",
+		caseLabel: "Case",
+		liveSite: "Live site",
+		repository: "Repository",
+		nextCase: "Next case",
+		backWork: "Back to work",
+	},
 
-  work: {
-    index: '02',
-    title: 'Selected work',
-    lead: 'Products running in production, not weekend experiments.',
-    viewCase: 'View case',
-    allProjects: 'All projects',
-    role: 'Role',
-    year: 'Year',
-    client: 'Context',
-    stack: 'Stack',
-    liveSite: 'Live site',
-    repository: 'Repository',
-    nextCase: 'Next case',
-    backWork: 'Back to work',
-  },
+	now: {
+		index: "02",
+		title: "Now / Lab",
+		lead: "A few things I am building or maintaining outside client work.",
+		openLink: "Open project",
+	},
 
-  proof: {
-    index: '03',
-    title: 'Production evidence',
-    lead: 'No borrowed logos or decorative numbers. Responsibilities already supporting a real product.',
-    facts: [
-      {
-        label: 'Technical leadership',
-        detail: 'PR reviews, architecture decisions, and direct coordination with technical leadership.',
-      },
-      {
-        label: 'Laravel 9 → 12',
-        detail: 'Backend migration and architecture redesign without stopping product development.',
-      },
-      {
-        label: 'Recurring Stripe',
-        detail: 'Subscriptions, payment states, and admin dashboards connected to the business.',
-      },
-      {
-        label: '4+ years',
-        detail: 'Web and mobile applications in production, with real users and real money involved.',
-      },
-    ],
-  },
+	about: {
+		index: "03",
+		title: "About",
+		bio: [
+			"I have spent more than four years building web and mobile applications. I have worked on products with users, payments, and operations that cannot simply stop.",
+			"In my current work I tech-lead a digital business-card SaaS platform: I review PRs, make architecture decisions, and coordinate directly with technical leadership.",
+			"I migrated that backend from Laravel 9 to 12, redesigned its architecture, integrated Stripe for recurring subscriptions, and built the admin dashboards that hold up the business metrics.",
+			"I am interested in products where a business decision has to become an interface, an API, and a deployment someone else can maintain.",
+			"I work best when there is a concrete problem, access to the context, and a willingness to discuss decisions before code is written.",
+		],
+		stats: [
+			{ value: "4+", label: "years building products" },
+			{ value: "200+", label: "active users on Tarjetly" },
+			{ value: "Laravel 9 → 12", label: "backend migration" },
+		],
+		portraitAlt: "Portrait of Elmer Jacobo Otiniano",
+	},
 
-  testimonials: {
-    index: '04',
-    title: 'External validation',
-    lead: 'The strongest proof should not come from me. These drafts reserve the space for real, specific, and verifiable references.',
-    draftLabel: 'Sample content · replace before publishing',
-    pendingLabel: 'Reference pending',
-  },
+	services: {
+		index: "04",
+		title: "What I build",
+		lead: "I can join when the product still needs direction, when it is already running, or when the backend starts slowing the team down. We work directly, with the decisions on the table.",
+		modeLabel: "Mode",
+		deliverables: "What stays",
+		fitTitle: "A good fit if...",
+		fit: [
+			"You can explain the problem you want to solve.",
+			"There is context and unfinished decisions to review together.",
+			"You want to speak directly with the person building it.",
+		],
+	},
 
-  process: {
-    index: '05',
-    title: 'How I work',
-    lead: 'A short, honest process. You always know exactly where we are.',
-  },
+	process: {
+		index: "05",
+		title: "How I work",
+		lead: "I show you the work as it happens. We discuss changes before they become code, and every week you have something you can open.",
+	},
 
-  about: {
-    index: '06',
-    title: 'About',
-    bio: [
-      'For over four years I have been building web and mobile applications that live in production, with real users and real money on the line.',
-      'Today I tech-lead a digital business-card SaaS platform: I review PRs, make the architecture calls, and work autonomously coordinating directly with technical leadership.',
-      'I migrated that backend from Laravel 9 to 12, redesigned its architecture, integrated Stripe for recurring subscriptions, and built the admin dashboards that hold up the business metrics.',
-    ],
-    stats: [
-      { value: '4+', label: 'years in production' },
-      { value: '2', label: 'countries, working remote' },
-      { value: '100%', label: 'end-to-end, design to deploy' },
-    ],
-    portraitAlt: 'Portrait of Elmer Jacobo Otiniano',
-  },
+	principles: {
+		index: "06",
+		title: "Working principles",
+		lead: "These are the rules I use when working with product and code.",
+		items: [
+			{
+				title: "I put decisions on the table",
+				body: "I explain what changes, what risk I see, and which alternative I am ruling out before it becomes code.",
+			},
+			{
+				title: "I deliver something you can open",
+				body: "I work in visible deliveries so you can review the product instead of receiving only a summary at the end.",
+			},
+			{
+				title: "I separate my work from the team’s",
+				body: "I say what I did, what the team solved, and where responsibility for each decision sits.",
+			},
+			{
+				title: "I leave the next step clear",
+				body: "At the end of a delivery, I leave the code, deployment, and decisions documented so the next change has a starting point.",
+			},
+		],
+	},
 
-  contact: {
-    index: '07',
-    title: "Let's talk",
-    lead: 'Tell me what you want to build. I reply within 24 hours.',
-    channelsTitle: 'Direct channels',
-    whatsapp: 'WhatsApp',
-    booking: 'Book 30 min',
-    email: 'contacto@elmerjacobo.dev',
-    whatsappPrefill:
-      'Hi Elmer, I saw your portfolio and I would like to talk about a project.',
-    form: {
-      name: 'Name',
-      email: 'Email',
-      company: 'Company',
-      scope: 'Project type',
-      scopeOptions: [
-        'End-to-end SaaS product',
-        'Website or conversion landing',
-        'API / Laravel backend',
-        'Mobile app',
-        'Something else',
-      ],
-      message: 'Tell me about the project',
-      submit: 'Send',
-      sending: 'Sending',
-      sendingHint: 'Secure delivery in progress',
-      successTitle: 'Message sent',
-      successBody: 'I will get back to you within 24 hours. Thanks for writing.',
-      responseLabel: 'Next step',
-      responseValue: 'You will receive a personal reply, not an automated sequence.',
-      errorGeneric: 'Something went wrong. Reach me on WhatsApp or email.',
-      errors: {
-        nameMin: 'Enter your name',
-        emailInvalid: 'Invalid email',
-        messageMin: 'Tell me a bit more (20 characters minimum)',
-        tooFast: 'Too fast. Please try again.',
-        rateLimit: 'Too many submissions. Try again later.',
-      },
-    },
-  },
+	proof: {
+		index: "07",
+		title: "Evidence",
+		lead: "These are concrete responsibilities: architecture, migrations, payments, and day-to-day product work.",
+		facts: [
+			{
+				label: "Architecture and PRs",
+				detail:
+					"I review PRs, make architecture decisions, and coordinate directly with technical leadership.",
+			},
+			{
+				label: "Laravel 9 → 12",
+				detail:
+					"I migrated Tarjetly’s backend and redesigned its architecture while the product kept moving.",
+			},
+			{
+				label: "Recurring Stripe",
+				detail:
+					"I implemented subscriptions, payment states, and admin dashboards connected to the business.",
+			},
+			{
+				label: "200+ active users",
+				detail:
+					"Tarjetly has more than 200 active users; the case explains what I built and which decisions I made.",
+			},
+		],
+	},
 
-  footer: {
-    marquee: 'Available for work',
-    localTime: 'Local time',
-    social: 'Social',
-    rights: 'All rights reserved',
-    builtWith: 'Next.js · GSAP · Tailwind',
-  },
+	contact: {
+		index: "08",
+		title: "Tell me about your project",
+		lead: "Tell me what you want to build. I reply within 24 hours.",
+		channelsTitle: "Direct channels",
+		whatsapp: "WhatsApp",
+		booking: "Book 30 min",
+		email: "contacto@elmerjacobo.dev",
+		whatsappPrefill:
+			"Hi Elmer, I saw your portfolio and I would like to talk about a project.",
+		form: {
+			name: "Name",
+			email: "Email",
+			company: "Company",
+			scope: "What needs solving",
+			scopeOptions: [
+				"New product",
+				"Existing product",
+				"Backend and architecture",
+				"I am still defining it",
+			],
+			message: "Tell me what you want to solve",
+			submit: "Send message",
+			sending: "Sending message",
+			sendingHint: "Secure delivery is in progress",
+			successTitle: "Message sent",
+			successBody:
+				"I will get back to you within 24 hours. Thanks for writing.",
+			responseLabel: "Next step",
+			responseValue:
+				"You will receive a personal reply, not an automated sequence.",
+			errorGeneric:
+				"The message could not be sent. Reach me on WhatsApp or email.",
+			errors: {
+				nameMin: "Enter your name",
+				emailInvalid: "Invalid email",
+				messageMin: "Tell me a bit more (20 characters minimum)",
+				tooFast: "Too fast. Please try again.",
+				rateLimit: "Too many submissions. Try again later.",
+			},
+		},
+	},
 
-  notFound: {
-    title: 'Page not found',
-    body: 'The route you are looking for does not exist or was renamed.',
-    cta: 'Back home',
-  },
-} as const satisfies Dictionary
+	footer: {
+		marquee: "Let's talk about your product",
+		localTime: "Local time",
+		social: "Social",
+		rights: "All rights reserved",
+		builtWith: "Next.js · GSAP · Tailwind",
+	},
 
-export default en
+	notFound: {
+		title: "Page not found",
+		body: "The route you are looking for does not exist or was renamed.",
+		cta: "Back home",
+	},
+} as const satisfies Dictionary;
+
+export default en;

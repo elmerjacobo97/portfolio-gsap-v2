@@ -1,123 +1,119 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Menu } from 'lucide-react'
+import { useState } from "react";
+import { Menu } from "lucide-react";
 
-import type { Locale } from '@/i18n/config'
-import { cn } from '@/lib/cn'
-import { ScrollSmoother } from '@/lib/gsap'
-import { TransitionLink } from '@/components/motion/TransitionLink'
-import { BrandMark } from './BrandMark'
-import { LocaleSwitcher } from './LocaleSwitcher'
-import { MobileMenu } from './MobileMenu'
+import type { Locale } from "@/i18n/config";
+import { cn } from "@/lib/cn";
+import { ScrollSmoother } from "@/lib/gsap";
+import { TransitionLink } from "@/components/motion/TransitionLink";
+import { BrandMark } from "./BrandMark";
+import { LocaleSwitcher } from "./LocaleSwitcher";
+import { MobileMenu } from "./MobileMenu";
 
-export type NavLink = { href: string; label: string }
+export type NavLink = { href: string; label: string };
 
 // ScrollSmoother owns scrolling, so native anchor jumps would fight it. If the
 // section is absent (for example, on a case-study route), leave navigation to
 // the browser so the absolute href returns to the home page.
-function handleAnchor(
-  e: React.MouseEvent<HTMLAnchorElement>,
-  href: string,
-) {
-  const hashIndex = href.indexOf('#')
-  if (hashIndex === -1) return
+function handleAnchor(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
+	const hashIndex = href.indexOf("#");
+	if (hashIndex === -1) return;
 
-  const target = document.getElementById(href.slice(hashIndex + 1))
-  if (!target) return
+	const target = document.getElementById(href.slice(hashIndex + 1));
+	if (!target) return;
 
-  e.preventDefault()
-  window.history.replaceState(null, '', href)
-  const smoother = ScrollSmoother.get()
+	e.preventDefault();
+	window.history.replaceState(null, "", href);
+	const smoother = ScrollSmoother.get();
 
-  if (smoother) {
-    smoother.scrollTo(target, true, 'top top')
-  } else {
-    target.scrollIntoView()
-  }
+	if (smoother) {
+		smoother.scrollTo(target, true, "top top");
+	} else {
+		target.scrollIntoView();
+	}
 }
 
 export function Nav({
-  locale,
-  links,
-  switchLabel,
-  menuLabel,
-  closeLabel,
+	locale,
+	links,
+	switchLabel,
+	menuLabel,
+	closeLabel,
 }: {
-  locale: Locale
-  links: readonly NavLink[]
-  switchLabel: string
-  menuLabel: string
-  closeLabel: string
+	locale: Locale;
+	links: readonly NavLink[];
+	switchLabel: string;
+	menuLabel: string;
+	closeLabel: string;
 }) {
-  const [open, setOpen] = useState(false)
+	const [open, setOpen] = useState(false);
 
-  return (
-    <>
-      <header
-        data-nav
-        className="bg-canvas/80 border-rule fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md"
-      >
-        <div className="grid-page items-center py-4">
-          {/* `py-2` on every nav control: the 11–13px mono type gives a ~19px
+	return (
+		<>
+			<header
+				data-nav
+				className="bg-canvas/80 border-rule fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md"
+			>
+				<div className="grid-page items-center py-4">
+					{/* `py-2` on every nav control: the 11–13px mono type gives a ~19px
               hit box, under the 24px minimum touch target (axe: target-size). */}
-          <TransitionLink
-            href={`/${locale}`}
-            className="group col-span-6 inline-flex w-fit items-center py-1 md:col-span-4"
-          >
-            <BrandMark />
-          </TransitionLink>
+					<TransitionLink
+						href={`/${locale}`}
+						className="group col-span-6 inline-flex w-fit items-center py-1 md:col-span-4"
+					>
+						<BrandMark />
+					</TransitionLink>
 
-          <nav
-            aria-label="Primary"
-            className="col-span-4 hidden justify-center gap-8 md:flex"
-          >
-            {links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleAnchor(e, link.href)}
-                className="u-label text-text-dim hover:text-text inline-flex items-center px-2 py-2 transition-colors duration-200"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
+					<nav
+						aria-label="Primary"
+						className="col-span-4 hidden justify-center gap-8 md:flex"
+					>
+						{links.map((link) => (
+							<TransitionLink
+								key={link.href}
+								href={link.href}
+								className="u-label text-text-dim hover:text-text inline-flex items-center px-2 py-2 whitespace-nowrap transition-colors duration-200"
+							>
+								{link.label}
+							</TransitionLink>
+						))}
+					</nav>
 
-          <div className="col-span-6 flex items-center justify-end gap-6 md:col-span-4">
-            <LocaleSwitcher locale={locale} label={switchLabel} />
-            <button
-              type="button"
-              onClick={() => setOpen(true)}
-              aria-expanded={open}
-              className={cn(
-                'u-label text-text hover:text-accent inline-flex items-center gap-2 py-2 transition-colors duration-200 md:hidden',
-              )}
-            >
-              {menuLabel}
-              <Menu
-                aria-hidden
-                size={14}
-                strokeWidth={1.5}
-                strokeLinecap="square"
-                strokeLinejoin="miter"
-              />
-            </button>
-          </div>
-        </div>
-      </header>
+					<div className="col-span-6 flex items-center justify-end gap-6 md:col-span-4">
+						<LocaleSwitcher locale={locale} label={switchLabel} />
+						<button
+							type="button"
+							onClick={() => setOpen(true)}
+							aria-expanded={open}
+							className={cn(
+								"u-label text-text hover:text-accent inline-flex items-center gap-2 py-2 transition-colors duration-200 md:hidden",
+							)}
+						>
+							{menuLabel}
+							<Menu
+								aria-hidden
+								size={14}
+								strokeWidth={1.5}
+								strokeLinecap="square"
+								strokeLinejoin="miter"
+							/>
+						</button>
+					</div>
+				</div>
+			</header>
 
-      <MobileMenu
-        open={open}
-        onClose={() => setOpen(false)}
-        onNavigate={(e, href) => {
-          handleAnchor(e, href)
-          setOpen(false)
-        }}
-        links={links}
-        label={menuLabel}
-        closeLabel={closeLabel}
-      />
-    </>
-  )
+			<MobileMenu
+				open={open}
+				onClose={() => setOpen(false)}
+				onNavigate={(e, href) => {
+					handleAnchor(e, href);
+					setOpen(false);
+				}}
+				links={links}
+				label={menuLabel}
+				closeLabel={closeLabel}
+			/>
+		</>
+	);
 }
