@@ -1,10 +1,11 @@
 ---
 version: alpha
 name: Elmer Jacobo Portfolio Design System
-description: Existing dark editorial/technical visual system documented from the source code; this file is descriptive, not a redesign.
+description: Dark-default editorial/technical visual system documented from the source code; this file is descriptive, not a redesign.
 colors:
   primary: "#D4FF3F"
   accent: "{colors.primary}"
+  accent-fill: "{colors.acid-500}"
   acid-300: "#E9FF9B"
   acid-400: "#DEFF6B"
   acid-500: "{colors.primary}"
@@ -22,11 +23,30 @@ colors:
   chalk-400: "#8A8A82"
   chalk-600: "#55554F"
   canvas: "{colors.ink-950}"
+  surface-inset: "{colors.ink-900}"
   surface: "{colors.ink-850}"
+  surface-raised: "{colors.ink-800}"
   rule: "{colors.ink-700}"
+  rule-strong: "{colors.ink-600}"
+  outline: "{colors.ink-600}"
   text: "{colors.chalk-50}"
+  text-secondary: "{colors.chalk-200}"
+  text-muted: "{colors.chalk-400}"
   text-dim: "{colors.chalk-400}"
-  alert: "#FF4A1C"
+  on-accent: "{colors.ink-950}"
+  scrim: "{colors.ink-950}"
+  alert-500: "#FF4A1C"
+  canvas-light: "#F7F7F2"
+  surface-inset-light: "#ECECE6"
+  surface-light: "#E5E5DE"
+  surface-raised-light: "#FFFFFF"
+  rule-light: "#D0D0C6"
+  rule-strong-light: "#A8A8A0"
+  outline-light: "#77776F"
+  text-light: "#050505"
+  text-secondary-light: "#24241F"
+  text-muted-light: "#5A5A52"
+  accent-light: "#536B00"
 typography:
   mega:
     fontFamily: Archivo
@@ -94,24 +114,32 @@ rounded:
   full: 9999px
 spacing:
   hairline: 1px
-  container-max: 1600px
+  container-page: 1600px
   gutter-min: 16px
   gutter-max: 40px
   section-min: 96px
   section-max: 224px
-  nav-padding: 16px
+  nav-block: 16px
   content-gap: 64px
   form-gap: 32px
+  hit-target: 40px
 components:
   page-canvas:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.text}"
+  page-canvas-light:
+    backgroundColor: "{colors.canvas-light}"
+    textColor: "{colors.text-light}"
   surface-panel:
-    backgroundColor: "{colors.ink-900}"
+    backgroundColor: "{colors.surface-inset}"
     textColor: "{colors.text}"
     typography: "{typography.body}"
     rounded: "{rounded.none}"
     padding: 24px
+  surface-raised:
+    backgroundColor: "{colors.surface-raised}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.none}"
   section-rule:
     backgroundColor: "{colors.rule}"
     height: 1px
@@ -124,29 +152,65 @@ components:
     rounded: "{rounded.none}"
     padding: 6px
   action-outline:
-    textColor: "{colors.primary}"
+    textColor: "{colors.accent}"
     typography: "{typography.meta}"
     rounded: "{rounded.none}"
     padding: 16px
   action-outline-hover:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.ink-950}"
+    backgroundColor: "{colors.accent-fill}"
+    textColor: "{colors.on-accent}"
   channel-row:
     textColor: "{colors.text}"
     typography: "{typography.h3}"
     rounded: "{rounded.none}"
     padding: 24px
   channel-row-hover:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.ink-950}"
+    backgroundColor: "{colors.accent-fill}"
+    textColor: "{colors.on-accent}"
   mobile-menu:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.ink-950}"
+    backgroundColor: "{colors.accent-fill}"
+    textColor: "{colors.on-accent}"
     typography: "{typography.h1}"
     rounded: "{rounded.none}"
     padding: 16px
+  theme-toggle:
+    textColor: "{colors.text-dim}"
+    rounded: "{rounded.none}"
+    size: 40px
+  form-field:
+    textColor: "{colors.text}"
+    typography: "{typography.body}"
+    rounded: "{rounded.none}"
+    padding: 8px
+  modal-dialog:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.none}"
+  notification:
+    backgroundColor: "{colors.surface-raised}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.none}"
+    padding: 16px
+  icon-action:
+    textColor: "{colors.text-dim}"
+    size: 16px
+  media-well:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.none}"
+  route-curtain:
+    backgroundColor: "{colors.acid-800}"
+    rounded: "{rounded.none}"
+  outlined-numeral:
+    textColor: "{colors.outline}"
+    typography: "{typography.numeral}"
+  strong-rule:
+    backgroundColor: "{colors.rule-strong}"
+    height: 1px
+  field-error:
+    textColor: "{colors.alert-500}"
+    typography: "{typography.micro}"
   cursor-dot:
-    backgroundColor: "{colors.primary}"
+    backgroundColor: "{colors.accent-fill}"
     rounded: "{rounded.full}"
     size: 12px
 ---
@@ -154,72 +218,88 @@ components:
 ## Overview
 
 This is the implemented visual language of the Elmer Jacobo portfolio. It is a
-**dark editorial/technical system**: an almost-black canvas, a visible 12-column
-hairline grid, oversized expanded grotesque headlines, compact monospace metadata,
-and one acid-lime interaction color. The result is intentionally spare, high
-contrast, and structured like a technical portfolio rather than a card-based
-product dashboard.
+**dark-default editorial/technical system**: an almost-black canvas, a visible
+12-column hairline grid, oversized expanded grotesque headlines, compact monospace
+metadata, and one acid-lime interaction signal. The result is intentionally spare,
+high contrast, and structured like a technical portfolio rather than a card-based
+product dashboard. An explicit light theme is also supported through semantic
+runtime aliases; it preserves the same grid, typography, geometry, and interaction
+grammar instead of becoming a separate visual identity.
 
 The source of truth is the current code, especially `app/globals.css`,
-`app/[locale]/layout.tsx`, and the reusable components under `components/`. This
-file records those choices; it does not introduce a new palette, theme, layout,
-or component behavior. The token values above use the closest fixed values where
-the implementation is fluid. The exact responsive formulas are recorded below.
+`app/[locale]/layout.tsx`, `lib/motion.ts`, and the reusable components under
+`components/`. This file records those choices; it does not introduce a new
+palette, theme, layout, or component behavior. The token values above use the
+closest fixed values where the implementation is fluid. The exact responsive
+formulas are recorded below.
 
 ### System principles
 
 - Treat the canvas and rules as part of the composition: the grid is visible,
   not merely a layout aid.
 - Use the acid color as a single signal for action, activity, focus, and selected
-  states; it is not a general-purpose decoration color.
+  states; in light mode, use the darker semantic accent for text and the acid
+  fill for surfaces. Neither is a general-purpose decoration color.
 - Prefer oversized type, open space, and hard rules over rounded cards, gradients,
   or ornamental shadows.
 - Keep content legible through tonal layering: canvas, raised panels, media wells,
   and cards differ subtly rather than through elevation effects.
-- The product is dark-only in the current implementation. `html` declares
-  `color-scheme: dark`, the notification toaster uses `theme="dark"`, and the
-  calendar embed is configured for the dark theme. There is no light-mode token
-  set or theme switcher to document.
+- The product defaults to dark mode. `ThemeProvider` uses `next-themes` with
+  `defaultTheme="dark"` and `enableSystem={false}`; `ThemeToggle` explicitly
+  switches the `html` class between dark and light. `ThemedToaster` follows the
+  resolved theme, while the calendar embed remains inside the same full-viewport
+  dialog treatment.
+- Use Lucide React for interface icons. Keep the custom EJ SVG mark separate from
+  the icon system and preserve square line caps and miter joins.
 
 ## Colors
 
-The palette is organized as two ramps and two semantic roles:
+The palette is organized as two structural ramps, an acid interaction ramp, and
+semantic aliases:
 
-- **Acid / primary (`#D4FF3F`):** the sole accent. It marks primary actions,
-  active tabs, selected numerals, progress bars, availability, focus rings,
-  hover fills, required markers, and key indices. `acid-300` through `acid-800`
-  are supporting states; `acid-800` is reserved for the route curtain.
+- **Acid / primary (`#D4FF3F`):** the interaction signal. It marks primary
+  actions, active states, selected numerals, progress bars, availability, focus
+  rings, hover fills, required markers, and key indices. `acid-300` through
+  `acid-800` are supporting states; `acid-800` is reserved for the route curtain.
+  `accent-fill` aliases `acid-500` so filled states remain stable across themes.
 - **Ink:** the near-black structural ramp. `ink-950` (`#050505`) is the page
-  canvas; `ink-900` (`#0A0A0A`) is used for raised sections and artifact panels;
-  `ink-850` (`#101010`) is used for media wells and surfaces; `ink-800`
-  (`#161616`) is used for cards; `ink-700` (`#242424`) is the visible rule/grid
-  color; and `ink-600` (`#3A3A3A`) is used for subdued outlines and disabled data.
+  canvas; `ink-900` (`#0A0A0A`) is the inset surface and artifact bed; `ink-850`
+  (`#101010`) is used for media wells and surfaces; `ink-800` (`#161616`) is
+  used for raised cards; `ink-700` (`#242424`) is the visible rule/grid color;
+  and `ink-600` (`#3A3A3A`) is used for strong outlines and disabled data.
 - **Chalk:** warm off-white text rather than pure white. `chalk-50`
   (`#F7F7F2`) is primary text, `chalk-200` (`#C9C9C2`) is supporting copy,
   `chalk-400` (`#8A8A82`) is metadata, and `chalk-600` (`#55554F`) is the
   quietest placeholder text.
 - **Alert (`#FF4A1C`):** form validation/error feedback only. It must not become
   a second accent or be used for ordinary emphasis.
+- **Light semantic set:** `html.light` maps canvas, surfaces, rules, outlines,
+  text, and text-secondary to warm off-white values. Text accent becomes
+  `#536B00` for contrast, while `accent-fill` remains `#D4FF3F`; `on-accent`
+  remains near-black.
 
 The semantic aliases are the values components should consume: `canvas`,
-`surface`, `rule`, `text`, `text-dim`, and `accent`/`primary`. Opacity is used
-sparingly for overlays: the fixed navigation uses the canvas at roughly 80%
-opacity with backdrop blur, and modal backdrops use a translucent canvas. The
+`surface-inset`, `surface`, `surface-raised`, `rule`, `rule-strong`, `outline`,
+`text`, `text-secondary`, `text-muted`, `text-dim`, `accent`, `accent-fill`,
+`on-accent`, `scrim`, and `alert-500`. Components should not bypass these aliases
+for one-off colors. Opacity is used sparingly for overlays: the fixed navigation
+uses the canvas at roughly 80% opacity with `backdrop-blur-md`, mobile and modal
+dialogs use translucent scrims, and the toaster follows the active theme. The
 placeholder `plate-bed` uses repeating 1px linear rules; it is a structural grid
 texture, not a decorative color gradient.
 
 ## Typography
 
-The type system uses two Google variable fonts loaded in
-`app/[locale]/layout.tsx`:
+The type system uses two Google fonts loaded in `app/[locale]/layout.tsx`:
 
 - **Archivo** is both `--font-display` and `--font-sans`. It carries the display
-  voice, section headings, project titles, body copy, and lead copy. The `u-wide`
-  utility uppercases the text and applies Archivo's expanded variable axis:
+  voice, section headings, project titles, body copy, and lead copy. Its `wdth`
+  axis is loaded explicitly. The `u-wide` utility uppercases text and applies
   `font-variation-settings: "wdth" 118, "wght" 800`.
 - **Space Mono** is `--font-mono`. It is reserved for eyebrows, indices, metadata,
   navigation labels, technical facts, status readouts, and other compact utility
-  text. These labels are uppercase with deliberate tracking.
+  text. These labels are uppercase with deliberate tracking. `u-label` uses the
+  micro scale; `u-meta` uses the metadata scale.
 
 The source defines the following fluid CSS sizes. The fixed `fontSize` values in
 the front matter are the minimum/mobile anchors; the formulas below are the
@@ -242,7 +322,8 @@ Headlines use tight negative tracking and compressed line heights. Body and lead
 copy use warmer chalk colors and constrained measure, generally between 24ch and
 48ch. `text-wrap: balance` is applied to headings and `text-wrap: pretty` to
 paragraphs. The style does not add italics, decorative font families, or a
-light-theme typographic variant.
+light-theme typographic variant; theme switching changes semantic color aliases,
+not typography.
 
 ## Layout
 
@@ -250,9 +331,8 @@ The page is built on a **12-column fluid grid**:
 
 - `grid-page` is a 12-column CSS grid with `minmax(0, 1fr)` tracks, a maximum
   width of `100rem` / 1600px, centered margins, and a horizontal gutter of
-  `clamp(1rem, 3.2vw, 2.5rem)` (16px to 40px).
-- `page-pad` uses the same maximum width and horizontal padding without exposing
-  columns. Use it for full-width controls, dialogs, and mobile navigation.
+  `clamp(1rem, 3.2vw, 2.5rem)` (16px to 40px). `page-pad` uses the same max-width
+  and gutter without exposing columns.
 - The visible `GridOverlay` is fixed outside the smooth-scroll content. It shows
   four guide divisions on narrow screens and all twelve divisions from `md` up.
 - `rule-h` and the section borders use a 1px hairline. The main section rhythm is
@@ -265,8 +345,9 @@ The implementation is mobile-first and uses the existing Tailwind breakpoints:
 `sm` (640px), `md` (768px), and `lg` (1024px). The behavior is structural, not
 a separate visual theme:
 
-- Below `md`, navigation links are replaced by a full-viewport acid mobile dialog;
-  content generally uses all 12 columns and stacks vertically.
+- Below `md`, navigation links are replaced by a native full-viewport acid
+  `<dialog>` mobile menu; content generally uses all 12 columns and stacks
+  vertically.
 - From `md`, the desktop navigation appears, the grid overlay exposes all columns,
   metadata and fact lists gain multiple columns, and form/stat layouts split.
 - From `lg`, editorial compositions use asymmetric column spans: hero copy and
@@ -284,8 +365,11 @@ a separate visual theme:
 
 Fixed viewport chrome (`Nav`, `GridOverlay`, `ScrollProgress`, `Cursor`, `Curtain`,
 `Intro`, and `MobileMenu`) stays a sibling of the transformed smooth-scroll
-content. Sticky animated content uses ScrollTrigger pinning instead of nesting
-`position: fixed` inside the smooth wrapper.
+content. The calendar booking dialog is portalled to `document.body` for the same
+reason. Sticky animated content uses ScrollTrigger pinning instead of nesting
+`position: fixed` inside the smooth wrapper. Native `scroll-behavior` remains
+`auto`; ScrollSmoother owns scrolling on fine pointers, while touch keeps native
+momentum with `smoothTouch: 0`.
 
 ## Elevation & Depth
 
@@ -293,17 +377,17 @@ This is a mostly flat system. Hierarchy comes from tonal layers and the hairline
 grid rather than conventional card shadows:
 
 1. **Canvas:** `ink-950` / `#050505`.
-2. **Raised structural panels:** `ink-900` / `#0A0A0A`.
+2. **Inset structural panels:** `ink-900` / `#0A0A0A`.
 3. **Media wells and surfaces:** `ink-850` / `#101010`.
-4. **Cards and dense data plates:** `ink-800` / `#161616`.
+4. **Raised cards and dense data plates:** `ink-800` / `#161616`.
 5. **Rules and outlines:** `ink-700` and `ink-600`.
 
-Navigation and the calendar dialog use translucent canvas layers plus
-`backdrop-blur-md` to preserve the dark surface while separating fixed chrome from
-content. The project preview's phone illustration is the exception to the flat
-rule: it uses a hard, unblurred `12px 12px` acid offset shadow as a graphic accent,
-not as ambient elevation. There are no soft card shadows, glow systems, or
-background gradients in the application chrome.
+Navigation, mobile-menu, and the calendar dialog use translucent canvas/scrim
+layers plus `backdrop-blur-md` to separate fixed chrome from content. The project
+preview's phone illustration is the exception to the flat rule: it uses a hard,
+unblurred `12px 12px` acid offset shadow as a graphic accent, not as ambient
+elevation. There are no soft card shadows, glow systems, or background gradients
+in the application chrome.
 
 ## Shapes
 
@@ -316,8 +400,10 @@ The default shape language is **square and architectural**:
 - The only substantial radius is the decorative mobile-phone preview, which uses
   `1.5rem` / 24px with a 2px border. That radius belongs to the illustration, not
   to the surrounding UI system.
-- Icons use square line caps and miter joins. Focus outlines remain square with a
-  2px acid stroke and 3px offset; do not round focus rings.
+- Interface icons use Lucide React at compact sizes, generally 14px to 16px, with
+  `strokeWidth={1.5}`, square line caps, and miter joins. The EJ brand mark is a
+  separate 5px-stroke SVG. Focus outlines remain square with a 2px acid stroke
+  and 3px offset; do not round focus rings.
 
 ## Components
 
@@ -330,25 +416,29 @@ content.
 - `components/layout/BrandMark.tsx` renders the EJ SVG mark with a 5px square
   stroke. The E is chalk and the J is acid; hover/focus swaps those two colors.
 - `components/layout/Nav.tsx` provides the fixed translucent top bar, centered
-  desktop links, locale switcher, and mobile-menu trigger. Controls use Space Mono
-  labels and generous vertical hit-area padding.
-- `components/layout/MobileMenu.tsx` is a full-viewport acid surface below `md`.
-  Its numbered links use expanded Archivo and dark ink labels.
+  desktop links, locale switcher, theme toggle, and mobile-menu trigger. Controls
+  use Space Mono labels and generous hit-area padding.
+- `components/layout/ThemeProvider.tsx` and `ThemeToggle.tsx` provide explicit
+  dark/light switching through `next-themes`; system preference is not followed.
+- `components/layout/MobileMenu.tsx` is a native full-viewport acid dialog below
+  `md`. Its numbered links use expanded Archivo and dark ink labels.
 - `components/layout/GridOverlay.tsx` renders the fixed visible grid bed.
 - `components/layout/Footer.tsx` combines a bordered marquee band with a three-part
   grid for local time, social links, and copyright.
 - `components/layout/SkipLink.tsx` is an acid utility control that appears on
   keyboard focus. `ScrollProgress` is a 2px fixed rule at the top of the viewport.
+  `ThemedToaster` keeps notifications aligned with the resolved theme.
 
 ### UI primitives
 
 - `components/ui/Rule.tsx` is the `rule-h` 1px horizontal motif used by section
   headers and hero baselines.
 - `components/ui/ArrowLink.tsx` is the shared text-link affordance. It uses a
-  16px square/miter arrow, acid hover color, and a small diagonal translate.
+  16px Lucide `ArrowUpRight`, acid hover color, and a small diagonal translate.
   Internal routes use `TransitionLink`; external routes open in a new tab.
 - `components/ui/Pill.tsx` is the availability badge: a square outlined label,
-  Space Mono micro type, and an acid circular status dot.
+  Space Mono micro type, and two-layer acid circular status dots, with the outer
+  dot pulsing during the hero reveal.
 - `components/ui/Numeral.tsx` is the oversized transparent outlined number used
   behind process steps and similar indices.
 - `components/sections/SectionHeader.tsx` establishes the repeated section
@@ -374,48 +464,64 @@ content.
 
 ### Contact and forms
 
-- `components/contact/Field.tsx` is a borderless dark field with a 1px rule and
-  an acid underline that draws from left to right on focus. Error state swaps the
-  rule/underline to alert red and adds a monospace error label.
+- `components/contact/Field.tsx` is a transparent field with a 1px rule and an
+  acid underline that draws from left to right on focus. Error state swaps the
+  rule/underline to alert red, adds a monospace error label, and uses a restrained
+  horizontal shake when motion is allowed.
 - `components/contact/ChannelRow.tsx` is a full-width bordered row. Hover/focus
   sweeps an acid fill across the row, inverts its text to ink, and moves the arrow
   diagonally.
 - `ContactForm` uses a 32px vertical rhythm, two columns from `sm`, outline-acid
-  submit styling, and an acid 2px progress bar while sending.
-- `CalButton` opens the booking embed as a portalled full-viewport dark dialog;
-  `WhatsAppLink` and `CalButton` both reuse `ChannelRow`.
+  submit styling, an acid 2px progress bar while sending, server-side validation,
+  and themed toast feedback.
+- `CalButton` opens the booking embed as a portalled full-viewport native dialog;
+  `WhatsAppLink` and `CalButton` both reuse `ChannelRow`. Icon affordances are
+  provided by Lucide (`MessageCircle`, `CalendarDays`, `Mail`, `X`, and arrows).
 
 ### Interaction and motion
 
 The motion system reinforces the same visual grammar: clip-path reveals, rules that
-draw from the left, acid fills that sweep across rows, arrows that travel diagonally,
-and restrained vertical/opacity entrances. Shared motion vocabulary lives in
-`lib/motion.ts` (`expo.out`/`power4.out` settles, `power3.out` sweeps, and faster
-retreats). The custom cursor exists only for fine pointers and enlarges over links
-and buttons; touch devices do not receive it.
+draw from the left, acid fills that sweep across rows, arrows that travel
+diagonally, and restrained vertical/opacity entrances. Shared motion vocabulary
+lives in `lib/motion.ts`: `expo.out`/`power4.out` settles, `power3.out` sweeps,
+`power3.in` retreats, and `expo.inOut` cuts. `DUR.fast`, `DUR.base`, and `DUR.slow`
+are the shared duration bands. The custom cursor exists only for fine pointers and
+enlarges over links and buttons; touch devices do not receive it. `ScrollProgress`
+is a direct scroll-position readout and remains available in reduced-motion mode.
 
-Every section branches on `prefers-reduced-motion`. CSS also collapses transitions,
-marquees, and keyframe-like effects for reduced-motion users. The process pin and
-horizontal track are not created in reduced mode. The scroll-progress bar remains
-because it is a position readout, not a timed animation.
+Every animated section branches on `prefers-reduced-motion` through shared queries
+in `lib/motion.ts`; pointer hover tweens resolve to zero duration in reduced mode.
+CSS also collapses transitions, marquees, and keyframe-like effects for reduced-
+motion users. The process pin and horizontal track are not created in reduced mode,
+and mobile never receives the desktop pin. The intro preloader skips itself for
+reduced-motion users, while the scroll-progress bar remains because it is a
+position readout, not a timed animation.
 
 ## Do's and Don'ts
 
-- **Do** consume the semantic aliases (`canvas`, `surface`, `rule`, `text`,
-  `text-dim`, `primary`) in component styles instead of inventing new colors.
+- **Do** consume the semantic aliases (`canvas`, `surface-inset`, `surface`,
+  `surface-raised`, `rule`, `outline`, `text`, `text-secondary`, `text-dim`,
+  `accent`, and `accent-fill`) in component styles instead of inventing new
+  colors.
 - **Do** keep the acid color focused on the important action, active state,
-  progress, focus, or index on a screen.
+  progress, focus, or index on a screen. Use the darker light-theme `accent` for
+  text when contrast requires it; use `accent-fill` for filled states.
 - **Do** use `grid-page`/`page-pad`, 1px rules, constrained text measures, and the
   existing `SectionHeader` pattern to preserve the editorial rhythm.
 - **Do** use `u-wide` for display headlines and `u-label`/`u-meta` for technical
   labels; keep labels uppercase with their established tracking.
 - **Do** preserve the 2px acid `:focus-visible` outline and keyboard-visible hover
   equivalents. Maintain readable contrast between chalk text and ink surfaces.
-- **Do** keep all animation inside the existing reduced-motion branches and use
+- **Do** keep all animation inside the existing reduced-motion branches, keep
+  interactive feedback available as an instantaneous state change, and use
   ScrollTrigger pinning for content that must remain visually attached to a viewport.
-- **Don't** add a light theme, a second accent color, soft elevation shadows, or a
-  new rounded-card language without changing the underlying product decision.
-- **Don't** use `alert` red for emphasis; it belongs to form errors only.
+- **Do** use Lucide React for interface icons with the established 1.5px square/miter
+  treatment; reserve custom SVG work for the EJ brand mark and project artwork.
+- **Don't** replace the explicit light theme with system-driven colors or create a
+  second visual language; both themes share geometry, type, and motion rules.
+- **Don't** add soft elevation shadows, a new rounded-card language, or a second
+  accent color without changing the underlying product decision.
+- **Don't** use `alert-500` red for emphasis; it belongs to form errors only.
 - **Don't** replace the visible grid/rules with generic cards, gradients, or heavy
   borders. The existing `plate-bed` texture is the only repeated line texture.
 - **Don't** set native `scroll-behavior: smooth`, put fixed chrome inside
