@@ -20,6 +20,9 @@ const en = {
 		close: "Close",
 		skipToContent: "Skip to content",
 		switchTo: "View in Spanish",
+		theme: "Change theme",
+		activateLight: "Activate light mode",
+		activateDark: "Activate dark mode",
 	},
 
 	hero: {

@@ -5,13 +5,13 @@ import { Menu } from "lucide-react";
 
 import type { Locale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
+import type { NavLink } from "./nav-types";
 import { ScrollSmoother } from "@/lib/gsap";
 import { TransitionLink } from "@/components/motion/TransitionLink";
 import { BrandMark } from "./BrandMark";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { MobileMenu } from "./MobileMenu";
-
-export type NavLink = { href: string; label: string };
+import { ThemeToggle } from "./ThemeToggle";
 
 // ScrollSmoother owns scrolling, so native anchor jumps would fight it. If the
 // section is absent (for example, on a case-study route), leave navigation to
@@ -38,12 +38,18 @@ export function Nav({
 	locale,
 	links,
 	switchLabel,
+	themeLabel,
+	lightThemeLabel,
+	darkThemeLabel,
 	menuLabel,
 	closeLabel,
 }: {
 	locale: Locale;
 	links: readonly NavLink[];
 	switchLabel: string;
+	themeLabel: string;
+	lightThemeLabel: string;
+	darkThemeLabel: string;
 	menuLabel: string;
 	closeLabel: string;
 }) {
@@ -80,8 +86,13 @@ export function Nav({
 						))}
 					</nav>
 
-					<div className="col-span-6 flex items-center justify-end gap-6 md:col-span-4">
+					<div className="col-span-6 flex items-center justify-end gap-4 md:col-span-4">
 						<LocaleSwitcher locale={locale} label={switchLabel} />
+						<ThemeToggle
+							label={themeLabel}
+							lightLabel={lightThemeLabel}
+							darkLabel={darkThemeLabel}
+						/>
 						<button
 							type="button"
 							onClick={() => setOpen(true)}
@@ -105,8 +116,8 @@ export function Nav({
 
 			<MobileMenu
 				open={open}
-				onClose={() => setOpen(false)}
-				onNavigate={(e, href) => {
+				onCloseAction={() => setOpen(false)}
+				onNavigateAction={(e, href) => {
 					handleAnchor(e, href);
 					setOpen(false);
 				}}

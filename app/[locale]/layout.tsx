@@ -17,7 +17,8 @@ import { Intro } from "@/components/motion/Intro";
 import { RouteMotion } from "@/components/motion/RouteMotion";
 import { ScrollProgress } from "@/components/motion/ScrollProgress";
 import { SmoothProvider } from "@/components/motion/SmoothProvider";
-import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/layout/ThemeProvider";
+import { ThemedToaster } from "@/components/layout/ThemedToaster";
 
 /**
  * Archivo carries the whole display voice. It is one of the very few Google
@@ -126,47 +127,52 @@ export default async function RootLayout({
 			suppressHydrationWarning
 		>
 			<body className="bg-canvas text-text">
-				{/*
-				 * Guarantees content for no-JS visitors and for the window before
-				 * hydration. The intro is server-rendered so it covers the page from
-				 * the first paint — without JS to dismiss it, it must not render.
-				 */}
-				<noscript>
-					<style>{`.intro{display:none!important}`}</style>
-				</noscript>
+				<ThemeProvider>
+					{/*
+					 * Guarantees content for no-JS visitors and for the window before
+					 * hydration. The intro is server-rendered so it covers the page from
+					 * the first paint — without JS to dismiss it, it must not render.
+					 */}
+					<noscript>
+						<style>{`.intro{display:none!important}`}</style>
+					</noscript>
 
-				{/*
-				 * Everything down to (and including) <Cursor/> is `position: fixed`
-				 * chrome. It MUST stay a sibling of <SmoothProvider/> — the transform
-				 * ScrollSmoother applies to #smooth-content creates a containing
-				 * block, so a fixed element nested inside it would scroll with the
-				 * page instead of staying pinned to the viewport.
-				 */}
-				<JsonLd locale={locale} description={dict.meta.description} />
+					{/*
+					 * Everything down to (and including) <Cursor/> is `position: fixed`
+					 * chrome. It MUST stay a sibling of <SmoothProvider/> — the transform
+					 * ScrollSmoother applies to #smooth-content creates a containing
+					 * block, so a fixed element nested inside it would scroll with the
+					 * page instead of staying pinned to the viewport.
+					 */}
+					<JsonLd locale={locale} description={dict.meta.description} />
 
-				<SkipLink label={dict.nav.skipToContent} />
-				<GridOverlay />
-				<Nav
-					locale={locale}
-					links={navLinks}
-					switchLabel={dict.nav.switchTo}
-					menuLabel={dict.nav.menu}
-					closeLabel={dict.nav.close}
-				/>
-				<ScrollProgress />
-				<Cursor />
-				<Curtain />
-				<Intro />
+					<SkipLink label={dict.nav.skipToContent} />
+					<GridOverlay />
+					<Nav
+						locale={locale}
+						links={navLinks}
+						switchLabel={dict.nav.switchTo}
+						themeLabel={dict.nav.theme}
+						lightThemeLabel={dict.nav.activateLight}
+						darkThemeLabel={dict.nav.activateDark}
+						menuLabel={dict.nav.menu}
+						closeLabel={dict.nav.close}
+					/>
+					<ScrollProgress />
+					<Cursor />
+					<Curtain />
+					<Intro />
 
-				<SmoothProvider>
-					<div className="relative z-10">
-						{children}
-						<Footer dict={dict.footer} locale={locale} />
-					</div>
-				</SmoothProvider>
+					<SmoothProvider>
+						<div className="relative z-10">
+							{children}
+							<Footer dict={dict.footer} locale={locale} />
+						</div>
+					</SmoothProvider>
 
-				<RouteMotion />
-				<Toaster theme="dark" position="bottom-right" closeButton />
+					<RouteMotion />
+					<ThemedToaster />
+				</ThemeProvider>
 			</body>
 		</html>
 	);

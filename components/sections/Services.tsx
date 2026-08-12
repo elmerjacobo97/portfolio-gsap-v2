@@ -202,7 +202,7 @@ export function Services({
 							>
 								<span
 									aria-hidden
-									className="service-indicator bg-accent absolute inset-x-0 bottom-0 block h-0.5 origin-left"
+									className="service-indicator bg-accent-fill absolute inset-x-0 bottom-0 block h-0.5 origin-left"
 									style={{ transform: `scaleX(${index === 0 ? 1 : 0})` }}
 								/>
 								<span
@@ -218,7 +218,7 @@ export function Services({
 										"service-title text-h3 u-wide transition-colors duration-300",
 										selected
 											? "text-text"
-											: "text-chalk-200 group-hover:text-text",
+											: "text-text-secondary group-hover:text-text",
 									)}
 								>
 									{t(service.title, locale)}
@@ -239,7 +239,7 @@ export function Services({
 					})}
 				</div>
 
-				<div className="border-rule bg-ink-900 relative col-span-12 grid overflow-hidden border-x border-b lg:col-span-7 lg:min-h-[42rem] lg:border-t lg:border-l-0">
+				<div className="border-rule bg-surface-inset relative col-span-12 grid overflow-hidden border-x border-b lg:col-span-7 lg:min-h-[42rem] lg:border-t lg:border-l-0">
 					<span className="plate-bed absolute inset-0 opacity-40" />
 					{services.map((service, index) => {
 						const selected = index === active;
@@ -262,7 +262,7 @@ export function Services({
 										</p>
 										<span
 											aria-hidden
-											className="u-wide text-[clamp(4rem,12cqw,9rem)] leading-[0.7] text-transparent [-webkit-text-stroke:1px_var(--color-ink-600)]"
+											className="u-wide text-[clamp(4rem,12cqw,9rem)] leading-[0.7] text-transparent [-webkit-text-stroke:1px_var(--color-outline)]"
 										>
 											{service.code}
 										</span>
@@ -271,7 +271,7 @@ export function Services({
 									<h3 className="text-h1 u-wide mt-12 max-w-[13ch]">
 										{t(service.title, locale)}
 									</h3>
-									<p className="text-lead text-chalk-200 mt-6 max-w-[42ch]">
+									<p className="text-lead text-text-secondary mt-6 max-w-[42ch]">
 										{t(service.pitch, locale)}
 									</p>
 								</div>
@@ -282,7 +282,7 @@ export function Services({
 										{t(service.deliverables, locale).map((item) => (
 											<li
 												key={item}
-												className="service-deliverable text-body text-chalk-200 border-rule flex gap-4 border-b py-3"
+												className="service-deliverable text-body text-text-secondary border-rule flex gap-4 border-b py-3"
 											>
 												<span aria-hidden className="text-accent">
 													/
@@ -303,7 +303,10 @@ export function Services({
 					<p className="u-label">{dict.fitTitle}</p>
 					<ul className="grid gap-3 sm:grid-cols-3">
 						{dict.fit.map((item) => (
-							<li key={item} className="text-body text-chalk-200 flex gap-3">
+							<li
+								key={item}
+								className="text-body text-text-secondary flex gap-3"
+							>
 								<span aria-hidden className="text-accent">
 									/
 								</span>

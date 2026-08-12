@@ -30,11 +30,20 @@
 
   /* Semantic aliases. Components use these, never the raw scale. */
   --color-canvas: var(--color-ink-950);
+  --color-surface-inset: var(--color-ink-900);
   --color-surface: var(--color-ink-850);
+  --color-surface-raised: var(--color-ink-800);
   --color-rule: var(--color-ink-700);
+  --color-rule-strong: var(--color-ink-600);
+  --color-outline: var(--color-ink-600);
   --color-text: var(--color-chalk-50);
+  --color-text-secondary: var(--color-chalk-200);
+  --color-text-muted: var(--color-chalk-400);
   --color-text-dim: var(--color-chalk-400);
   --color-accent: var(--color-acid-500);
+  --color-accent-fill: var(--color-acid-500);
+  --color-on-accent: var(--color-ink-950);
+  --color-scrim: var(--color-ink-950);
 
   /* ── TYPE ───────────────────────────────────────────────────────────── */
   --font-display: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
@@ -171,7 +180,7 @@
 /* Outlined numeral used behind process steps and section indices. */
 @utility u-outline {
   color: transparent;
-  -webkit-text-stroke: 1px var(--color-ink-600);
+  -webkit-text-stroke: 1px var(--color-outline);
 }
 
 /* ── BASE ─────────────────────────────────────────────────────────────── */
@@ -185,6 +194,25 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  html.light {
+    --color-canvas: #f7f7f2;
+    --color-surface-inset: #ecece6;
+    --color-surface: #e5e5de;
+    --color-surface-raised: #ffffff;
+    --color-rule: #d0d0c6;
+    --color-rule-strong: #a8a8a0;
+    --color-outline: #77776f;
+    --color-text: #050505;
+    --color-text-secondary: #24241f;
+    --color-text-muted: #5a5a52;
+    --color-text-dim: #5a5a52;
+    --color-accent: #536b00;
+    --color-accent-fill: #d4ff3f;
+    --color-on-accent: #050505;
+    --color-scrim: #050505;
+    color-scheme: light;
   }
 
   body {
@@ -208,8 +236,8 @@
   }
 
   ::selection {
-    background: var(--color-accent);
-    color: var(--color-ink-950);
+    background: var(--color-accent-fill);
+    color: var(--color-on-accent);
   }
 
   :focus-visible {

@@ -18,6 +18,9 @@ const es = {
 		close: "Cerrar",
 		skipToContent: "Saltar al contenido",
 		switchTo: "Ver en inglés",
+		theme: "Cambiar tema",
+		activateLight: "Activar modo claro",
+		activateDark: "Activar modo oscuro",
 	},
 
 	hero: {

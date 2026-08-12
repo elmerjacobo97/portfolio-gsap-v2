@@ -1,189 +1,195 @@
-'use client'
+"use client";
 
-import { ArrowUpRight } from 'lucide-react'
-import { useActionState, useEffect, useRef } from 'react'
-import { toast } from 'sonner'
+import { ArrowUpRight } from "lucide-react";
+import { useActionState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 
-import { submitContact } from '@/actions/contact'
-import { initialContactState } from '@/actions/contact-state'
-import type { Locale } from '@/i18n/config'
-import type { Dictionary } from '@/i18n/dictionary'
-import { gsap, useGSAP } from '@/lib/gsap'
-import { OK, REDUCED } from '@/lib/motion'
-import { Field } from './Field'
+import { submitContact } from "@/actions/contact";
+import { initialContactState } from "@/actions/contact-state";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionary";
+import { gsap, useGSAP } from "@/lib/gsap";
+import { OK, REDUCED } from "@/lib/motion";
+import { Field } from "./Field";
 
 export function ContactForm({
-  dict,
-  locale,
+	dict,
+	locale,
 }: {
-  dict: Dictionary['contact']['form']
-  locale: Locale
+	dict: Dictionary["contact"]["form"];
+	locale: Locale;
 }) {
-  const [state, formAction, pending] = useActionState(
-    submitContact,
-    initialContactState,
-  )
-  const rootRef = useRef<HTMLDivElement>(null)
-  const mountedAtRef = useRef<HTMLInputElement>(null)
-  const hasSubmittedRef = useRef(false)
-  const lastReportedStateRef = useRef(initialContactState)
+	const [state, formAction, pending] = useActionState(
+		submitContact,
+		initialContactState,
+	);
+	const rootRef = useRef<HTMLDivElement>(null);
+	const mountedAtRef = useRef<HTMLInputElement>(null);
+	const hasSubmittedRef = useRef(false);
+	const lastReportedStateRef = useRef(initialContactState);
 
-  // Written straight to the DOM, not through state: a one-way write to an
-  // external system needs no re-render (and setState in an effect would
-  // trigger a cascading one). Stamping it client-side is the point — a script
-  // POSTing directly to the action has no plausible value for it.
-  //
-  // Re-stamped on every `state` change because React 19 resets the form once
-  // its action completes, which restores this input to its empty defaultValue.
-  // Without the re-stamp the form is stuck rejecting every retry as "too fast".
-  useEffect(() => {
-    if (mountedAtRef.current) {
-      mountedAtRef.current.value = String(Date.now())
-    }
-  }, [state])
+	// Written straight to the DOM, not through state: a one-way write to an
+	// external system needs no re-render (and setState in an effect would
+	// trigger a cascading one). Stamping it client-side is the point — a script
+	// POSTing directly to the action has no plausible value for it.
+	//
+	// Re-stamped on every `state` change because React 19 resets the form once
+	// its action completes, which restores this input to its empty defaultValue.
+	// Without the re-stamp the form is stuck rejecting every retry as "too fast".
+	useEffect(() => {
+		if (mountedAtRef.current) {
+			mountedAtRef.current.value = String(Date.now());
+		}
+	}, [state]);
 
-  useEffect(() => {
-    if (!hasSubmittedRef.current || lastReportedStateRef.current === state) return
-    lastReportedStateRef.current = state
+	useEffect(() => {
+		if (!hasSubmittedRef.current || lastReportedStateRef.current === state)
+			return;
+		lastReportedStateRef.current = state;
 
-    if (state.ok) {
-      toast.success(dict.successTitle, { description: dict.successBody })
-      return
-    }
+		if (state.ok) {
+			toast.success(dict.successTitle, { description: dict.successBody });
+			return;
+		}
 
-    const detail = state.formError ?? Object.values(state.errors ?? {})[0]
-    if (detail) toast.error(dict.errorGeneric, { description: detail })
-  }, [dict.errorGeneric, dict.successBody, dict.successTitle, state])
+		const detail = state.formError ?? Object.values(state.errors ?? {})[0];
+		if (detail) toast.error(dict.errorGeneric, { description: detail });
+	}, [dict.errorGeneric, dict.successBody, dict.successTitle, state]);
 
-  useGSAP(
-    () => {
-      const bar = rootRef.current?.querySelector('.submit-progress')
-      if (!bar) return
+	useGSAP(
+		() => {
+			const bar = rootRef.current?.querySelector(".submit-progress");
+			if (!bar) return;
 
-      if (!pending) {
-        gsap.set(bar, { scaleX: 0 })
-        return
-      }
+			if (!pending) {
+				gsap.set(bar, { scaleX: 0 });
+				return;
+			}
 
-      const mm = gsap.matchMedia()
-      mm.add(OK, () => {
-        const tween = gsap.fromTo(
-          bar,
-          { scaleX: 0.08, transformOrigin: 'left center' },
-          {
-            scaleX: 1,
-            duration: 0.9,
-            ease: 'power2.inOut',
-            repeat: -1,
-            yoyo: true,
-          },
-        )
-        return () => tween.kill()
-      })
-      mm.add(REDUCED, () => {
-        gsap.set(bar, { scaleX: 1 })
-      })
+			const mm = gsap.matchMedia();
+			mm.add(OK, () => {
+				const tween = gsap.fromTo(
+					bar,
+					{ scaleX: 0.08, transformOrigin: "left center" },
+					{
+						scaleX: 1,
+						duration: 0.9,
+						ease: "power2.inOut",
+						repeat: -1,
+						yoyo: true,
+					},
+				);
+				return () => tween.kill();
+			});
+			mm.add(REDUCED, () => {
+				gsap.set(bar, { scaleX: 1 });
+			});
 
-      return () => mm.revert()
-    },
-    { scope: rootRef, dependencies: [pending], revertOnUpdate: true },
-  )
+			return () => mm.revert();
+		},
+		{ scope: rootRef, dependencies: [pending], revertOnUpdate: true },
+	);
 
-  return (
-    <div ref={rootRef}>
-      <form
-        action={formAction}
-        onSubmit={() => {
-          hasSubmittedRef.current = true
-        }}
-        aria-busy={pending}
-        className="form-panel space-y-8"
-      >
-          <input type="hidden" name="locale" value={locale} />
-          <input ref={mountedAtRef} type="hidden" name="mountedAt" defaultValue="" />
+	return (
+		<div ref={rootRef}>
+			<form
+				action={formAction}
+				onSubmit={() => {
+					hasSubmittedRef.current = true;
+				}}
+				aria-busy={pending}
+				className="form-panel space-y-8"
+			>
+				<input type="hidden" name="locale" value={locale} />
+				<input
+					ref={mountedAtRef}
+					type="hidden"
+					name="mountedAt"
+					defaultValue=""
+				/>
 
-          {/* Honeypot. Hidden from sight, from tab order and from a11y. */}
-          <div aria-hidden className="sr-only">
-            <label htmlFor="company_website">Website</label>
-            <input
-              id="company_website"
-              name="company_website"
-              type="text"
-              tabIndex={-1}
-              autoComplete="off"
-            />
-          </div>
+				{/* Honeypot. Hidden from sight, from tab order and from a11y. */}
+				<div aria-hidden className="sr-only">
+					<label htmlFor="company_website">Website</label>
+					<input
+						id="company_website"
+						name="company_website"
+						type="text"
+						tabIndex={-1}
+						autoComplete="off"
+					/>
+				</div>
 
-          {/* defaultValue echoes the last submission back: React 19 resets an
+				{/* defaultValue echoes the last submission back: React 19 resets an
               uncontrolled form when its action completes, so a validation
               error would otherwise wipe everything the visitor typed. */}
-          <div className="grid gap-8 sm:grid-cols-2">
-            <Field
-              name="name"
-              label={dict.name}
-              autoComplete="name"
-              required
-              error={state.errors?.name}
-              defaultValue={state.values?.name}
-            />
-            <Field
-              name="email"
-              label={dict.email}
-              type="email"
-              autoComplete="email"
-              required
-              error={state.errors?.email}
-              defaultValue={state.values?.email}
-            />
-            <Field
-              name="company"
-              label={dict.company}
-              autoComplete="organization"
-              defaultValue={state.values?.company}
-            />
-            <Field
-              name="scope"
-              label={dict.scope}
-              options={dict.scopeOptions}
-              defaultValue={state.values?.scope}
-            />
-          </div>
+				<div className="grid gap-8 sm:grid-cols-2">
+					<Field
+						name="name"
+						label={dict.name}
+						autoComplete="name"
+						required
+						error={state.errors?.name}
+						defaultValue={state.values?.name}
+					/>
+					<Field
+						name="email"
+						label={dict.email}
+						type="email"
+						autoComplete="email"
+						required
+						error={state.errors?.email}
+						defaultValue={state.values?.email}
+					/>
+					<Field
+						name="company"
+						label={dict.company}
+						autoComplete="organization"
+						defaultValue={state.values?.company}
+					/>
+					<Field
+						name="scope"
+						label={dict.scope}
+						options={dict.scopeOptions}
+						defaultValue={state.values?.scope}
+					/>
+				</div>
 
-          <Field
-            name="message"
-            label={dict.message}
-            textarea
-            required
-            error={state.errors?.message}
-            defaultValue={state.values?.message}
-          />
+				<Field
+					name="message"
+					label={dict.message}
+					textarea
+					required
+					error={state.errors?.message}
+					defaultValue={state.values?.message}
+				/>
 
-          <button
-            type="submit"
-            disabled={pending}
-            className="u-meta border-accent text-accent hover:bg-accent hover:text-ink-950 relative overflow-hidden border px-8 py-4 transition-colors duration-300 disabled:cursor-wait disabled:opacity-70"
-          >
-            <span className="relative z-10">
-              {pending ? dict.sending : dict.submit}
-              <ArrowUpRight
-                aria-hidden
-                size={16}
-                strokeWidth={1.5}
-                strokeLinecap="square"
-                strokeLinejoin="miter"
-                className="ml-1 inline-block align-[-0.2em]"
-              />
-            </span>
-            <span
-              aria-hidden
-              className="submit-progress bg-accent absolute inset-x-0 bottom-0 block h-0.5 origin-left"
-              style={{ transform: 'scaleX(0)' }}
-            />
-          </button>
-          <p className="u-label min-h-[1em] text-text-dim" aria-live="polite">
-            {pending ? dict.sendingHint : ''}
-          </p>
-      </form>
-    </div>
-  )
+				<button
+					type="submit"
+					disabled={pending}
+					className="u-meta border-accent text-accent hover:bg-accent-fill hover:text-on-accent relative overflow-hidden border px-8 py-4 transition-colors duration-300 disabled:cursor-wait disabled:opacity-70"
+				>
+					<span className="relative z-10">
+						{pending ? dict.sending : dict.submit}
+						<ArrowUpRight
+							aria-hidden
+							size={16}
+							strokeWidth={1.5}
+							strokeLinecap="square"
+							strokeLinejoin="miter"
+							className="ml-1 inline-block align-[-0.2em]"
+						/>
+					</span>
+					<span
+						aria-hidden
+						className="submit-progress bg-accent-fill absolute inset-x-0 bottom-0 block h-0.5 origin-left"
+						style={{ transform: "scaleX(0)" }}
+					/>
+				</button>
+				<p className="u-label min-h-[1em] text-text-dim" aria-live="polite">
+					{pending ? dict.sendingHint : ""}
+				</p>
+			</form>
+		</div>
+	);
 }

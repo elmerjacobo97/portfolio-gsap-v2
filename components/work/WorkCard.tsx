@@ -68,7 +68,7 @@ export function WorkCard({
 		});
 		// The mass sweeps right over the meta line; it has to change ink with it.
 		gsap.to(card.querySelectorAll(".plate-meta"), {
-			color: "var(--color-ink-950)",
+			color: "var(--color-on-accent)",
 			duration: hoverDuration(DUR.fast),
 			overwrite: "auto",
 		});
@@ -147,15 +147,15 @@ export function WorkCard({
 			>
 				<div className="u-meta text-text-dim work-meta flex flex-wrap gap-x-4 gap-y-1">
 					<span>{t(project.client, locale)}</span>
-					<span aria-hidden className="text-ink-600">
+					<span aria-hidden className="text-outline">
 						/
 					</span>
 					<span>{project.year}</span>
-					<span aria-hidden className="text-ink-600">
+					<span aria-hidden className="text-outline">
 						/
 					</span>
 					<span>{t(project.role, locale)}</span>
-					<span aria-hidden className="text-ink-600">
+					<span aria-hidden className="text-outline">
 						/
 					</span>
 					<span>{project.stack.slice(0, 3).join(" · ")}</span>
@@ -198,11 +198,11 @@ export function WorkCard({
             three separate children never quite did. */}
 				<span
 					aria-hidden
-					className="work-rule bg-accent mt-4 block h-px w-full origin-left"
+					className="work-rule bg-accent-fill mt-4 block h-px w-full origin-left"
 					style={{ transform: "scaleX(0)" }}
 				/>
 
-				<p className="work-close text-body text-chalk-200 mt-4 max-w-[46ch]">
+				<p className="work-close text-body text-text-secondary mt-4 max-w-[46ch]">
 					{t(project.tagline, locale)}
 				</p>
 			</TransitionLink>

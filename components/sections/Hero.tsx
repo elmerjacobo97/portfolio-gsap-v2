@@ -315,10 +315,10 @@ function HeroView({
 				</div>
 
 				<div className="hero-copy order-1 col-span-12 mt-10 max-w-[42ch] lg:order-none lg:col-span-6 lg:mt-14">
-					<p className="text-lead text-chalk-200 max-w-[24ch]">
+					<p className="text-lead text-text-secondary max-w-[24ch]">
 						{dict.statement}
 					</p>
-					<p className="text-body text-chalk-200 mt-5 max-w-[44ch]">
+					<p className="text-body text-text-secondary mt-5 max-w-[44ch]">
 						{dict.supporting}
 					</p>
 					<div className="mt-8 flex flex-wrap gap-x-7 gap-y-4">
@@ -329,10 +329,10 @@ function HeroView({
 					</div>
 				</div>
 
-				<div className="hero-artifact border-rule bg-ink-900 order-3 col-span-12 mt-10 border lg:order-none lg:col-span-5 lg:col-start-8 lg:mt-14">
+				<div className="hero-artifact border-rule bg-surface-inset order-3 col-span-12 mt-10 border lg:order-none lg:col-span-5 lg:col-start-8 lg:mt-14">
 					<div className="border-rule flex items-center justify-between border-b px-4 py-3">
 						<span className="u-label text-accent">{dict.artifactLabel}</span>
-						<span className="u-label text-chalk-400">{dict.artifactKind}</span>
+						<span className="u-label text-text-muted">{dict.artifactKind}</span>
 					</div>
 					<ol className="grid grid-cols-2 md:grid-cols-4">
 						{dict.artifactSteps.map((step, index) => (
@@ -340,20 +340,20 @@ function HeroView({
 								key={step}
 								className="hero-artifact-step border-rule flex flex-col border-r border-b p-4 last:border-r-0 md:border-b-0"
 							>
-								<span className="u-label text-ink-600 block">
+								<span className="u-label text-outline block">
 									{String(index + 1).padStart(2, "0")}
 								</span>
 								<span className="mt-8 flex items-end justify-between gap-3">
 									<span className="u-meta">{step}</span>
 									<span
 										aria-hidden
-										className="bg-accent mb-0.5 block size-1.5 shrink-0 rounded-full"
+										className="bg-accent-fill mb-0.5 block size-1.5 shrink-0 rounded-full"
 									/>
 								</span>
 							</li>
 						))}
 					</ol>
-					<p className="u-label border-rule text-chalk-400 border-t px-4 py-3">
+					<p className="u-label border-rule text-text-muted border-t px-4 py-3">
 						{dict.artifactStatus}
 					</p>
 				</div>

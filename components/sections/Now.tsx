@@ -45,7 +45,7 @@ export function Now({
 
 								<div className="col-span-12 md:col-span-6">
 									<h3 className="text-h2 u-wide">{t(project.title, locale)}</h3>
-									<p className="text-body text-chalk-200 mt-4 max-w-[48ch]">
+									<p className="text-body text-text-secondary mt-4 max-w-[48ch]">
 										{t(project.summary, locale)}
 									</p>
 								</div>
