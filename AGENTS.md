@@ -1,37 +1,31 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+# Repository Instructions
 
-This version has breaking changes. APIs, conventions, and file structure may differ from training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing Next.js code and heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+## Toolchain
 
-## Commands
+- This is one Next.js `16.2.12` App Router app. Use `pnpm`; `pnpm-lock.yaml` and `pnpm-workspace.yaml` are authoritative. `README.md` is stale create-next-app boilerplate.
+- Before changing Next.js APIs, read the matching guide under `node_modules/next/dist/docs/`; this project uses Next 16 conventions.
+- Run `pnpm dev` for local development at `http://localhost:3000`. Run `pnpm lint` and `pnpm exec tsc --noEmit` for focused checks; full verification is `pnpm lint && pnpm exec tsc --noEmit && pnpm build`.
+- There is no test script or automated test suite. Do not assume Jest, Vitest, or Playwright commands exist.
 
-- Use pnpm; `pnpm-lock.yaml` is the dependency source of truth.
-- Develop with `pnpm dev` at `http://localhost:3000`; `/` returns a temporary 307 redirect to `/es`.
-- Focused checks: `pnpm lint` and `pnpm exec tsc --noEmit`.
-- Full verification: `pnpm lint && pnpm exec tsc --noEmit && pnpm build`.
-- No automated test suite or test script exists.
+## Routing And Content
 
-## App Structure
-
-- This is one Next.js 16 App Router app, not a multi-package workspace; `pnpm-workspace.yaml` only configures ignored build dependencies. `README.md` is stale create-next-app boilerplate.
-- `app/[locale]/layout.tsx` is the root layout; there is intentionally no `app/layout.tsx`. Routes live under `/es` and `/en`, while `next.config.ts` redirects `/` to the default locale.
-- Keep `app/[locale]/[...rest]/page.tsx`: it routes deep unknown paths through the localized layout and styled `not-found.tsx`.
-- App Router `params` are promises in this version; follow existing async route signatures.
-- Home composition lives in `app/[locale]/page.tsx`; case studies are statically generated from `data/projects.ts` by `app/[locale]/work/[slug]/page.tsx`.
-- Site records belong in `data/`. Interface copy belongs in `i18n/dictionaries/`; Spanish defines the `Dictionary` shape, so update both `es.ts` and `en.ts` together.
+- `app/[locale]/layout.tsx` is the root layout; there is intentionally no `app/layout.tsx`. Locales are `/es` and `/en`; `/` is a temporary `307` redirect to default locale `es`.
+- App Router `params` are promises. Preserve existing async route signatures and `await params` usage.
+- Preserve `app/[locale]/[...rest]/page.tsx`, `[locale]/not-found.tsx`, and `app/global-not-found.tsx`: together they keep invalid and deep unknown paths inside the intended styled 404 flow.
+- Home composition is `app/[locale]/page.tsx`; case studies are statically generated from `data/projects.ts` by `app/[locale]/work/[slug]/page.tsx`. Project slugs stay the same across locales; the locale switcher swaps only the first path segment.
+- `data/` owns site, project, service, and other content records. `i18n/dictionaries/es.ts` defines the `Dictionary` shape; update `en.ts` with every dictionary change.
 
 ## Motion And Styling
 
-- Import GSAP and plugins only from `@/lib/gsap`; plugin registration is centralized there. Do not import `gsap/all`.
-- Use `useGSAP` with scoped refs and shared media queries from `lib/motion.ts`; every animation must preserve reduced-motion behavior.
-- `SmoothProvider` owns `#smooth-wrapper` and `#smooth-content`. Viewport-fixed chrome must remain its sibling in `app/[locale]/layout.tsx`; transformed smooth content breaks descendant `position: fixed`. Use ScrollTrigger pinning for sticky animated content.
-- Route transitions depend on `TransitionLink`, `.curtain`, and `RouteMotion` refreshing ScrollTrigger after navigation; do not replace internal animated links with plain navigation without preserving that flow.
-- Tailwind v4 tokens and custom utilities live in `app/globals.css`. Keep `@theme static`, use semantic color aliases, and leave native `scroll-behavior` as `auto` because ScrollSmoother owns scrolling.
-- Keep the `next/font` variable classes on `<html>`, not `<body>`; root theme variables resolve them where they are declared.
+- Import GSAP and plugins only from `@/lib/gsap`; registration is centralized there and uses deep imports. Never import `gsap/all`.
+- Use `useGSAP` with scoped refs and the shared reduced-motion/media queries from `lib/motion.ts`. New animation must preserve `prefers-reduced-motion` behavior.
+- `SmoothProvider` owns `#smooth-wrapper` and `#smooth-content`. Viewport-fixed chrome must stay outside it as a sibling in `app/[locale]/layout.tsx`; use ScrollTrigger pinning instead of descendant `position: fixed` for sticky animated content.
+- Internal animated navigation depends on `TransitionLink`, `.curtain`, and `RouteMotion`; do not replace those links with plain navigation without preserving the route-transition and ScrollTrigger refresh flow.
+- Tailwind v4 tokens and custom utilities live in `app/globals.css`. Keep `@theme static`, use semantic color aliases, and leave native `scroll-behavior: auto` because ScrollSmoother owns scrolling. Keep `next/font` variable classes on `<html>`.
+- `DESIGN.md` documents the implemented visual tokens and interaction rules; consult it before changing frontend styling.
 
 ## Contact Form
 
-- Sending mail requires `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, and `CONTACT_FROM_EMAIL`; copy `.env.example` to `.env.local`. Public site, WhatsApp, and Cal values have defaults in `data/site.ts`.
-- Server Actions are capped at `64kb`. `actions/contact.ts` deliberately avoids cache revalidation so prerendered pages stay static; keep request headers and rate limiting inside the action, not route rendering.
-- `lib/rate-limit.ts` is intentionally an in-memory, per-instance speed bump, not durable distributed enforcement.
+- For mail-enabled local development, run `cp .env.example .env.local` and set `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, and a domain-verified `CONTACT_FROM_EMAIL`. `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_WHATSAPP_NUMBER`, and `NEXT_PUBLIC_CAL_LINK` are public values; `data/site.ts` provides defaults.
+- `next.config.ts` caps Server Action bodies at `64kb`. `actions/contact.ts` keeps request headers, validation, and rate limiting in the action and intentionally does not revalidate the statically generated page.
+- `lib/rate-limit.ts` is an in-memory, per-instance speed bump, not durable distributed enforcement.
