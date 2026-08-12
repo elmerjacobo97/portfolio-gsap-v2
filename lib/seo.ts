@@ -4,7 +4,7 @@ import { defaultLocale, locales, type Locale } from '@/i18n/config'
 
 /**
  * Builds canonical + hreflang alternates for a path that exists in every
- * locale. `path` is the part AFTER the locale segment, e.g. '' or '/work/x'.
+ * locale. `path` is the part AFTER the locale segment, e.g. '' or '/nested/path'.
  */
 export function buildAlternates(locale: Locale, path = ''): Metadata['alternates'] {
   return {

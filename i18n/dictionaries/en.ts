@@ -10,8 +10,8 @@ const en = {
 
 	nav: {
 		services: "What I build",
-		work: "Work",
-		now: "Now",
+		projects: "Projects",
+		experience: "Experience",
 		process: "How I work",
 		about: "About",
 		contact: "Contact",
@@ -47,27 +47,20 @@ const en = {
 		label: "Stack",
 	},
 
-	work: {
+	projects: {
 		index: "01",
-		title: "Selected work",
-		lead: "These are products I have built, maintained, or taken to production. Each case explains what I did and why I made those decisions.",
-		viewCase: "View case",
-		role: "Role",
-		year: "Year",
-		client: "Context",
-		stack: "Stack",
-		caseLabel: "Case",
-		liveSite: "Live site",
-		repository: "Repository",
-		nextCase: "Next case",
-		backWork: "Back to work",
+		title: "Projects",
+		lead: "These are products I built by my own initiative or published as open source. They show how I think and how I work.",
+		openProject: "Open project",
 	},
 
-	now: {
+	experience: {
 		index: "02",
-		title: "Now / Lab",
-		lead: "A few things I am building or maintaining outside client work.",
-		openLink: "Open project",
+		title: "Experience",
+		lead: "Products I have contributed to professionally. I show my responsibility and context without presenting them as personal property.",
+		contribution: "Professional contribution",
+		role: "Role",
+		openProject: "Open project",
 	},
 
 	about: {
@@ -90,7 +83,7 @@ const en = {
 
 	services: {
 		index: "04",
-		title: "What I build",
+		title: "Services",
 		lead: "I can join when the product still needs direction, when it is already running, or when the backend starts slowing the team down. We work directly, with the decisions on the table.",
 		modeLabel: "Mode",
 		deliverables: "What stays",
@@ -104,13 +97,13 @@ const en = {
 
 	process: {
 		index: "05",
-		title: "How I work",
+		title: "Process",
 		lead: "I show you the work as it happens. We discuss changes before they become code, and every week you have something you can open.",
 	},
 
 	principles: {
 		index: "06",
-		title: "Working principles",
+		title: "Principles",
 		lead: "These are the rules I use when working with product and code.",
 		items: [
 			{
@@ -155,14 +148,14 @@ const en = {
 			{
 				label: "200+ active users",
 				detail:
-					"Tarjetly has more than 200 active users; the case explains what I built and which decisions I made.",
+					"Tarjetly has more than 200 active users; this experience explains what I built and which decisions I made.",
 			},
 		],
 	},
 
 	contact: {
 		index: "08",
-		title: "Tell me about your project",
+		title: "Contact",
 		lead: "Tell me what you want to build. I reply within 24 hours.",
 		channelsTitle: "Direct channels",
 		whatsapp: "WhatsApp",

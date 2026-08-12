@@ -104,12 +104,11 @@ export default async function RootLayout({
 	const locale = hasLocale(requestedLocale) ? requestedLocale : defaultLocale;
 	const dict = await getDictionary(locale);
 
-	// Absolute, not bare hashes: on a case-study page these sections do not
-	// exist, and a bare hash link would silently do nothing. Nav intercepts
-	// these for a smooth scroll only when the target is on the current page.
+	// Absolute, not bare hashes: these links also work from future nested routes.
+	// Nav intercepts them for smooth scrolling only when the target is on the page.
 	const navLinks = [
-		{ href: `/${locale}#work`, label: dict.nav.work },
-		{ href: `/${locale}#now`, label: dict.nav.now },
+		{ href: `/${locale}#projects`, label: dict.nav.projects },
+		{ href: `/${locale}#experience`, label: dict.nav.experience },
 		{ href: `/${locale}#about`, label: dict.nav.about },
 		{ href: `/${locale}#contact`, label: dict.nav.collaborate },
 	];

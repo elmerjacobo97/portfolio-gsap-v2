@@ -1,6 +1,5 @@
 import type { MetadataRoute } from 'next'
 
-import { projects } from '@/data/projects'
 import { site } from '@/data/site'
 import { defaultLocale, locales } from '@/i18n/config'
 
@@ -17,7 +16,7 @@ function alternates(path: string) {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = ['', ...projects.map((p) => `/work/${p.slug}`)]
+  const paths = ['']
   const lastModified = new Date()
 
   return locales.flatMap((locale) =>

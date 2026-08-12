@@ -14,8 +14,8 @@ import { MobileMenu } from "./MobileMenu";
 import { ThemeToggle } from "./ThemeToggle";
 
 // ScrollSmoother owns scrolling, so native anchor jumps would fight it. If the
-// section is absent (for example, on a case-study route), leave navigation to
-// the browser so the absolute href returns to the home page.
+// Section is absent on nested routes, so leave navigation to the browser and let
+// the absolute href return to the home page.
 function handleAnchor(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
 	const hashIndex = href.indexOf("#");
 	if (hashIndex === -1) return;

@@ -351,7 +351,7 @@ a separate visual theme:
 - From `md`, the desktop navigation appears, the grid overlay exposes all columns,
   metadata and fact lists gain multiple columns, and form/stat layouts split.
 - From `lg`, editorial compositions use asymmetric column spans: hero copy and
-  artifact panels sit beside each other; work cards alternate between centered
+  artifact panels sit beside each other; project blocks alternate between centered
   10-column and paired 6-column placements; services, proof, and contact use
   dedicated text/data bands.
 - The process section becomes a pinned horizontal track only at `min-width: 1024px`
@@ -447,18 +447,12 @@ content.
 
 ### Content and work
 
-- `components/work/WorkCard.tsx` is a full-card link with metadata rail, media
-  plate, title, arrow, tagline, and an acid rule drawn on hover/focus. Its desktop
+- `components/work/ProjectCard.tsx` is an editorial project block with a metadata
+  rail, media plate, title, tagline, stack, and external project link. Its desktop
   placements alternate so the portfolio does not read as a uniform card table.
 - `components/work/MediaPlate.tsx` provides a bordered `ink-850` media well with
   responsive aspect ratio and either a real image or `ProjectPreview` fallback.
-- `components/work/ProjectPreview.tsx` uses the same ink/rule/acid vocabulary to
-  draw dashboard, operations, and offline-mobile placeholders with container-query
-  type sizing.
-- `components/work/CaseHeader.tsx`, `CaseBody.tsx`, `CaseMetrics.tsx`, and
-  `NextProject.tsx` reuse the same indexed rules, constrained reading measure,
-  oversized type, and acid-arrow links on case-study pages.
-- The home sections (`Hero`, `Work`, `Now`, `About`, `Services`, `Process`,
+- The home sections (`Hero`, `Projects`, `Experience`, `About`, `Services`, `Process`,
   `Principles`, `Proof`, and `Contact`) are composed from these primitives rather
   than from a separate card or theme library.
 

@@ -7,7 +7,7 @@ import { TransitionLink } from "@/components/motion/TransitionLink";
 
 /**
  * Slugs are deliberately not translated, so switching locale is a pure swap of
- * path segment 0 — it works identically on `/es` and on `/es/work/<slug>`.
+ * path segment 0 — it works identically on `/es` and on any future nested route.
  */
 export function LocaleSwitcher({
 	locale,

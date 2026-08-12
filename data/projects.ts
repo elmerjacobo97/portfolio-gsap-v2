@@ -8,7 +8,7 @@ export type CaseBlock =
 export type Project = {
 	/** The locale switcher stays a segment swap, but visible context is translated. */
 	slug: string;
-	featured: boolean;
+	category: "project" | "experience";
 	order: number;
 	year: number;
 	client: Localized;
@@ -20,7 +20,6 @@ export type Project = {
 	tagline: Localized;
 	summary: Localized;
 	metrics: readonly { value: string; label: Localized }[];
-	/** Undefined renders the CSS-only <MediaPlate/> instead of an <Image/>. */
 	cover?: {
 		src: string;
 		width: number;
@@ -38,9 +37,9 @@ export type Project = {
 };
 
 export const projects: readonly Project[] = [
-	{
-		slug: "spec-flow-skills",
-		featured: false,
+		{
+			slug: "spec-flow-skills",
+			category: "project",
 		order: 1,
 		year: 2026,
 		client: { es: "Open source · Individual", en: "Open source · Individual" },
@@ -110,9 +109,9 @@ export const projects: readonly Project[] = [
 			},
 		],
 	},
-	{
-		slug: "driftwatch",
-		featured: false,
+		{
+			slug: "driftwatch",
+			category: "project",
 		order: 2,
 		year: 2026,
 		client: { es: "Open source · Individual", en: "Open source · Individual" },
@@ -190,9 +189,9 @@ export const projects: readonly Project[] = [
 			},
 		],
 	},
-	{
-		slug: "tarjetly",
-		featured: true,
+		{
+			slug: "tarjetly",
+			category: "experience",
 		order: 3,
 		year: 2025,
 		client: { es: "Tarjetly · SaaS B2B", en: "Tarjetly · B2B SaaS" },
@@ -279,9 +278,9 @@ export const projects: readonly Project[] = [
 			},
 		],
 	},
-	{
-		slug: "gastly",
-		featured: true,
+		{
+			slug: "gastly",
+			category: "project",
 		order: 4,
 		year: 2025,
 		client: { es: "Producto personal", en: "Personal product" },
@@ -366,9 +365,9 @@ export const projects: readonly Project[] = [
 			},
 		],
 	},
-	{
-		slug: "sismol",
-		featured: true,
+		{
+			slug: "sismol",
+			category: "experience",
 		order: 5,
 		year: 2024,
 		client: { es: "ABEHA · Operaciones", en: "ABEHA · Operations" },
@@ -446,17 +445,12 @@ export const projects: readonly Project[] = [
 	},
 ];
 
-export const featured = () =>
-	projects.filter((p) => p.featured).sort((a, b) => a.order - b.order);
+export const personalProjects = () =>
+	projects
+		.filter((project) => project.category === "project")
+		.sort((a, b) => a.order - b.order);
 
-export const getProject = (slug: string) =>
-	projects.find((p) => p.slug === slug);
-
-export const projectSlugs = () => projects.map((p) => ({ slug: p.slug }));
-
-export const nextProject = (slug: string) => {
-	const list = featured();
-	const i = list.findIndex((p) => p.slug === slug);
-	if (i === -1) return undefined;
-	return list[(i + 1) % list.length];
-};
+export const professionalProjects = () =>
+	projects
+		.filter((project) => project.category === "experience")
+		.sort((a, b) => a.order - b.order);

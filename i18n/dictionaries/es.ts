@@ -8,8 +8,8 @@ const es = {
 
 	nav: {
 		services: "Qué construyo",
-		work: "Trabajo",
-		now: "Ahora",
+		projects: "Proyectos",
+		experience: "Experiencia",
 		process: "Cómo trabajo",
 		about: "Sobre mí",
 		contact: "Contacto",
@@ -45,32 +45,25 @@ const es = {
 		label: "Stack",
 	},
 
-	work: {
+	projects: {
 		index: "01",
-		title: "Trabajo seleccionado",
-		lead: "Aquí reúno productos que he construido, mantenido o llevado a producción. En cada caso cuento qué hice y qué decisiones tomé.",
-		viewCase: "Ver caso",
-		role: "Rol",
-		year: "Año",
-		client: "Contexto",
-		stack: "Stack",
-		caseLabel: "Caso",
-		liveSite: "Sitio en vivo",
-		repository: "Repositorio",
-		nextCase: "Siguiente caso",
-		backWork: "Volver al trabajo",
+		title: "Proyectos",
+		lead: "Estos son productos que he construido por iniciativa propia o publicado como open source. Aquí puedes revisar cómo pienso y cómo trabajo.",
+		openProject: "Abrir proyecto",
 	},
 
-	now: {
+	experience: {
 		index: "02",
-		title: "Ahora / Laboratorio",
-		lead: "Algunas cosas que estoy construyendo o manteniendo fuera del trabajo de clientes.",
-		openLink: "Abrir proyecto",
+		title: "Experiencia",
+		lead: "Productos en los que he contribuido profesionalmente. Muestro mi responsabilidad y contexto, no los presento como propiedad personal.",
+		contribution: "Contribución profesional",
+		role: "Rol",
+		openProject: "Abrir proyecto",
 	},
 
 	about: {
 		index: "03",
-		title: "Sobre mí",
+		title: "Perfil",
 		bio: [
 			"Llevo más de cuatro años construyendo aplicaciones web y móviles. He trabajado con productos que tienen usuarios, pagos y operaciones que no pueden detenerse.",
 			"En mi trabajo actual lidero técnicamente el desarrollo de una plataforma SaaS de tarjetas digitales: reviso PRs, tomo decisiones de arquitectura y coordino directamente con el liderazgo técnico.",
@@ -88,7 +81,7 @@ const es = {
 
 	services: {
 		index: "04",
-		title: "Qué construyo",
+		title: "Servicios",
 		lead: "Puedo entrar cuando todavía hay que decidir qué construir, cuando el producto ya existe o cuando el backend empieza a frenar al equipo. Trabajamos directo, con las decisiones sobre la mesa.",
 		modeLabel: "Modo",
 		deliverables: "Qué queda",
@@ -102,13 +95,13 @@ const es = {
 
 	process: {
 		index: "05",
-		title: "Cómo trabajo",
+		title: "Proceso",
 		lead: "Te enseño el trabajo mientras ocurre. Hablamos de los cambios antes de convertirlos en código y cada semana tienes algo que puedes abrir.",
 	},
 
 	principles: {
 		index: "06",
-		title: "Principios de trabajo",
+		title: "Principios",
 		lead: "Son las reglas que uso para trabajar con producto y código.",
 		items: [
 			{
@@ -153,14 +146,14 @@ const es = {
 			{
 				label: "200+ usuarios activos",
 				detail:
-					"Tarjetly tiene más de 200 usuarios activos; el caso explica qué construí y qué decisiones tomé.",
+					"Tarjetly tiene más de 200 usuarios activos; esta experiencia explica qué construí y qué decisiones tomé.",
 			},
 		],
 	},
 
 	contact: {
 		index: "08",
-		title: "Cuéntame tu proyecto",
+		title: "Contacto",
 		lead: "Cuéntame qué quieres construir. Respondo en menos de 24 horas.",
 		channelsTitle: "Canales directos",
 		whatsapp: "WhatsApp",

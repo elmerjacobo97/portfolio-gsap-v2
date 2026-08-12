@@ -12,7 +12,7 @@
 - `app/[locale]/layout.tsx` is the root layout; there is intentionally no `app/layout.tsx`. Locales are `/es` and `/en`; `/` is a temporary `307` redirect to default locale `es`.
 - App Router `params` are promises. Preserve existing async route signatures and `await params` usage.
 - Preserve `app/[locale]/[...rest]/page.tsx`, `[locale]/not-found.tsx`, and `app/global-not-found.tsx`: together they keep invalid and deep unknown paths inside the intended styled 404 flow.
-- Home composition is `app/[locale]/page.tsx`; case studies are statically generated from `data/projects.ts` by `app/[locale]/work/[slug]/page.tsx`. Project slugs stay the same across locales; the locale switcher swaps only the first path segment.
+- Home composition is `app/[locale]/page.tsx`; project and professional-experience records live in `data/projects.ts` and render directly on the home page. There is no project-detail route; the locale switcher swaps only the first path segment.
 - `data/` owns site, project, service, and other content records. `i18n/dictionaries/es.ts` defines the `Dictionary` shape; update `en.ts` with every dictionary change.
 
 ## Motion And Styling

@@ -322,7 +322,7 @@ function HeroView({
 						{dict.supporting}
 					</p>
 					<div className="mt-8 flex flex-wrap gap-x-7 gap-y-4">
-						<ArrowLink href="#work" className="text-accent">
+						<ArrowLink href="#projects" className="text-accent">
 							{dict.projectsCta}
 						</ArrowLink>
 						<ArrowLink href="#contact">{dict.contactCta}</ArrowLink>
