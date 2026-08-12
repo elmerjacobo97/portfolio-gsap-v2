@@ -347,7 +347,7 @@ function HeroView({
 									<span className="u-meta">{step}</span>
 									<span
 										aria-hidden
-										className="bg-accent-fill mb-0.5 block size-1.5 shrink-0 rounded-full"
+										className="bg-accent-fill border-on-accent mb-0.5 block size-2 shrink-0 rounded-full border"
 									/>
 								</span>
 							</li>
