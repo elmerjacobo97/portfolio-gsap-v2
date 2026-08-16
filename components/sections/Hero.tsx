@@ -7,9 +7,9 @@ import { ArrowLink } from "@/components/ui/ArrowLink";
 import { Pill } from "@/components/ui/Pill";
 import { Rule } from "@/components/ui/Rule";
 import type { Dictionary } from "@/i18n/dictionary";
-import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
+import { gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { introDone } from "@/lib/intro";
-import { DUR, EASE, OK } from "@/lib/motion";
+import { OK } from "@/lib/motion";
 
 export function Hero({ dict }: { dict: Dictionary["hero"] }) {
 	const rootRef = useRef<HTMLElement>(null);
@@ -73,66 +73,8 @@ export function Hero({ dict }: { dict: Dictionary["hero"] }) {
 				// earlier would run the onSplit tween behind the intro overlay, and
 				// the headline would already be settled by the time it lifts.
 				let split: SplitText | undefined;
-				let ambient: gsap.core.Timeline | undefined;
 				let cancelled = false;
 				let hasRevealed = false;
-				let heroVisible = true;
-
-				const visibilityTrigger = ScrollTrigger.create({
-					trigger: root,
-					start: "top bottom",
-					end: "bottom top",
-					onToggle: (self) => {
-						heroVisible = self.isActive;
-						if (self.isActive) ambient?.play();
-						else ambient?.pause();
-					},
-				});
-				heroVisible = visibilityTrigger.isActive;
-
-				const restingY = (index: number) => {
-					const offset = window.innerWidth < 768 ? 3 : 7;
-					return index % 2 === 0 ? -offset : offset;
-				};
-
-				const startAmbientMotion = (characters: Element[]) => {
-					ambient?.kill();
-					gsap.set(characters, {
-						y: restingY,
-						yPercent: 0,
-						scaleY: 1,
-					});
-
-					ambient = gsap
-						.timeline({
-							paused: !heroVisible,
-							repeat: -1,
-							repeatDelay: 1.6,
-							delay: 0.8,
-						})
-						.to(characters, {
-							y: (index) => {
-								const offset = window.innerWidth < 768 ? 5 : 11;
-								return index % 2 === 0 ? -offset : offset;
-							},
-							scaleY: 1.012,
-							duration: 0.42,
-							stagger: { each: 0.055, from: "start" },
-							ease: "sine.inOut",
-						})
-						.to(
-							characters,
-							{
-								y: restingY,
-								scaleY: 1,
-								duration: DUR.base,
-								stagger: { each: 0.045, from: "start" },
-								ease: EASE.brutal,
-							},
-							">-0.12",
-						);
-				};
-
 				introDone.then(() => {
 					if (cancelled) return;
 
@@ -152,7 +94,6 @@ export function Hero({ dict }: { dict: Dictionary["hero"] }) {
 							// of the name instead, with the animated lines aria-hidden.
 							aria: "none",
 							onSplit(self) {
-								ambient?.kill();
 								self.chars.forEach((character) => {
 									character.setAttribute(
 										"data-char",
@@ -167,13 +108,12 @@ export function Hero({ dict }: { dict: Dictionary["hero"] }) {
 
 								if (hasRevealed) {
 									gsap.set(self.chars, {
-										y: restingY,
+										y: 0,
 										yPercent: 0,
 										rotationX: 0,
 										opacity: 1,
 										color: "var(--color-text)",
 									});
-									startAmbientMotion(self.chars);
 									return;
 								}
 
@@ -205,19 +145,7 @@ export function Hero({ dict }: { dict: Dictionary["hero"] }) {
 											stagger: { each: 0.025, from: "start" },
 										},
 										"<0.1",
-									)
-									.to(
-										self.chars,
-										{
-											y: restingY,
-											duration: DUR.fast,
-											stagger: { each: 0.025, from: "start" },
-											ease: EASE.settle,
-										},
-										"<",
 									);
-
-								reveal.call(() => startAmbientMotion(self.chars));
 								return reveal;
 							},
 						},
@@ -248,8 +176,6 @@ export function Hero({ dict }: { dict: Dictionary["hero"] }) {
 
 				return () => {
 					cancelled = true;
-					visibilityTrigger.kill();
-					ambient?.kill();
 					gsap.killTweensOf(root.querySelectorAll(".hero-char"));
 					split?.revert();
 				};
