@@ -40,7 +40,7 @@ colors:
   surface-inset-light: "#E9E9E2"
   surface-light: "#E1E1D9"
   surface-raised-light: "#FFFFFF"
-  rule-light: "#C6C6BC"
+  rule-light: "#D6D6CE"
   rule-strong-light: "#98988E"
   outline-light: "#6F6F67"
   text-light: "#050505"
