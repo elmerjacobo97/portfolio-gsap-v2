@@ -13,14 +13,19 @@ export function ArrowLink({
   children,
   external,
   className,
+  tone = 'default',
 }: {
   href: string
   children: React.ReactNode
   external?: boolean
   className?: string
+  tone?: 'default' | 'action'
 }) {
   const classes = cn(
-    'group text-text hover:text-accent inline-flex items-baseline gap-2 transition-colors duration-200',
+    'group/arrow-link inline-flex items-baseline gap-2 transition-[background-color,color] duration-200',
+    tone === 'action'
+      ? 'bg-accent-fill !text-on-accent min-h-11 whitespace-nowrap px-4 py-3 hover:bg-accent-fill/90 hover:!text-on-accent focus-visible:!outline-text'
+      : 'text-text hover:text-accent',
     className,
   )
 
@@ -39,7 +44,7 @@ export function ArrowLink({
         strokeWidth={1.5}
         strokeLinecap="square"
         strokeLinejoin="miter"
-        className="arrow inline-block transition-transform duration-300 ease-(--ease-brutal) group-hover:translate-x-1 group-hover:-translate-y-1 group-focus-visible:translate-x-1 group-focus-visible:-translate-y-1"
+        className="arrow inline-block transition-transform duration-300 ease-(--ease-brutal) group-hover/arrow-link:translate-x-1 group-hover/arrow-link:-translate-y-1 group-focus-visible/arrow-link:translate-x-1 group-focus-visible/arrow-link:-translate-y-1"
       />
     </>
   )

@@ -59,7 +59,8 @@ export function Experience({
 									<ArrowLink
 										href={href}
 										external
-										className="u-meta text-accent col-span-12 self-end md:col-span-3 md:justify-self-end"
+										tone="action"
+										className="u-meta col-span-12 self-end md:col-span-3 md:justify-self-end"
 									>
 										{dict.openProject}
 									</ArrowLink>

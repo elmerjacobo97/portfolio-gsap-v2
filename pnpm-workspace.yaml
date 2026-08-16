@@ -3,7 +3,14 @@ minimumReleaseAgeExclude:
   - '@napi-rs/wasm-runtime'
 trustPolicy: no-downgrade
 blockExoticSubdeps: true
+overrides:
+  eslint-import-resolver-typescript: 3.10.0
+  semver@6: 6.3.0
 
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+
+allowBuilds:
+  sharp: false
+  unrs-resolver: false

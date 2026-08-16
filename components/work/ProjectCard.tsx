@@ -1,7 +1,5 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
-
 import type { Project } from "@/data/projects";
 import type { Locale } from "@/i18n/config";
 import { t } from "@/i18n/t";
@@ -76,25 +74,18 @@ export function ProjectCard({
 					<ArrowLink
 						href={href}
 						external
-						className="u-meta text-accent col-span-12 lg:col-span-4 lg:justify-self-end"
+						tone="action"
+						className="u-meta col-span-12 lg:col-span-4 lg:justify-self-end"
 					>
 						{openLabel}
 					</ArrowLink>
 				) : null}
 			</div>
 
-			<div className="mt-5 flex items-center justify-between gap-6 border-rule border-t pt-3">
+			<div className="mt-5 border-rule border-t pt-3">
 				<p className="u-label text-text-dim truncate">
 					{project.stack.slice(0, 4).join(" · ")}
 				</p>
-				<ArrowUpRight
-					aria-hidden
-					size={18}
-					strokeWidth={1.5}
-					strokeLinecap="square"
-					strokeLinejoin="miter"
-					className="text-accent shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-				/>
 			</div>
 		</article>
 	);
