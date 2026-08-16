@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight } from "lucide-react";
 
 import { defaultLocale, hasLocale, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionary";
@@ -32,14 +31,6 @@ export function NotFoundContent({ copy, href }: NotFoundContentProps) {
 					className="u-meta text-accent mt-10 inline-block hover:underline"
 				>
 					{copy.cta}
-					<ArrowUpRight
-						aria-hidden
-						size={16}
-						strokeWidth={1.5}
-						strokeLinecap="square"
-						strokeLinejoin="miter"
-						className="ml-1 inline-block align-[-0.2em]"
-					/>
 				</Link>
 			</div>
 		</main>
