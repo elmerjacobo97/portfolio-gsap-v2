@@ -64,18 +64,18 @@ const en = {
 
 	about: {
 		index: "03",
-		title: "About",
+		title: "Approach",
 		bio: [
-			"I have spent more than four years building web and mobile applications. I have worked on products with users, payments, and operations that cannot simply stop.",
-			"In my current work I tech-lead a digital business-card SaaS platform: I review PRs, make architecture decisions, and coordinate directly with technical leadership.",
-			"I migrated that backend from Laravel 9 to 12, redesigned its architecture, integrated Stripe for recurring subscriptions, and built the admin dashboards that hold up the business metrics.",
-			"I am interested in products where a business decision has to become an interface, an API, and a deployment someone else can maintain.",
-			"I work best when there is a concrete problem, access to the context, and a willingness to discuss decisions before code is written.",
+			"I work with people who need to build, improve, or put an existing digital product in order. I connect a business decision to a clear interface and a technical foundation the team can maintain.",
+			"I have spent more than four years building web and mobile products in production. I have worked on admin dashboards, SaaS products, APIs, payments, and internal tools. I like working close to the person who knows the business, not only the codebase.",
+			"In my current work, I have led architecture decisions for a SaaS platform with more than 200 active users. I migrated a Laravel backend from version 9 to 12, integrated Stripe, and built dashboards the team uses to run the business.",
+			"I have also worked directly with clients to turn requirements into UI improvements without making the existing code harder to work with. I can join to define a first scope, improve a product that already has users, or prepare a backend that has become difficult to change.",
+			"I like to start with a concrete problem and enough context to discuss decisions. You do not need everything figured out. You do need to explain what you want to build or what is slowing the product down.",
 		],
 		stats: [
 			{ value: "4+", label: "years building products" },
-			{ value: "200+", label: "active users on Tarjetly" },
-			{ value: "Laravel 9 → 12", label: "backend migration" },
+			{ value: "380+", label: "active users across products" },
+			{ value: "2", label: "products in production at once" },
 		],
 		portraitAlt: "Portrait of Elmer Jacobo Otiniano",
 	},
