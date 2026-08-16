@@ -96,7 +96,7 @@ export function Process({
 						// Outline-only numerals at ink-600 on a near-black canvas were
 						// effectively invisible, and nothing marked the active panel.
 						const ignite = gsap.to(numeral, {
-							webkitTextStrokeColor: "var(--color-accent)",
+							webkitTextStrokeColor: "var(--color-accent-fill)",
 							duration: DUR.base,
 							ease: EASE.sweep,
 							scrollTrigger: {
