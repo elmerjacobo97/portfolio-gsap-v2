@@ -1,4 +1,4 @@
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowDown, ArrowUpRight } from 'lucide-react'
 
 import { cn } from '@/lib/cn'
 import { TransitionLink } from '@/components/motion/TransitionLink'
@@ -14,12 +14,14 @@ export function ArrowLink({
   external,
   className,
   tone = 'default',
+  direction = 'up-right',
 }: {
   href: string
   children: React.ReactNode
   external?: boolean
   className?: string
   tone?: 'default' | 'action'
+  direction?: 'up-right' | 'down'
 }) {
   const classes = cn(
     'group/arrow-link inline-flex items-baseline gap-2 transition-[background-color,color] duration-200',
@@ -28,6 +30,12 @@ export function ArrowLink({
       : 'text-text hover:text-accent',
     className,
   )
+
+  const Icon = direction === 'down' ? ArrowDown : ArrowUpRight
+  const iconMotion =
+    direction === 'down'
+      ? 'group-hover/arrow-link:translate-y-1 group-focus-visible/arrow-link:translate-y-1'
+      : 'group-hover/arrow-link:translate-x-1 group-hover/arrow-link:-translate-y-1 group-focus-visible/arrow-link:translate-x-1 group-focus-visible/arrow-link:-translate-y-1'
 
   const content = (
     <>
@@ -38,13 +46,16 @@ export function ArrowLink({
        * that never moved. CSS rather than GSAP: it is a two-property hover on
        * a link, and the global reduced-motion block already neutralises it.
        */}
-      <ArrowUpRight
+      <Icon
         aria-hidden
         size={16}
         strokeWidth={1.5}
         strokeLinecap="square"
         strokeLinejoin="miter"
-        className="arrow inline-block transition-transform duration-300 ease-(--ease-brutal) group-hover/arrow-link:translate-x-1 group-hover/arrow-link:-translate-y-1 group-focus-visible/arrow-link:translate-x-1 group-focus-visible/arrow-link:-translate-y-1"
+        className={cn(
+          'arrow inline-block transition-transform duration-300 ease-(--ease-brutal)',
+          iconMotion,
+        )}
       />
     </>
   )

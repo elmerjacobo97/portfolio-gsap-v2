@@ -35,7 +35,6 @@ const en = {
 		meta: ["Trujillo, PE", "4+ years", "React · Next.js · Laravel"],
 		available: "Let's talk about your product",
 		projectsCta: "View projects",
-		contactCta: "Tell me about your project",
 		scroll: "Explore",
 		artifactLabel: "From problem to deploy",
 		artifactKind: "Method",

@@ -33,7 +33,6 @@ const es = {
 		meta: ["Trujillo, PE", "+4 años", "React · Next.js · Laravel"],
 		available: "Hablemos de tu producto",
 		projectsCta: "Ver proyectos",
-		contactCta: "Cuéntame tu proyecto",
 		scroll: "Explorar",
 		artifactLabel: "De problema a deploy",
 		artifactKind: "Método",
