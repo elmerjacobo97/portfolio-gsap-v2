@@ -29,17 +29,17 @@ const en = {
     lineOne: "Elmer",
     lineTwo: "Jacobo",
     role: "Product engineer · Full stack",
-    statement: "I build digital products that make it to production.",
+    statement: "I build digital products that move from idea to real use.",
     supporting:
-      "I work across frontend, backend, payments, and deployment. I use AI when it solves a concrete task inside the product or the team.",
-    meta: ["Trujillo, PE", "4+ years", "React · Next.js · Laravel", "Applied AI"],
+      "I work with you from product definition to launch: interface, product logic, payments, and a foundation your team can maintain. I use AI when it solves a concrete task.",
+    meta: ["Trujillo, PE", "Remote · UTC−5"],
     available: "Let's talk about your product",
     projectsCta: "View projects",
     scroll: "Explore",
-    artifactLabel: "From problem to deploy",
+    artifactLabel: "From problem to product",
     artifactKind: "Method",
     artifactStatus: "Each step leaves a visible decision",
-    artifactSteps: ["Problem", "Decision", "Code", "Deploy"],
+    artifactSteps: ["Problem", "Decision", "Build", "Launch"],
   },
 
   ticker: {

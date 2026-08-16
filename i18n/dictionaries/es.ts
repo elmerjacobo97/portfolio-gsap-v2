@@ -27,17 +27,17 @@ const es = {
     lineOne: "Elmer",
     lineTwo: "Jacobo",
     role: "Product engineer · Full stack",
-    statement: "Construyo productos digitales que llegan a producción.",
+    statement: "Construyo productos digitales que pasan de idea a uso real.",
     supporting:
-      "Trabajo en frontend, backend, pagos y despliegue. Aplico IA cuando resuelve una tarea concreta dentro del producto o del equipo.",
-    meta: ["Trujillo, PE", "+4 años", "React · Next.js · Laravel", "IA aplicada"],
+      "Trabajo contigo desde definir el producto hasta el lanzamiento: interfaz, lógica, pagos y una base que tu equipo pueda mantener. Uso IA cuando resuelve una tarea concreta.",
+    meta: ["Trujillo, PE", "Remoto · UTC−5"],
     available: "Hablemos de tu producto",
     projectsCta: "Ver proyectos",
     scroll: "Explorar",
-    artifactLabel: "De problema a deploy",
+    artifactLabel: "De problema a producto",
     artifactKind: "Método",
     artifactStatus: "Cada paso deja una decisión visible",
-    artifactSteps: ["Problema", "Decisión", "Código", "Deploy"],
+    artifactSteps: ["Problema", "Decisión", "Construcción", "Lanzamiento"],
   },
 
   ticker: {
