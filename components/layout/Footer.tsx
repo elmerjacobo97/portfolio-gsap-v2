@@ -18,9 +18,9 @@ export function Footer({
       <div className="footer-inner">
         <div className="border-rule border-b py-8">
           <Marquee duration={34}>
-            {[0, 1, 2, 3].map((i) => (
-              <span key={i} className="text-h1 u-wide flex items-center">
-                <span className="px-8">{dict.marquee}</span>
+            {dict.marquee.map((phrase) => (
+              <span key={phrase} className="text-h1 u-wide flex items-center">
+                <span className="px-8">{phrase}</span>
                 <Asterisk
                   aria-hidden
                   size={24}

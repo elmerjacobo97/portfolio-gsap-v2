@@ -193,7 +193,13 @@ const es = {
   },
 
   footer: {
-    marquee: "Hablemos de tu producto",
+    marquee: [
+      "Hablemos de tu producto",
+      "De la idea a producción",
+      "Mejoremos lo que ya existe",
+      "Ordenemos el backend",
+      "Decisiones claras, código que aguanta",
+    ],
     localTime: "Hora local",
     social: "Redes",
     rights: "Todos los derechos reservados",

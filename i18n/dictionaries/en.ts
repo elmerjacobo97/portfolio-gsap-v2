@@ -196,7 +196,13 @@ const en = {
 	},
 
 	footer: {
-		marquee: "Let's talk about your product",
+		marquee: [
+			"Let's talk about your product",
+			"From idea to production",
+			"Improve what already exists",
+			"Bring order to the backend",
+			"Clear decisions, code that holds up",
+		],
 		localTime: "Local time",
 		social: "Social",
 		rights: "All rights reserved",
