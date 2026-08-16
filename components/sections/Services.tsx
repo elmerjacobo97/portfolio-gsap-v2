@@ -172,7 +172,7 @@ export function Services({
 		<section
 			id="services"
 			ref={rootRef}
-			className="py-[var(--spacing-section)]"
+			className="border-rule border-t py-[var(--spacing-section)]"
 		>
 			<div className="grid-page">
 				<SectionHeader index={dict.index} title={dict.title} lead={dict.lead} />

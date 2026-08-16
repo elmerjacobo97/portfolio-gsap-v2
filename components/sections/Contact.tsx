@@ -102,16 +102,21 @@ export function Contact({
 
 			{/* Ordered by friction: WhatsApp lowest, booking next, email last. */}
 			<div className="contact-column order-1 col-span-12 mt-14 lg:order-none lg:col-span-5 lg:col-start-8 lg:mt-20">
-				<p className="u-label mb-2">{dict.channelsTitle}</p>
-				<WhatsAppLink label={dict.whatsapp} prefill={dict.whatsappPrefill} />
-				<CalButton label={dict.booking} closeLabel={closeLabel} />
-				<ChannelRow
-					label="Email"
-					value={site.email}
-					href={`mailto:${site.email}`}
-					icon={Mail}
-				/>
-				<span className="rule-h" />
+				<div className="border-rule bg-surface-inset relative h-full overflow-hidden border-x border-b lg:border-t lg:border-l-0">
+					<span aria-hidden className="plate-bed absolute inset-0 opacity-40" />
+					<div className="relative z-10 p-6 sm:p-10 lg:p-12">
+						<p className="u-label mb-2">{dict.channelsTitle}</p>
+						<WhatsAppLink label={dict.whatsapp} prefill={dict.whatsappPrefill} />
+						<CalButton label={dict.booking} closeLabel={closeLabel} />
+						<ChannelRow
+							label="Email"
+							value={site.email}
+							href={`mailto:${site.email}`}
+							icon={Mail}
+						/>
+						<span className="rule-h" />
+					</div>
+				</div>
 			</div>
 		</section>
 	);
