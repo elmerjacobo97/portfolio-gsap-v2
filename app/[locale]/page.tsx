@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { hasLocale } from "@/i18n/config";
 import { About } from "@/components/sections/About";
+import { AISection } from "@/components/sections/AISection";
 import { Contact } from "@/components/sections/Contact";
 import { Hero } from "@/components/sections/Hero";
 import { Experience } from "@/components/sections/Experience";
@@ -29,6 +30,7 @@ export default async function Home({
 			<Experience dict={dict.experience} locale={locale} />
 			<About dict={dict.about} />
 			<Services dict={dict.services} locale={locale} />
+			<AISection dict={dict.ai} />
 			<Process dict={dict.process} locale={locale} />
 			<Principles dict={dict.principles} />
 			<Proof dict={dict.proof} />

@@ -2,7 +2,7 @@ const es = {
   meta: {
     title: "Elmer Jacobo — Product engineer · Full stack",
     description:
-      "Construyo productos digitales que llegan a producción. Trabajo en frontend, backend, pagos y despliegue.",
+      "Construyo productos digitales que llegan a producción. Trabajo en frontend, backend, pagos, despliegue e IA aplicada.",
     ogAlt: "Elmer Jacobo — Product engineer · Full stack",
   },
 
@@ -29,8 +29,8 @@ const es = {
     role: "Product engineer · Full stack",
     statement: "Construyo productos digitales que llegan a producción.",
     supporting:
-      "Trabajo en frontend, backend, pagos y despliegue. La idea es que el producto funcione cuando deja de ser una demo.",
-    meta: ["Trujillo, PE", "+4 años", "React · Next.js · Laravel"],
+      "Trabajo en frontend, backend, pagos y despliegue. Aplico IA cuando resuelve una tarea concreta dentro del producto o del equipo.",
+    meta: ["Trujillo, PE", "+4 años", "React · Next.js · Laravel", "IA aplicada"],
     available: "Hablemos de tu producto",
     projectsCta: "Ver proyectos",
     scroll: "Explorar",
@@ -92,14 +92,39 @@ const es = {
     ],
   },
 
+  ai: {
+    index: "06",
+    title: "IA",
+    lead: "La IA tiene sentido cuando mejora una parte concreta del producto o del trabajo del equipo. Primero definimos la tarea; después elegimos entre integración, agente o skill.",
+    positionLabel: "Cómo trabajo",
+    positionTitle: "Empiezo por la tarea",
+    positionBody:
+      "Si ya tienes un producto, busco dónde puede ahorrar pasos o mejorar una respuesta. Si el trabajo es interno, diseño el agente o la skill con contexto, límites y revisión.",
+    cta: "Cuéntame qué quieres mejorar",
+    items: [
+      {
+        title: "IA dentro del producto",
+        body: "Integro asistentes, generación de contenido o extracción de datos en los pasos que ya usa tu cliente. El resultado queda dentro del producto, no en una demo aparte.",
+      },
+      {
+        title: "Agentes para operaciones",
+        body: "Construyo agentes que buscan información, consultan herramientas o preparan una primera respuesta. Cada acción tiene límites claros y una revisión antes de afectar el sistema.",
+      },
+      {
+        title: "Skills para tu equipo",
+        body: "Convierto tareas repetidas en skills versionadas, con contexto y pasos de revisión. Así el equipo puede trabajar con agentes sin depender de un prompt perdido en el chat.",
+      },
+    ],
+  },
+
   process: {
-    index: "05",
+    index: "07",
     title: "Proceso",
     lead: "Te enseño el trabajo mientras ocurre. Hablamos de los cambios antes de convertirlos en código y cada semana tienes algo que puedes abrir.",
   },
 
   principles: {
-    index: "06",
+    index: "08",
     title: "Principios",
     lead: "Son las reglas que uso para trabajar con producto y código.",
     items: [
@@ -123,7 +148,7 @@ const es = {
   },
 
   proof: {
-    index: "07",
+    index: "09",
     title: "Evidencia",
     lead: "Lo que aparece aquí son responsabilidades concretas: arquitectura, migraciones, pagos y trabajo diario con producto.",
     facts: [
@@ -143,6 +168,11 @@ const es = {
           "Implementé suscripciones, estados de pago y paneles administrativos conectados al negocio.",
       },
       {
+        label: "IA aplicada en SaaS",
+        detail:
+          "Integré Groq en Tarjetly para generar bios y sugerencias a partir de datos estructurados dentro del flujo real del producto.",
+      },
+      {
         label: "200+ usuarios activos",
         detail:
           "Tarjetly tiene más de 200 usuarios activos; esta experiencia explica qué construí y qué decisiones tomé.",
@@ -151,7 +181,7 @@ const es = {
   },
 
   contact: {
-    index: "08",
+    index: "10",
     title: "Contacto",
     lead: "Cuéntame qué quieres construir. Respondo en menos de 24 horas.",
     channelsTitle: "Canales directos",
@@ -169,6 +199,7 @@ const es = {
         "Producto nuevo",
         "Producto existente",
         "Backend y arquitectura",
+        "IA en producto o automatización",
         "Todavía lo estoy definiendo",
       ],
       message: "Cuéntame qué quieres resolver",

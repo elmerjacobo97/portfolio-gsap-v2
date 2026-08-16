@@ -4,7 +4,7 @@ const en = {
   meta: {
     title: "Elmer Jacobo — Product engineer · Full stack",
     description:
-      "I build digital products that make it to production. I work across frontend, backend, payments, and deployment.",
+      "I build digital products that make it to production. I work across frontend, backend, payments, deployment, and applied AI.",
     ogAlt: "Elmer Jacobo — Product engineer · Full stack",
   },
 
@@ -31,8 +31,8 @@ const en = {
     role: "Product engineer · Full stack",
     statement: "I build digital products that make it to production.",
     supporting:
-      "I work across frontend, backend, payments, and deployment. The point is to make the product work after it stops being a demo.",
-    meta: ["Trujillo, PE", "4+ years", "React · Next.js · Laravel"],
+      "I work across frontend, backend, payments, and deployment. I use AI when it solves a concrete task inside the product or the team.",
+    meta: ["Trujillo, PE", "4+ years", "React · Next.js · Laravel", "Applied AI"],
     available: "Let's talk about your product",
     projectsCta: "View projects",
     scroll: "Explore",
@@ -94,14 +94,39 @@ const en = {
     ],
   },
 
+	ai: {
+		index: "06",
+		title: "AI",
+		lead: "AI makes sense when it improves one concrete part of the product or the team's work. We define the task first, then choose between an integration, an agent, or a skill.",
+		positionLabel: "How I work",
+		positionTitle: "I start with the task",
+		positionBody:
+			"If you already have a product, I look for a step where AI can remove work or improve a response. If the work is internal, I design the agent or skill with context, limits, and review.",
+		cta: "Tell me what you want to improve",
+		items: [
+			{
+				title: "AI inside the product",
+				body: "I integrate assistants, content generation, or data extraction into the steps your customer already uses. The result belongs inside the product, not in a separate demo.",
+			},
+			{
+				title: "Agents for operations",
+				body: "I build agents that find information, use tools, or prepare a first response. Each action has clear limits and a review step before it affects the system.",
+			},
+			{
+				title: "Skills for your team",
+				body: "I turn repeated tasks into versioned skills with context and review steps. The team can work with agents without relying on a prompt lost in chat.",
+			},
+    ],
+  },
+
   process: {
-    index: "05",
+    index: "07",
     title: "Process",
     lead: "I show you the work as it happens. We discuss changes before they become code, and every week you have something you can open.",
   },
 
   principles: {
-    index: "06",
+    index: "08",
     title: "Principles",
     lead: "These are the rules I use when working with product and code.",
     items: [
@@ -125,7 +150,7 @@ const en = {
   },
 
   proof: {
-    index: "07",
+    index: "09",
     title: "Evidence",
     lead: "These are concrete responsibilities: architecture, migrations, payments, and day-to-day product work.",
     facts: [
@@ -145,6 +170,11 @@ const en = {
           "I implemented subscriptions, payment states, and admin dashboards connected to the business.",
       },
       {
+        label: "AI applied in SaaS",
+        detail:
+          "I integrated Groq into Tarjetly to generate bios and suggestions from structured data inside the product's real workflow.",
+      },
+      {
         label: "200+ active users",
         detail:
           "Tarjetly has more than 200 active users; this experience explains what I built and which decisions I made.",
@@ -153,7 +183,7 @@ const en = {
   },
 
   contact: {
-    index: "08",
+    index: "10",
     title: "Contact",
     lead: "Tell me what you want to build. I reply within 24 hours.",
     channelsTitle: "Direct channels",
@@ -171,6 +201,7 @@ const en = {
         "New product",
         "Existing product",
         "Backend and architecture",
+        "AI in a product or automation",
         "I am still defining it",
       ],
       message: "Tell me what you want to solve",

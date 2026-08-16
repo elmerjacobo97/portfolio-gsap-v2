@@ -33,5 +33,8 @@ export const site = {
 		"Vitest",
 		"Pest",
 		"GSAP",
+		"Generative AI",
+		"AI Agents",
+		"Agent Skills",
 	],
 } as const;

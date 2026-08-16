@@ -31,6 +31,8 @@ export function SectionHeader({
 
 				// Hash navigation can place a section in view before this setup runs.
 				// In that case, preserve the server-painted content instead of hiding it.
+				const sectionId = root.closest<HTMLElement>("section[id]")?.id;
+				if (sectionId && window.location.hash === `#${sectionId}`) return;
 				if (root.getBoundingClientRect().top <= window.innerHeight) return;
 
 				gsap.set(index, { opacity: 0, y: 10 });
