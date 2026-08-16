@@ -1,13 +1,16 @@
-import { defaultLocale } from '@/i18n/config'
+import { locales, type Locale } from '@/i18n/config'
+import type { Dictionary } from '@/i18n/dictionary'
 import { getDictionary } from '@/i18n/get-dictionary'
-import { NotFoundContent } from '@/components/layout/NotFoundContent'
+import { LocalizedNotFoundContent } from '@/components/layout/NotFoundContent'
 
-/**
- * `not-found.tsx` renders without route params, so it cannot know the locale.
- * It falls back to the default one — the same choice the root redirect makes.
- */
 export default async function NotFound() {
-  const dict = await getDictionary(defaultLocale)
+  const dictionaries = await Promise.all(
+    locales.map(async (locale) => [locale, (await getDictionary(locale)).notFound] as const),
+  )
+  const copies = Object.fromEntries(dictionaries) as Record<
+    Locale,
+    Dictionary['notFound']
+  >
 
-  return <NotFoundContent copy={dict.notFound} href={`/${defaultLocale}`} />
+  return <LocalizedNotFoundContent copies={copies} />
 }

@@ -1,11 +1,19 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 
+import { defaultLocale, hasLocale, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionary";
 
 type NotFoundContentProps = {
 	copy: Dictionary["notFound"];
 	href: string;
+};
+
+type LocalizedNotFoundContentProps = {
+	copies: Record<Locale, Dictionary["notFound"]>;
 };
 
 export function NotFoundContent({ copy, href }: NotFoundContentProps) {
@@ -36,4 +44,14 @@ export function NotFoundContent({ copy, href }: NotFoundContentProps) {
 			</div>
 		</main>
 	);
+}
+
+export function LocalizedNotFoundContent({
+	copies,
+}: LocalizedNotFoundContentProps) {
+	const pathname = usePathname();
+	const requestedLocale = pathname?.split("/")[1] ?? defaultLocale;
+	const locale = hasLocale(requestedLocale) ? requestedLocale : defaultLocale;
+
+	return <NotFoundContent copy={copies[locale]} href={`/${locale}`} />;
 }
