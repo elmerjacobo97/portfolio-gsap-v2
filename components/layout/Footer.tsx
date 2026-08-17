@@ -1,5 +1,6 @@
 import { ArrowUpRight, Asterisk } from 'lucide-react'
 
+import packageJson from '@/package.json'
 import { site } from '@/data/site'
 import type { Locale } from '@/i18n/config'
 import type { Dictionary } from '@/i18n/dictionary'
@@ -75,6 +76,7 @@ export function Footer({
             <span className="block">
               &copy; {new Date().getFullYear()} {site.shortName}
             </span>
+            <span className="text-text-dim mt-1 block">v{packageJson.version}</span>
           </div>
         </div>
       </div>
