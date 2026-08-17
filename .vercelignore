@@ -1,0 +1,6 @@
+.codegraph
+.git
+.vercel
+.next
+node_modules
+.env*
