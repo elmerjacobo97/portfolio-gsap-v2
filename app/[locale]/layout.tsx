@@ -56,38 +56,46 @@ export async function generateMetadata({
 
 	return {
 		metadataBase: new URL(site.url),
-		title: {
-			default: dict.meta.title,
-			template: `%s — ${site.shortName}`,
-		},
-		description: dict.meta.description,
-		applicationName: site.shortName,
-		authors: [{ name: site.name, url: site.url }],
-		creator: site.name,
-		keywords: [...site.stack],
-		alternates: buildAlternates(locale),
-		openGraph: {
-			type: "website",
-			siteName: site.shortName,
-			title: dict.meta.title,
+			title: {
+				default: dict.meta.title,
+				template: `%s — ${site.shortName}`,
+			},
 			description: dict.meta.description,
-			url: `/${locale}`,
-			locale: localeTag[locale].replace("-", "_"),
-			alternateLocale: locales.flatMap((l) =>
-				l === locale ? [] : [localeTag[l].replace("-", "_")],
-			),
-		},
-		twitter: {
-			card: "summary_large_image",
-			title: dict.meta.title,
-			description: dict.meta.description,
-		},
-		robots: {
-			index: true,
-			follow: true,
-			googleBot: { index: true, follow: true, "max-image-preview": "large" },
-		},
-	};
+			applicationName: site.shortName,
+			authors: [{ name: site.name, url: site.url }],
+			creator: site.name,
+			alternates: buildAlternates(locale),
+			openGraph: {
+				type: "website",
+				siteName: site.shortName,
+				title: dict.meta.title,
+				description: dict.meta.description,
+				url: `/${locale}`,
+				locale: localeTag[locale].replace("-", "_"),
+				alternateLocale: locales.flatMap((l) =>
+					l === locale ? [] : [localeTag[l].replace("-", "_")],
+				),
+				images: [
+					{
+						url: `/${locale}/opengraph-image`,
+						width: 1200,
+						height: 630,
+						alt: dict.meta.ogAlt,
+					},
+				],
+			},
+			twitter: {
+				card: "summary_large_image",
+				title: dict.meta.title,
+				description: dict.meta.description,
+				images: [{ url: `/${locale}/opengraph-image`, alt: dict.meta.ogAlt }],
+			},
+			robots: {
+				index: true,
+				follow: true,
+				googleBot: { index: true, follow: true, "max-image-preview": "large" },
+			},
+		};
 }
 
 export default async function RootLayout({

@@ -1,9 +1,9 @@
 const es = {
   meta: {
-    title: "Elmer Jacobo — Product engineer · Full stack",
+    title: "Elmer Jacobo — Ingeniero de producto · Full stack",
     description:
-      "Construyo productos digitales que llegan a producción. Trabajo en frontend, backend, pagos, despliegue e IA aplicada.",
-    ogAlt: "Elmer Jacobo — Product engineer · Full stack",
+      "Ingeniero de producto y desarrollador full stack en Trujillo, Perú. Construyo productos digitales con frontend, backend, pagos, despliegue e IA aplicada.",
+    ogAlt: "Elmer Jacobo, ingeniero de producto y desarrollador full stack",
   },
 
   nav: {

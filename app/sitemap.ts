@@ -17,12 +17,10 @@ function alternates(path: string) {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = ['']
-  const lastModified = new Date()
 
   return locales.flatMap((locale) =>
     paths.map((path) => ({
       url: url(`/${locale}${path}`),
-      lastModified,
       changeFrequency: path === '' ? ('monthly' as const) : ('yearly' as const),
       priority: path === '' ? 1 : 0.8,
       alternates: alternates(path),

@@ -62,7 +62,7 @@ export function Experience({
 										tone="action"
 										className="u-meta col-span-12 self-end md:col-span-3 md:justify-self-end"
 									>
-										{dict.openProject}
+										{dict.openProject}: {t(project.title, locale)}
 									</ArrowLink>
 								) : null}
 							</article>

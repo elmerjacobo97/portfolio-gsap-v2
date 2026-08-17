@@ -16,60 +16,65 @@ function serializeJsonLd(value: unknown) {
  * cross-reference each other by @id instead of being duplicated.
  */
 export function JsonLd({
-  locale,
-  description,
+	locale,
+	description,
 }: {
-  locale: Locale
-  description: string
+	locale: Locale
+	description: string
 }) {
-  const personId = `${site.url}/#person`
-  const businessId = `${site.url}/#business`
+	const personId = `${site.url}/#person`
+	const businessId = `${site.url}/#business`
+	const profileImage = `${site.url}/images/profile/elmer-jacobo-portrait.png`
 
-  const graph = [
-    {
-      '@type': 'Person',
-      '@id': personId,
-      name: site.name,
-      alternateName: site.shortName,
-      jobTitle: site.role,
-      email: `mailto:${site.email}`,
-      telephone: site.phone,
-      url: `${site.url}/${locale}`,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: site.city,
-        addressCountry: site.country,
-      },
-      sameAs: site.social.map((s) => s.href),
-      knowsAbout: site.stack,
-    },
-    {
-      '@type': 'ProfessionalService',
-      '@id': businessId,
-      name: site.shortName,
-      description,
-      url: `${site.url}/${locale}`,
-      founder: { '@id': personId },
-      areaServed: 'Worldwide',
-      availableLanguage: Object.values(localeTag),
-      hasOfferCatalog: {
-        '@type': 'OfferCatalog',
-        name: site.role,
-        itemListElement: services.map((service) => ({
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: t(service.title, locale),
-            description: t(service.pitch, locale),
-          },
-        })),
-      },
-    },
-  ]
-  const serializedGraph = serializeJsonLd({
-    '@context': 'https://schema.org',
-    '@graph': graph,
-  })
+	const graph = [
+		{
+			'@type': 'Person',
+			'@id': personId,
+			name: site.name,
+			alternateName: site.shortName,
+			jobTitle: site.role,
+			image: profileImage,
+			email: `mailto:${site.email}`,
+			telephone: site.phone,
+			url: `${site.url}/${locale}`,
+			address: {
+				'@type': 'PostalAddress',
+				addressLocality: site.city,
+				addressCountry: site.country,
+			},
+			sameAs: site.social.map((s) => s.href),
+			knowsAbout: site.stack,
+		},
+		{
+			'@type': 'ProfessionalService',
+			'@id': businessId,
+			name: site.shortName,
+			description,
+			url: `${site.url}/${locale}`,
+			image: profileImage,
+			email: `mailto:${site.email}`,
+			telephone: site.phone,
+			founder: { '@id': personId },
+			areaServed: 'Worldwide',
+			availableLanguage: Object.values(localeTag),
+			hasOfferCatalog: {
+				'@type': 'OfferCatalog',
+				name: site.role,
+				itemListElement: services.map((service) => ({
+					'@type': 'Offer',
+					itemOffered: {
+						'@type': 'Service',
+						name: t(service.title, locale),
+						description: t(service.pitch, locale),
+					},
+				})),
+			},
+		},
+	]
+	const serializedGraph = serializeJsonLd({
+		'@context': 'https://schema.org',
+		'@graph': graph,
+	})
 
   return (
     <script

@@ -6,7 +6,7 @@ import { getDictionary } from '@/i18n/get-dictionary'
 
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
-export const alt = site.name
+export const alt = 'Elmer Jacobo — Product engineer and full-stack developer'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))

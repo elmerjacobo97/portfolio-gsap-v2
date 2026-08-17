@@ -2,10 +2,10 @@ import type { Dictionary } from "../dictionary";
 
 const en = {
   meta: {
-    title: "Elmer Jacobo — Product engineer · Full stack",
+    title: "Elmer Jacobo — Product engineer · Full-stack developer",
     description:
-      "I build digital products that make it to production. I work across frontend, backend, payments, deployment, and applied AI.",
-    ogAlt: "Elmer Jacobo — Product engineer · Full stack",
+      "Product engineer and full-stack developer in Trujillo, Peru. I build digital products across frontend, backend, payments, deployment, and applied AI.",
+    ogAlt: "Elmer Jacobo, product engineer and full-stack developer",
   },
 
   nav: {
