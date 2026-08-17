@@ -19,6 +19,8 @@ export function WhatsAppLink({
       href={href}
       icon={MessageCircle}
       external
+      analyticsEvent="contact_cta_click"
+      analyticsSource="whatsapp"
     />
   )
 }

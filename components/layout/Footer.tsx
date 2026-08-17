@@ -49,6 +49,12 @@ export function Footer({
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-analytics-event={
+                    item.label === 'LinkedIn' ? 'linkedin_click' : undefined
+                  }
+                  data-analytics-source={
+                    item.label === 'LinkedIn' ? 'footer' : undefined
+                  }
                   className="u-meta text-text-dim hover:text-accent inline-flex items-center py-2 transition-colors duration-200"
                 >
                   {item.label}

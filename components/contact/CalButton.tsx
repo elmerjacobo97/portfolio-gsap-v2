@@ -70,6 +70,8 @@ export function CalButton({
 				value="cal.com"
 				href={`https://cal.com/${site.calLink}`}
 				icon={CalendarDays}
+				analyticsEvent="contact_cta_click"
+				analyticsSource="booking"
 				onActivateAction={() => setOpen(true)}
 			/>
 

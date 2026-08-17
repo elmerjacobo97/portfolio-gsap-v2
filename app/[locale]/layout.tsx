@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Archivo, Space_Mono } from "next/font/google";
 import "../globals.css";
 
@@ -19,6 +21,7 @@ import { ScrollProgress } from "@/components/motion/ScrollProgress";
 import { SmoothProvider } from "@/components/motion/SmoothProvider";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { ThemedToaster } from "@/components/layout/ThemedToaster";
+import { AnalyticsClickTracker } from "@/components/layout/AnalyticsClickTracker";
 
 /**
  * Archivo carries the whole display voice. It is one of the very few Google
@@ -94,6 +97,9 @@ export async function generateMetadata({
 				index: true,
 				follow: true,
 				googleBot: { index: true, follow: true, "max-image-preview": "large" },
+			},
+			verification: {
+				google: "HA28A2vlUFoh931DY3PLA6rnCHvNGu8ZNVCIV9gLTLc",
 			},
 		};
 }
@@ -180,6 +186,9 @@ export default async function RootLayout({
 					<RouteMotion />
 					<ThemedToaster />
 				</ThemeProvider>
+				<AnalyticsClickTracker />
+				<Analytics />
+				<SpeedInsights />
 			</body>
 		</html>
 	);

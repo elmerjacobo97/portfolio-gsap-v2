@@ -7,6 +7,7 @@ import { submitContact } from "@/actions/contact";
 import { initialContactState } from "@/actions/contact-state";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionary";
+import { trackEvent } from "@/lib/analytics";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { OK, REDUCED } from "@/lib/motion";
 import { Field } from "./Field";
@@ -47,13 +48,14 @@ export function ContactForm({
 		lastReportedStateRef.current = state;
 
 		if (state.ok) {
+			trackEvent("contact_submit", { locale, source: "contact_form" });
 			toast.success(dict.successTitle, { description: dict.successBody });
 			return;
 		}
 
 		const detail = state.formError ?? Object.values(state.errors ?? {})[0];
 		if (detail) toast.error(dict.errorGeneric, { description: detail });
-	}, [dict.errorGeneric, dict.successBody, dict.successTitle, state]);
+	}, [dict.errorGeneric, dict.successBody, dict.successTitle, locale, state]);
 
 	useGSAP(
 		() => {

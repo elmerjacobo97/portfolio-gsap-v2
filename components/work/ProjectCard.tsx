@@ -78,6 +78,8 @@ export function ProjectCard({
 					<ArrowLink
 						href={href}
 						external
+						analyticsEvent="project_view"
+						analyticsSource={project.slug}
 						tone="action"
 						className="u-meta col-span-12 lg:col-span-4 lg:justify-self-end"
 					>

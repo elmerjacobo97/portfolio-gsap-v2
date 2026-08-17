@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Archivo, Space_Mono } from "next/font/google";
 
 import "./globals.css";
@@ -51,6 +53,8 @@ export default async function GlobalNotFound() {
 					<NotFoundContent copy={dict.notFound} href={`/${defaultLocale}`} />
 					<ThemedToaster />
 				</ThemeProvider>
+				<Analytics />
+				<SpeedInsights />
 			</body>
 		</html>
 	);

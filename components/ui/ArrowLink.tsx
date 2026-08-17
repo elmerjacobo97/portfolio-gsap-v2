@@ -1,6 +1,7 @@
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
 
 import { cn } from '@/lib/cn'
+import type { AnalyticsEvent } from '@/lib/analytics'
 import { TransitionLink } from '@/components/motion/TransitionLink'
 
 /**
@@ -15,6 +16,8 @@ export function ArrowLink({
   className,
   tone = 'default',
   direction = 'up-right',
+  analyticsEvent,
+  analyticsSource,
 }: {
   href: string
   children: React.ReactNode
@@ -22,6 +25,8 @@ export function ArrowLink({
   className?: string
   tone?: 'default' | 'action'
   direction?: 'up-right' | 'down'
+  analyticsEvent?: AnalyticsEvent
+  analyticsSource?: string
 }) {
   const classes = cn(
     'group/arrow-link inline-flex items-baseline gap-2 transition-[background-color,color] duration-200',
@@ -62,7 +67,14 @@ export function ArrowLink({
 
   if (external) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-analytics-event={analyticsEvent}
+        data-analytics-source={analyticsSource}
+        className={classes}
+      >
         {content}
       </a>
     )

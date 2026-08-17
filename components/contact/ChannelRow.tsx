@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
+import type { AnalyticsEvent } from "@/lib/analytics";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { DUR, EASE, hoverDuration } from "@/lib/motion";
 
@@ -21,6 +22,8 @@ export function ChannelRow({
 	icon: Icon,
 	external,
 	onActivateAction,
+	analyticsEvent,
+	analyticsSource,
 }: {
 	label: string;
 	value: string;
@@ -28,6 +31,8 @@ export function ChannelRow({
 	icon?: LucideIcon;
 	external?: boolean;
 	onActivateAction?: () => void;
+	analyticsEvent?: AnalyticsEvent;
+	analyticsSource?: string;
 }) {
 	const rootRef = useRef<HTMLAnchorElement>(null);
 	const { contextSafe } = useGSAP({ scope: rootRef });
@@ -84,6 +89,8 @@ export function ChannelRow({
 			onFocus={(e) => handleEnter(e.currentTarget)}
 			onBlur={(e) => handleLeave(e.currentTarget)}
 			{...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+			data-analytics-event={analyticsEvent}
+			data-analytics-source={analyticsSource}
 			className="channel-row border-rule group relative block overflow-hidden border-t py-6"
 		>
 			{/* Hidden via transform (not Tailwind's scale-*, which writes the

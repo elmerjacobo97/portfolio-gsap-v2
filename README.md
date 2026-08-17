@@ -10,6 +10,7 @@ Bilingual portfolio for Elmer Jacobo, a product engineer and full-stack develope
 - React 19 and TypeScript
 - Tailwind CSS 4
 - GSAP with ScrollTrigger and ScrollSmoother
+- Vercel Analytics and Speed Insights
 - Resend for contact-form email delivery
 - Vercel for deployment
 
@@ -19,6 +20,8 @@ Bilingual portfolio for Elmer Jacobo, a product engineer and full-stack develope
 - Localized metadata, canonical URLs, hreflang, Open Graph, Twitter cards, sitemap, and robots rules
 - Custom EJ SVG favicon at `app/icon.svg`
 - JSON-LD for the person, professional service, and service catalog
+- Conversion events for contact, booking, LinkedIn, WhatsApp, and project links
+- Global security headers and a web app manifest
 - Reduced-motion support for animations
 - Server Action contact form with Zod validation, honeypot protection, time trap, and rate limiting
 - Responsive project and experience sections with localized summaries and image alt text
