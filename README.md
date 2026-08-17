@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Elmer Jacobo Portfolio
 
-## Getting Started
+Bilingual portfolio for Elmer Jacobo, a product engineer and full-stack developer based in Trujillo, Peru. The site presents open-source projects, professional experience, services, applied AI work, and a direct contact flow.
 
-First, run the development server:
+**Live site:** [elmerjacobo.dev](https://elmerjacobo.dev)
+
+## Stack
+
+- Next.js 16 App Router
+- React 19 and TypeScript
+- Tailwind CSS 4
+- GSAP with ScrollTrigger and ScrollSmoother
+- Resend for contact-form email delivery
+- Vercel for deployment
+
+## Features
+
+- Spanish and English routes at `/es` and `/en`
+- Localized metadata, canonical URLs, hreflang, Open Graph, Twitter cards, sitemap, and robots rules
+- Custom EJ SVG favicon at `app/icon.svg`
+- JSON-LD for the person, professional service, and service catalog
+- Reduced-motion support for animations
+- Server Action contact form with Zod validation, honeypot protection, time trap, and rate limiting
+- Responsive project and experience sections with localized summaries and image alt text
+
+## Requirements
+
+- Node.js 22 or newer
+- pnpm
+
+## Local Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The root route redirects to `/es`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local`. Never commit `.env.local`.
 
-## Learn More
+| Variable | Scope | Purpose |
+| --- | --- | --- |
+| `RESEND_API_KEY` | Server | Resend API key for contact submissions |
+| `CONTACT_TO_EMAIL` | Server | Inbox receiving contact submissions |
+| `CONTACT_FROM_EMAIL` | Server | Domain-verified sender address |
+| `NEXT_PUBLIC_SITE_URL` | Public | Canonical site origin; production is `https://elmerjacobo.dev` |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Public | WhatsApp number in international format |
+| `NEXT_PUBLIC_CAL_LINK` | Public | Cal.com path used by the booking button |
 
-To learn more about Next.js, take a look at the following resources:
+Set the three server variables in Vercel before expecting the contact form to send email. Public variables can be configured in Vercel as well; the app also has safe defaults in `data/site.ts`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Verification
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm lint
+pnpm exec tsc --noEmit
+pnpm build
+```
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This repository deploys to the existing Vercel project `my-portfolio`, which owns `elmerjacobo.dev`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+vercel link --yes --scope elmer-jacobos-projects --project my-portfolio
+vercel --prod --scope elmer-jacobos-projects
+```
+
+Configure production environment variables in the Vercel dashboard before testing the contact form.
+
+## Project Structure
+
+```text
+app/[locale]/       Localized App Router layout and home page
+components/         Layout, sections, contact, motion, and UI components
+i18n/               Spanish and English dictionaries
+lib/                SEO, GSAP, motion, and utility helpers
+public/             Project and profile images
+```
+
+## License
+
+No license has been assigned yet. Public visibility does not grant permission to reuse the source code or visual assets.
