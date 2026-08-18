@@ -29,7 +29,6 @@ export function ProjectCard({
 }) {
 	const href = project.liveUrl ?? project.repoUrl;
 	const title = t(project.title, locale);
-	const linkLabel = `${openLabel}: ${title}`;
 
 	return (
 		<article
@@ -83,7 +82,7 @@ export function ProjectCard({
 						tone="action"
 						className="u-meta col-span-12 lg:col-span-4 lg:justify-self-end"
 					>
-						{linkLabel}
+						{openLabel}
 					</ArrowLink>
 				) : null}
 			</div>

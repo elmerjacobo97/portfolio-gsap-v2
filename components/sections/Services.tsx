@@ -262,7 +262,7 @@ export function Services({
 										</p>
 										<span
 											aria-hidden
-											className="u-wide text-[clamp(4rem,12cqw,9rem)] leading-[0.7] text-transparent [-webkit-text-stroke:1px_var(--color-outline)]"
+											className="u-wide text-[clamp(4rem,12cqw,9rem)] leading-[0.7] text-transparent [-webkit-text-stroke:1px_var(--color-accent-fill)]"
 										>
 											{service.code}
 										</span>
