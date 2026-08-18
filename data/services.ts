@@ -83,4 +83,29 @@ export const services: readonly Service[] = [
 			],
 		},
 	},
+	{
+		code: "04",
+		title: {
+			es: "Destrabar un producto",
+			en: "Unblock a product",
+		},
+		pitch: {
+			es: "Si no sabes qué construir después, una decisión técnica se ha quedado atascada o necesitas una segunda opinión, revisamos el contexto y definimos un siguiente paso ejecutable.",
+			en: "If you are unsure what to build next, a technical decision is stuck, or you need a second opinion, we review the context and define an executable next step.",
+		},
+		deliverables: {
+			es: [
+				"Lectura del contexto y del problema concreto",
+				"Decisión de producto o técnica documentada",
+				"Plan priorizado para el siguiente paso",
+				"Acompañamiento opcional para implementar lo decidido",
+			],
+			en: [
+				"Review of the context and concrete problem",
+				"Documented product or technical decision",
+				"Prioritized plan for the next step",
+				"Optional support to implement the decision",
+			],
+		},
+	},
 ];

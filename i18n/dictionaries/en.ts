@@ -83,14 +83,14 @@ const en = {
   services: {
     index: "04",
     title: "Services",
-    lead: "I can join when the product still needs direction, when it is already running, or when the backend starts slowing the team down. We work directly, with the decisions on the table.",
+    lead: "I can join when the product still needs direction, when it is already running, or when a technical decision is slowing the team down. We can also start with a focused session to define the next step.",
     modeLabel: "Mode",
     deliverables: "What stays",
     fitTitle: "A good fit if...",
     fit: [
       "You can explain the problem you want to solve.",
       "There is context and unfinished decisions to review together.",
-      "You want to speak directly with the person building it.",
+      "You want a clear decision before committing to development.",
     ],
   },
 
@@ -185,7 +185,7 @@ const en = {
   contact: {
     index: "10",
     title: "Contact",
-    lead: "Tell me what you want to build. I reply within 24 hours.",
+    lead: "Tell me what you want to build, improve, or unblock. I reply within 24 hours.",
     channelsTitle: "Direct channels",
     whatsapp: "WhatsApp",
     booking: "Book 30 min",
@@ -201,6 +201,7 @@ const en = {
         "New product",
         "Existing product",
         "Backend and architecture",
+        "Product unblock session",
         "AI in a product or automation",
         "I am still defining it",
       ],

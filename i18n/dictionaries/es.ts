@@ -81,14 +81,14 @@ const es = {
   services: {
     index: "04",
     title: "Servicios",
-    lead: "Puedo entrar cuando todavía hay que decidir qué construir, cuando el producto ya existe o cuando el backend empieza a frenar al equipo. Trabajamos directo, con las decisiones sobre la mesa.",
+    lead: "Puedo entrar cuando todavía hay que decidir qué construir, cuando el producto ya existe o cuando una decisión técnica está frenando al equipo. También podemos empezar con una sesión puntual para ordenar el siguiente paso.",
     modeLabel: "Modo",
     deliverables: "Qué queda",
     fitTitle: "Buen encaje si...",
     fit: [
       "Puedes explicar qué problema quieres resolver.",
       "Hay contexto y decisiones pendientes para revisar juntos.",
-      "Quieres hablar directamente con quien va a construirlo.",
+      "Quieres una decisión clara antes de comprometer un desarrollo.",
     ],
   },
 
@@ -183,7 +183,7 @@ const es = {
   contact: {
     index: "10",
     title: "Contacto",
-    lead: "Cuéntame qué quieres construir. Respondo en menos de 24 horas.",
+    lead: "Cuéntame qué quieres construir, mejorar o destrabar. Respondo en menos de 24 horas.",
     channelsTitle: "Canales directos",
     whatsapp: "WhatsApp",
     booking: "Agendar 30 min",
@@ -199,6 +199,7 @@ const es = {
         "Producto nuevo",
         "Producto existente",
         "Backend y arquitectura",
+        "Sesión para destrabar un producto",
         "IA en producto o automatización",
         "Todavía lo estoy definiendo",
       ],
