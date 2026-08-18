@@ -298,24 +298,6 @@ export function Services({
 				</div>
 			</div>
 
-			<div className="grid-page mt-12 md:mt-16">
-				<div className="border-rule col-span-12 grid gap-6 border-t pt-5 md:grid-cols-[8rem_1fr] md:gap-8">
-					<p className="u-label">{dict.fitTitle}</p>
-					<ul className="grid gap-3 sm:grid-cols-3">
-						{dict.fit.map((item) => (
-							<li
-								key={item}
-								className="text-body text-text-secondary flex gap-3"
-							>
-								<span aria-hidden className="text-accent">
-									/
-								</span>
-								{item}
-							</li>
-						))}
-					</ul>
-				</div>
-			</div>
 		</section>
 	);
 }
