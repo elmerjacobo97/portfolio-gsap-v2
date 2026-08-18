@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 import { services } from "@/data/services";
 import type { Dictionary } from "@/i18n/dictionary";
@@ -189,7 +189,7 @@ export function Services({
 								key={service.code}
 								id={`service-button-${service.code}`}
 								type="button"
-								aria-pressed={selected}
+								aria-expanded={selected}
 								aria-controls={panelId}
 								onClick={(event) =>
 									selectService(index, event.currentTarget.closest("section")!)
@@ -223,7 +223,7 @@ export function Services({
 								>
 									{t(service.title, locale)}
 								</span>
-								<ArrowUpRight
+								<ChevronDown
 									aria-hidden
 									size={16}
 									strokeWidth={1.5}
@@ -231,7 +231,7 @@ export function Services({
 									strokeLinejoin="miter"
 									className={cn(
 										"transition-transform duration-500",
-										selected ? "text-accent rotate-45" : "text-text-dim",
+										selected ? "text-accent rotate-180" : "text-text-dim",
 									)}
 								/>
 							</button>

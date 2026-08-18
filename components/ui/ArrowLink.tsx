@@ -29,10 +29,10 @@ export function ArrowLink({
   analyticsSource?: string
 }) {
   const classes = cn(
-    'group/arrow-link inline-flex items-baseline gap-2 transition-[background-color,color] duration-200',
+    'group/arrow-link inline-flex gap-2 transition-[background-color,color] duration-200',
     tone === 'action'
-      ? 'bg-accent-fill !text-on-accent min-h-11 whitespace-nowrap px-4 py-3 hover:bg-accent-fill/90 hover:!text-on-accent focus-visible:!outline-text'
-      : 'text-text hover:text-accent',
+      ? 'items-center justify-center bg-accent-fill !text-on-accent min-h-11 whitespace-nowrap px-4 py-3 hover:bg-accent-fill/90 hover:!text-on-accent focus-visible:!outline-text'
+      : 'items-baseline text-text hover:text-accent',
     className,
   )
 
