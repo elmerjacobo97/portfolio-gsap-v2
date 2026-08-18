@@ -160,9 +160,9 @@ const en = {
           "I review PRs, make architecture decisions, and coordinate directly with technical leadership.",
       },
       {
-        label: "Laravel 9 → 12",
+        label: "Change without slowing down",
         detail:
-          "I migrated Tarjetly’s backend and redesigned its architecture while the product kept moving.",
+          "At Tarjetly, I migrated the backend from Laravel 9 to 12 and reworked its architecture while the product kept moving.",
       },
       {
         label: "Recurring Stripe",

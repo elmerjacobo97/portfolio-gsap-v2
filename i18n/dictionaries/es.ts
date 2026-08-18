@@ -158,9 +158,9 @@ const es = {
           "Reviso PRs, tomo decisiones de arquitectura y coordino directamente con el liderazgo técnico.",
       },
       {
-        label: "Laravel 9 → 12",
+        label: "Cambiar sin frenar",
         detail:
-          "Migré el backend de Tarjetly y rediseñé su arquitectura mientras el producto seguía avanzando.",
+          "En Tarjetly migré el backend de Laravel 9 a 12 y reorganicé su arquitectura mientras el producto seguía avanzando.",
       },
       {
         label: "Stripe recurrente",

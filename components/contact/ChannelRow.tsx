@@ -114,8 +114,8 @@ export function ChannelRow({
 					) : null}
 					{label}
 				</span>
-				<span className="text-h3 u-wide group-hover:text-on-accent group-focus-visible:text-on-accent mt-2 flex items-baseline justify-between gap-3 break-all transition-colors duration-300">
-					{value}
+				<span className="text-h3 u-wide group-hover:text-on-accent group-focus-visible:text-on-accent mt-2 flex min-w-0 items-baseline gap-3 transition-colors duration-300">
+					<span className="min-w-0 flex-1 truncate">{value}</span>
 					<ArrowUpRight
 						aria-hidden
 						size={16}

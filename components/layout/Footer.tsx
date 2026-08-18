@@ -17,7 +17,7 @@ export function Footer({
   return (
     <footer className="border-rule overflow-hidden border-t">
       <div className="footer-inner">
-        <div className="border-rule border-b py-8">
+        <div className="hidden border-rule border-b py-8 md:block">
           <Marquee duration={34}>
             {dict.marquee.map((phrase) => (
               <span key={phrase} className="text-h1 u-wide flex items-center">

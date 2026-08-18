@@ -101,7 +101,7 @@ export function Contact({
 			</div>
 
 			{/* Ordered by friction: WhatsApp lowest, booking next, email last. */}
-			<div className="contact-column order-1 col-span-12 mt-14 lg:order-none lg:col-span-5 lg:col-start-8 lg:mt-20">
+			<div className="contact-column order-1 col-span-12 mt-14 lg:order-none lg:col-span-6 lg:col-start-7 lg:mt-20">
 				<div className="border-rule bg-surface-inset relative h-full overflow-hidden border-x border-b lg:border-t lg:border-l-0">
 					<span aria-hidden className="plate-bed absolute inset-0 opacity-40" />
 					<div className="relative z-10 p-6 sm:p-10 lg:p-12">
