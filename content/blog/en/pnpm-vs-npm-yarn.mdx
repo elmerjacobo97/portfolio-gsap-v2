@@ -1,0 +1,187 @@
+---
+title: 'pnpm vs npm vs yarn: Why I Use pnpm'
+description: >-
+  A practical comparison of the three most popular package managers. Speed, disk
+  space, and why pnpm is my choice.
+date: '2026-01-12'
+category: TypeScript
+tags:
+  - pnpm
+  - npm
+  - yarn
+  - Node.js
+  - Tooling
+---
+
+After years of using npm and yarn, I switched to pnpm some time ago and have not looked back. In this post I explain the real differences and why pnpm has become my default package manager.
+
+## Quick comparison
+
+| Feature              | npm                 | yarn        | pnpm               |
+| -------------------- | ------------------- | ----------- | ------------------ |
+| **Speed**            | Slow                | Fast        | Very fast          |
+| **Disk space**       | High (duplicates deps) | High     | Low (symlinks)     |
+| **node_modules**     | Messy               | Messy       | Organized          |
+| **Monorepos**        | Workspaces          | Workspaces  | Native workspaces  |
+| **Lockfile**         | `package-lock.json` | `yarn.lock` | `pnpm-lock.yaml`   |
+
+## The problem with npm and yarn
+
+### They duplicate everything
+
+Imagine you have 10 projects that use React 19. With npm or yarn:
+
+```
+project-1/node_modules/react/  → 2.5 MB
+project-2/node_modules/react/  → 2.5 MB
+...
+project-10/node_modules/react/ → 2.5 MB
+
+Total: 25 MB just for React
+```
+
+Each project has its own copy. Multiply that by all your dependencies and projects.
+
+### They let you import things you did not install
+
+npm and yarn mix all dependencies into `node_modules`, including your dependencies' dependencies:
+
+```tsx
+// Your package.json does NOT contain "lodash"
+// But react-scripts uses it internally
+import _ from "lodash"; // It works! (but it should not)
+```
+
+This is called a "phantom dependency." Your code works today, but if `react-scripts` stops using `lodash` tomorrow, your app breaks even though you have not changed anything.
+
+## How pnpm solves this
+
+### Content-addressable store
+
+pnpm stores all dependencies in a global store (`~/.pnpm-store`). Each version of each package exists only once:
+
+```
+~/.pnpm-store/
+├── react@19.0.0/
+├── react@18.3.1/
+├── typescript@5.8.0/
+└── ...
+```
+
+Your projects use **symlinks** to this store:
+
+```
+project-1/node_modules/react → ~/.pnpm-store/react@19.0.0
+project-2/node_modules/react → ~/.pnpm-store/react@19.0.0
+```
+
+<Callout type="success" title="Result">
+  10 projects with React 19 = 2.5 MB total (not 25 MB). The space savings are
+  real.
+</Callout>
+
+### You can only use what you installed
+
+pnpm organizes `node_modules` so that you can import only what is in your `package.json`. If you try to use a phantom dependency:
+
+```tsx
+import _ from "lodash"; // ❌ Error: Cannot find module 'lodash'
+```
+
+pnpm forces you to install it explicitly:
+
+```bash
+pnpm add lodash
+```
+
+## Real-world speed
+
+Benchmark while installing the dependencies of a typical React project:
+
+```bash
+# Project with ~50 dependencies
+
+npm install    → 45 seconds
+yarn install   → 28 seconds
+pnpm install   → 12 seconds
+```
+
+<Callout type="info">
+  The first pnpm installation may be similar to npm (it has to populate the
+  store). Later installations are much faster because they reuse the cache.
+</Callout>
+
+## Installation
+
+```bash
+# With npm
+npm install -g pnpm
+
+# With Homebrew (macOS)
+brew install pnpm
+
+# With corepack (recommended, included with Node 16+)
+corepack enable
+corepack prepare pnpm@latest --activate
+```
+
+## Equivalent commands
+
+| npm                   | yarn                   | pnpm                   |
+| --------------------- | ---------------------- | ---------------------- |
+| `npm install`         | `yarn`                 | `pnpm install`         |
+| `npm install pkg`     | `yarn add pkg`         | `pnpm add pkg`         |
+| `npm install -D pkg`  | `yarn add -D pkg`      | `pnpm add -D pkg`      |
+| `npm uninstall pkg`   | `yarn remove pkg`      | `pnpm remove pkg`      |
+| `npm run dev`         | `yarn dev`             | `pnpm dev`             |
+| `npx create-next-app` | `yarn create next-app` | `pnpm create next-app` |
+
+<Callout type="info" title="install vs add">
+  `pnpm install` installs all dependencies from `package.json`. `pnpm add pkg`
+  adds a new package to the project. They are different commands, not
+  interchangeable ones.
+</Callout>
+
+## Migrating from npm/yarn to pnpm
+
+It is simple:
+
+```bash
+# 1. Remove node_modules and the old lockfile
+rm -rf node_modules package-lock.json yarn.lock
+
+# 2. Install with pnpm
+pnpm install
+```
+
+This generates `pnpm-lock.yaml`. Commit this file and remove the old lockfile from git.
+
+## When should you NOT use pnpm?
+
+There are a few cases where you might run into problems:
+
+- **Legacy projects** that rely on being able to import undeclared dependencies
+- **Some tools** that do not handle symlinks well (increasingly uncommon)
+
+<Callout type="warning" title="Compatibility">
+  Most modern projects work perfectly with pnpm. If you encounter a problem,
+  it is usually a misconfigured dependency that would eventually fail with
+  npm/yarn as well.
+</Callout>
+
+## Conclusion
+
+pnpm solves real problems:
+
+- **Saves space** → One global store with symlinks
+- **Is faster** → Parallel installations and an efficient cache
+- **Is safer** → You cannot import phantom dependencies
+- **Native monorepos** → No extra configuration
+
+If you still use npm or yarn, give pnpm a try. The migration is simple and the benefits are immediate.
+
+## Resources
+
+- [Official pnpm documentation](https://pnpm.io)
+- [pnpm benchmarks](https://pnpm.io/benchmarks)
+- [Flat node_modules is not the only way](https://pnpm.io/blog/2020/05/27/flat-node-modules-is-not-the-only-way)

@@ -1,0 +1,187 @@
+---
+title: How I Connected Obsidian to Claude Code Using MCP
+description: >-
+  I configured Obsidian as a knowledge base connected to Claude Code via MCP.
+  Here is the process, the SSL problems, and the vault structure that ultimately
+  worked.
+date: '2026-06-03'
+category: AI Engineering
+tags:
+  - Obsidian
+  - Claude Code
+  - MCP
+  - Productivity
+---
+
+For years I used Notion to organize projects, documentation, and ideas. Over time, friction started to appear: slow pages, dependence on the internet, and no way to integrate it with AI tools. That led me to Obsidian.
+
+## Why Obsidian?
+
+The files are yours. That is all.
+
+Obsidian stores everything in local Markdown. You do not depend on an external server, it works offline, and it connects directly to AI through MCP.
+
+## The goal
+
+I wanted a direct connection between Claude Code and my vault:
+
+```
+Claude Code ↔ MCP ↔ Obsidian
+```
+
+With this setup, Claude could read notes, create documentation, and search for information without leaving the workflow.
+
+## Installing the plugin
+
+I installed the **Local REST API with MCP** plugin from the Obsidian community.
+
+It exposes an MCP server and a local REST API. Once enabled, you get an endpoint at:
+
+```
+https://127.0.0.1:27124/mcp/
+```
+
+## First problem: SSL certificates
+
+Claude Code could not connect. The error:
+
+```
+obsidian: https://127.0.0.1:27124/mcp/ (HTTP) - Failed to connect
+```
+
+The plugin uses a self-signed certificate that macOS rejects by default. You have to import it manually into Keychain.
+
+First, download the certificate:
+
+```bash
+curl -k https://127.0.0.1:27124/obsidian-local-rest-api.crt \
+  -o ~/Downloads/obsidian-local-rest-api.crt
+```
+
+Then open it in Keychain Access and mark it as "Always Trust".
+
+## Verifying the API
+
+With the certificate trusted:
+
+```bash
+curl -k https://127.0.0.1:27124/
+```
+
+Response:
+
+```json
+{
+  "authenticated": true
+}
+```
+
+API working.
+
+## Configuring Claude Code
+
+```bash
+claude mcp add \
+  --scope user \
+  --transport http \
+  obsidian \
+  https://127.0.0.1:27124/mcp/ \
+  --header "Authorization: Bearer YOUR_TOKEN"
+```
+
+To verify:
+
+```bash
+claude mcp list
+```
+
+Expected result:
+
+```
+obsidian: https://127.0.0.1:27124/mcp/ (HTTP) - ✓ Connected
+```
+
+## Available tools
+
+Once connected, Claude Code automatically detects the vault tools:
+
+- `vault_write` / `vault_read` / `vault_move` / `vault_delete`
+- `search_simple` / `search_query`
+- `open_file`
+- `tag_list`
+
+With these, Claude can read, create, and move notes directly.
+
+## Vault organization
+
+My first attempt was to organize everything by project. It did not last long. I needed to separate work, development, content, and personal areas instead of mixing them together.
+
+The structure that ultimately worked:
+
+```
+01-Work
+└── ABEHA
+    ├── Tarjetly
+    └── Meetings
+
+02-Projects
+
+03-Dev
+├── AI
+├── Backend
+├── DevOps
+├── Frontend
+├── Resources
+└── Snippets
+
+04-Content
+├── Blog
+└── TikTok
+
+05-Areas
+├── Career
+├── Finance
+└── Learning
+
+Home
+```
+
+## What I would do differently
+
+Do not create multiple vaults from the start. Fragmenting your knowledge makes it difficult to unify later.
+
+I would also avoid over-structuring before I had any content. The folder you use most often ends up being the one you least anticipated. The structure emerges from use, not the other way around.
+
+## Result
+
+Claude Code can now create notes, organize documentation, and search within the vault. I mainly use it to keep project documentation up to date while I work on those projects.
+
+The information is still mine: local Markdown files that I can version, move, or migrate without depending on anyone.
+
+## References
+
+### Obsidian
+
+- [Obsidian](https://obsidian.md)
+- [Obsidian Help](https://help.obsidian.md)
+- [Obsidian Community Plugins](https://obsidian.md/plugins)
+
+### Local REST API with MCP plugin
+
+- [GitHub repository](https://github.com/coddingtonbear/obsidian-local-rest-api)
+- [Plugin documentation](https://coddingtonbear.github.io/obsidian-local-rest-api)
+
+### Model Context Protocol
+
+- [Official MCP documentation](https://modelcontextprotocol.io)
+- [MCP specification](https://spec.modelcontextprotocol.io)
+
+### Claude Code
+
+- [Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code)
+- [Claude Code and MCP](https://docs.anthropic.com/en/docs/claude-code/mcp)
+
+### Organization
+
+- [PARA method — Tiago Forte](https://fortelabs.com/blog/para)
+- [PARA examples in Obsidian](https://www.obsibrain.com/docs/features/p.a.r.a-folder-structure)

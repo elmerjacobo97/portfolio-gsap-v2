@@ -1,0 +1,88 @@
+---
+title: Migrating Companies from MySQL to PostgreSQL Without Overcharging Them on Stripe
+description: >-
+  We had customers with active subscriptions in an old Stripe account and a new
+  architecture that didn’t recognize them. This is the process we used to move
+  them without charging the difference.
+date: '2026-06-17'
+category: Backend
+tags:
+  - Laravel
+  - PostgreSQL
+  - MySQL
+  - Stripe
+  - Google Cloud
+  - Migration
+---
+
+Hundreds of companies active in production. Each one with users, digital profiles, links, and—most delicate of all—Stripe subscriptions with products and prices that existed only in the old account.
+
+The new system ran on PostgreSQL. The old one ran on MySQL. And there was no way to connect a Stripe webhook to the new system if that webhook came from a subscription the new system didn’t recognize.
+
+I couldn’t find a command to solve that. I built one.
+
+## The specific Stripe problem
+
+Moving data between databases is tedious but manageable. Stripe creates a different problem: if you change the price of an active subscription, Stripe may charge the difference at the moment of the change. This is called proration. The customer didn’t ask to change their plan—we migrated the system internally. Charging them the difference for that would be a mistake.
+
+The solution is `proration_behavior: 'none'`. Stripe updates the subscription item to the new price without generating an immediate charge. The customer pays the new price at their next renewal:
+
+```php
+$this->stripe->subscriptions->update($subscriptionId, [
+    'items' => [['id' => $item->id, 'price' => $newPriceId]],
+    'proration_behavior' => 'none',
+]);
+```
+
+It works. But there’s a design trap I almost overlooked.
+
+In the first draft of the code, when migrating a company’s data I wrote the new `stripe_price_id` to the database at the same time—before updating anything in Stripe. If the Stripe step failed afterward, the database said the subscription had price v2 while Stripe still had the old price. Silent inconsistency.
+
+I separated the steps. The data migrates with `stripe_price_id = null`. A separate command writes the price, after confirming it with the Stripe API.
+
+## Four commands instead of one
+
+My first instinct was to write a script that did everything at once. Bad idea. When something fails halfway through, resuming is difficult, and mixing data migration with Stripe calls in the same process means mixing two things that can fail for completely different reasons.
+
+I ended up with four separate commands:
+
+```
+legacy:check              # checks the connection, counts companies, checks Stripe vars
+legacy:migrate-data       # creates companies, users, cards, and links in PostgreSQL
+legacy:fix-subscriptions  # expires overdue subs, syncs status, adjusts dates
+legacy:migrate-stripe     # updates prices in Stripe with proration_behavior: none
+```
+
+Each one is idempotent. If you run `migrate-data` twice, companies that already exist (by slug) are skipped without creating duplicates. You can interrupt and resume where you left off. You can test a single command with `--dry-run` before applying changes.
+
+The Stripe command also accepts `--company=slug` so you can test it with one company before running it for all of them.
+
+## Connectivity between VMs
+
+In production, the legacy database lives on a different Google Cloud instance from the one running the new system. To read the data during the migration, `app-v2` needs to connect to the MySQL database on `app-legacy`.
+
+MySQL was bound to `0.0.0.0` and the user had permissions with `@%`, so it technically accepted external connections. The problem was the GCP firewall: the `mysql` rule had two authorized IPs, and `app-v2`’s IP was neither of them.
+
+I considered creating an SSH tunnel—exposing MySQL on a local port on `app-v2` so Laravel would see it as local. The problem: `app-v2` didn’t have the SSH key needed to connect to `app-legacy`, and uploading SSH keys between servers to solve a one-off migration didn’t seem like a good idea.
+
+I went with the most direct option: add `app-v2`’s IP to the firewall rule, run the migration, then remove it. One gcloud command, completely reversible, visible in GCP’s history.
+
+## Assets don’t move first
+
+I decided not to copy images in the first step. Logo and card photos live in the old VM’s storage. The command has a `--copy-assets` flag, but I didn’t enable it in sandbox because the destination uses GCS in production and a local disk in development. Copying assets between environments creates URLs that don’t work on the other side.
+
+In real production, with `ASSET_DISK=gcs`, the flag uploads directly to Google Cloud Storage and the URLs resolve automatically. In sandbox, the data is migrated and works—just without images.
+
+## Errors that aren’t errors
+
+In sandbox, the Stripe command returns several “No such subscription” errors. Those subscriptions exist in the old production Stripe account—in sandbox they aren’t there because sandbox is a different account.
+
+At first I worried. I reviewed the code twice. But there’s no bug: they’re production data pointing to an environment that doesn’t exist in sandbox. The command doesn’t abort because of this—it continues with the subscriptions it can process and displays the count at the end.
+
+The difference between an error that indicates a bug and one that indicates you’re testing with data from a different environment isn’t always obvious at first glance. In this case, the subscription ID pattern gave it away—the failing ones contained an account fragment that didn’t correspond to sandbox.
+
+## The result
+
+148 companies migrated, with 0 data errors. Some Stripe subscriptions fail in sandbox because they point to production—as expected. In real production, with Stripe’s live key and the real data, those same subscriptions exist and the command updates them without charging the difference.
+
+The complete dry run took less than two minutes. The actual migration took about five.

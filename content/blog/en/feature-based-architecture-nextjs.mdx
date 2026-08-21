@@ -1,0 +1,98 @@
+---
+title: How I Organize My Next.js Projects with Feature-Based Architecture
+description: >-
+  The structure I use in Next.js projects to keep features more isolated,
+  scalable, and easy to maintain.
+date: '2026-05-27'
+category: Next.js
+tags:
+  - Next.js
+  - Architecture
+  - TypeScript
+  - Frontend
+---
+
+As a Next.js project starts to grow, the `components` folder becomes a dumping ground. Hooks get mixed together, utilities disappear, and schemas end up who knows where. At first everything works fine, but after several features, keeping the context becomes difficult.
+
+I went through that several times until I started organizing code by feature.
+
+## The problem with traditional structures
+
+Most of us start with something like this:
+
+```text
+src/
+  components/
+  hooks/
+  services/
+  utils/
+```
+
+It looks organized, but an authentication feature ends up spread across four different folders. The login hook is in `hooks`, the form is in `components`, and the validation schemas are who knows where. To understand a single piece of functionality, you have to navigate through the entire project.
+
+As it grows:
+
+- you have to open more folders to understand a screen
+- you need more mental context
+- refactoring becomes scarier because you never know what affects what
+
+## The structure I use now
+
+Instead of separating by technical type, I separate by domain. In a real project, it looks like this:
+
+```text
+src/
+  features/
+    auth/
+      components/    → login-form, verify-code, passkeys-settings
+      hooks/         → queries, mutations
+      schemas/       → zod validation
+      services/      → API calls
+      types/         → domain interfaces
+      utils/
+    cards/
+      components/    → create-card-dialog, card-links, stats, gallery
+      hooks/         → queries, mutations
+      services/      → cards.service.ts, card-stats.service.ts
+      schemas/       → form validation
+      types/         → Card, CreateCardRequest, CardLink, etc.
+      templates/     → design templates
+      utils/
+```
+
+Each feature contains everything it needs to work. If you want to understand how auth works, you go into `features/auth/` and find everything there.
+
+This makes it easier to:
+
+- scale — add one folder instead of ten scattered files
+- move or remove features — delete the folder and you're done
+- make ownership clear — you know what belongs to what
+- keep shared types with the feature instead of spreading them across the project
+
+I currently work on an admin dashboard with more than 15 features (auth, cards, companies, contacts, subscriptions, leads, and so on), and this structure is what keeps the project maintainable.
+
+## What I avoid today
+
+Over time, I also learned what not to do:
+
+- **Barrel files (`index.ts`)** — they look tidy but create circular dependencies and make your editor slower at importing. Today I prefer direct imports.
+- **Huge `utils` folders** — if you can't give something a specific name, that function probably shouldn't exist.
+- **Complex logic inside components** — if a component is over 100 lines or manages non-UI state, I move it to a hook or a separate service.
+- **Mixing server and client logic** — this is critical in the Next.js App Router. If something can run on the server, let it run on the server.
+
+## The stack it works best with
+
+I've used this structure in both Next.js App Router projects and React + Vite + TanStack Router projects. It works especially well with:
+
+- Next.js App Router or TanStack Router
+- TypeScript (feature-level types help a lot)
+- TanStack Query (queries and mutations organized by feature)
+- Zustand (small stores per feature)
+- zod (validation schemas close to the forms)
+- shadcn/ui (atomic components in `components/ui/`, feature components in `features/`)
+
+## When is it worth it?
+
+For small projects, a couple of pages, or a quick MVP — you probably don't need it. But when you're working on SaaS with multiple modules, dashboards with several sections, or projects touched by multiple people, the difference is significant.
+
+It's not magic, and it doesn't solve every architecture problem. But it helps keep the code organized without making you think about it so much.

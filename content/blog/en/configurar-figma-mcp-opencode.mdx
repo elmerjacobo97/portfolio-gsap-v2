@@ -1,0 +1,275 @@
+---
+title: How to Connect Figma to OpenCode with MCP
+description: >-
+  Configure Figma’s MCP in OpenCode so your agent can read design context and
+  help you implement interfaces more accurately.
+date: '2026-05-07'
+category: AI Engineering
+tags:
+  - OpenCode
+  - MCP
+  - Figma
+  - AI
+---
+
+If you work with design and code, you’ve probably been there: you have the design in Figma, the project open in your editor, and you end up copying colors, dimensions, text, and references by hand.
+
+It’s not impossible. It’s just unnecessary friction.
+
+With [MCP](https://modelcontextprotocol.io/), you can connect external tools to your coding agent. In this case, we’ll connect [Figma](https://www.figma.com/) to [OpenCode](https://opencode.ai/) so the agent can query design context without you having to copy everything manually.
+
+## What we’re going to configure
+
+We’ll configure [`figma-developer-mcp`](https://www.npmjs.com/package/figma-developer-mcp), an MCP integration that lets OpenCode query information from your Figma files using a personal token.
+
+You don’t need to install `figma-developer-mcp` as a project dependency or install it globally. We’ll use `npx` in the configuration, so OpenCode will run it whenever it needs to start the MCP.
+
+The idea looks like this:
+
+```text
+OpenCode
+  |
+  | uses MCP
+  v
+figma-developer-mcp
+  |
+  | uses your Figma token
+  v
+Figma API
+```
+
+OpenCode doesn’t connect to Figma magically. It reads your configuration, starts this MCP integration on your machine, and uses your token to query the [Figma API](https://www.figma.com/developers/api) when the agent needs design information.
+
+## Requirements
+
+Before you begin, you need:
+
+- [OpenCode](https://opencode.ai/) installed.
+- [Node.js](https://nodejs.org/) available, because `npx` comes with npm.
+- A [Figma](https://www.figma.com/) account.
+- A personal Figma token created from your account settings.
+- Access to the Figma file you want to query.
+
+## Step 1: Create a Figma token
+
+For this setup, you don’t need to create an OAuth app in Figma. You only need a **Personal access token** so OpenCode can query Figma through MCP.
+
+Figma’s official guide to tokens is here: [Manage personal access tokens](https://help.figma.com/hc/en-us/articles/8085703771159-Manage-personal-access-tokens)
+
+Then:
+
+1. Sign in to Figma.
+2. Open your account menu.
+3. Go to **Settings**.
+4. Open the **Security** tab.
+5. Find **Personal access tokens**.
+6. Create a new token.
+7. Copy the token.
+8. Store it somewhere safe.
+
+Don’t publish that token. Don’t upload it to GitHub. Don’t include it in screenshots.
+
+## Step 2: Save the token as an environment variable
+
+The quickest way to test it in your terminal is to export it as an environment variable:
+
+```bash
+export FIGMA_API_KEY="tu_token_de_figma"
+```
+
+If you use `zsh`, you can save it in your shell configuration so you don’t have to export it manually every time.
+
+The important idea is this: the token lives outside OpenCode’s configuration file.
+
+OpenCode officially supports this syntax:
+
+```json
+"FIGMA_API_KEY": "{env:FIGMA_API_KEY}"
+```
+
+That means: “read the value from an environment variable named `FIGMA_API_KEY`.” If that variable doesn’t exist when OpenCode starts, it replaces it with an empty string and the MCP won’t be able to authenticate.
+
+If environment variables give you trouble, a more stable alternative is to store the token in a private local file and read it with `{file:...}`:
+
+```json
+"FIGMA_API_KEY": "{file:~/.secrets/figma-api-key}"
+```
+
+That file must not be committed to Git.
+
+## Step 3: Configure OpenCode
+
+The global configuration file is usually located at:
+
+```text
+~/.config/opencode/opencode.json
+```
+
+Inside that file, add `figma` under the `mcp` property:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "figma": {
+      "type": "local",
+      "command": ["npx", "-y", "figma-developer-mcp", "--stdio"],
+      "environment": {
+        "FIGMA_API_KEY": "{env:FIGMA_API_KEY}"
+      },
+      "enabled": true
+    }
+  }
+}
+```
+
+If you already have other MCPs configured, just add the `figma` entry inside `mcp`.
+
+## What each part means
+
+```json
+"type": "local"
+```
+
+This tells OpenCode that the MCP runs on your machine.
+
+```json
+"command": ["npx", "-y", "figma-developer-mcp", "--stdio"]
+```
+
+This is the command OpenCode will use to start the MCP server.
+
+```json
+"environment": {
+  "FIGMA_API_KEY": "{env:FIGMA_API_KEY}"
+}
+```
+
+It passes your Figma token to the process by reading it from an environment variable.
+
+## Step 4: Verify the connection
+
+After saving the configuration, run:
+
+```bash
+opencode mcp list
+```
+
+If everything is working, you should see something like this:
+
+```text
+figma connected
+```
+
+If it appears disconnected, check three things:
+
+- That `npx` works in your terminal.
+- That `FIGMA_API_KEY` exists in your environment.
+- That the token has permission to read the Figma file.
+
+You can check the variable with:
+
+```bash
+printenv FIGMA_API_KEY
+```
+
+## Step 5: Use Figma from OpenCode
+
+Once connected, you can ask OpenCode to use the Figma MCP.
+
+For example:
+
+```text
+Use figma to review this file and tell me the visual hierarchy of the main frame:
+https://www.figma.com/design/FILE_KEY/Proyecto?node-id=123-456
+```
+
+Or something more implementation-oriented:
+
+```text
+Use figma to read this frame and then implement the component while respecting the design’s spacing,
+typography, colors, and visual hierarchy.
+```
+
+You can also ask for analysis first and implementation afterward:
+
+```text
+Use figma to analyze this design. Don’t write code yet.
+First tell me the structure, components, colors, and possible interactive states.
+```
+
+That workflow is better than asking for code immediately, because you first validate that the agent understood the design.
+
+## How to get the file key and node id
+
+A Figma URL will normally look something like this:
+
+```text
+https://www.figma.com/design/ABC123MiFileKey/Mi-Proyecto?node-id=123-456
+```
+
+The `file key` is the part after `/design/`.
+
+The `node-id` is in the `node-id` query parameter.
+
+## A good workflow
+
+Don’t just tell it, “Make this look like Figma.” That usually produces mediocre results.
+
+Instead, use a step-by-step workflow:
+
+1. Ask it to analyze the frame.
+2. Ask it to identify reusable components.
+3. Ask it to compare the design with the existing design system.
+4. Ask it to implement the component.
+5. Ask it to review responsiveness, accessibility, and states.
+
+That’s where MCP starts to pay off: you’re not just giving the agent an image; you’re giving it structured context.
+
+## Security: don’t paste tokens into your config
+
+This works, but it isn’t recommended for sharing or versioning:
+
+```json
+"environment": {
+  "FIGMA_API_KEY": "NO_PEGUES_TU_TOKEN_AQUI"
+}
+```
+
+Use this instead:
+
+```json
+"environment": {
+  "FIGMA_API_KEY": "{env:FIGMA_API_KEY}"
+}
+```
+
+The difference looks small, but it’s huge: in the first case, your secret is stored in plain text.
+
+## Quick troubleshooting
+
+**The token doesn’t exist in your environment:**
+
+```bash
+printenv FIGMA_API_KEY
+```
+
+If it prints nothing, export the variable again.
+
+**`npx` can’t run the package:**
+
+```bash
+npx -y figma-developer-mcp --help
+```
+
+If it fails, check your Node.js installation.
+
+**The Figma file isn’t accessible:** The token can only read what your account can read. If the file is private and your user doesn’t have access, neither will the MCP.
+
+**OpenCode was already open before the change:** Close and reopen OpenCode so it loads the new configuration.
+
+## Conclusion
+
+Configuring Figma with OpenCode using MCP isn’t complicated. The important thing is understanding what’s happening: OpenCode starts a local MCP server, that server talks to Figma using your token, and the agent gets tools for querying design context.
+
+The real benefit isn’t “AI does everything.” The real benefit is reducing friction between design and code.

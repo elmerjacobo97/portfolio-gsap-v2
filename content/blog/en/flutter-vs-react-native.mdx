@@ -1,0 +1,135 @@
+---
+title: 'Flutter vs React Native: A React Developer’s Perspective'
+description: >-
+  Everything a React developer needs to know before moving to Flutter. Key
+  differences in language, UI, and state management.
+date: '2026-02-03'
+category: Mobile
+tags:
+  - Flutter
+  - React Native
+  - Mobile
+  - Dart
+---
+
+Recently, I had the opportunity to dive into **Flutter** to implement a specific feature (a profile editing screen), coming from a strong background in **React** and **React Native**.
+
+The transition was fascinating. Although both frameworks pursue the same goal — cross-platform native apps from a single codebase — the philosophy behind each one is radically different.
+
+Here’s my experience and the main differences you’ll encounter.
+
+## 1. The Language: Dart vs JavaScript/TypeScript
+
+If you come from React, you’re used to JavaScript or TypeScript. Flutter uses **Dart**.
+
+- **Dart** feels like a mix of Java/C# and TypeScript.
+- It is statically typed by default. You don't need to configure something like TypeScript; the language itself forces you to think in types.
+- **Advantage:** The compiler is your best friend. Errors are caught long before the app runs.
+
+```dart
+// Dart
+String name = 'Carlos';
+int age = 30;
+
+void greet(String name) {
+  print('Hello $name');
+}
+```
+
+## 2. UI: Widgets vs JSX
+
+In React Native, we use **JSX**, which resembles HTML. We have `View`, `Text`, and `TouchableOpacity`.
+
+In Flutter, **“Everything is a Widget.”**
+
+- There is no JSX. The UI is built by instantiating Dart classes.
+- Nesting can become deep very quickly (the infamous “Widget Hell”), but IDEs (VS Code, Android Studio) help a lot with this.
+
+### Visual comparison
+
+**React Native:**
+
+```jsx
+<View style={{ flex: 1, padding: 20 }}>
+  <Text style={{ fontSize: 20 }}>Hello World</Text>
+  <Button title="Click me" onPress={handleClick} />
+</View>
+```
+
+**Flutter:**
+
+```dart
+Padding(
+  padding: const EdgeInsets.all(20.0),
+  child: Column(
+      children: [
+        Text('Hello World', style: TextStyle(fontSize: 20)),
+        ElevatedButton(
+            onPressed: handleClick,
+            child: Text('Click me')
+        ),
+      ],
+  ),
+)
+```
+
+<Callout type="info" title="Local Styles">
+  In Flutter, you don't use CSS or a separate StyleSheet object. Styles are
+  widget properties (such as `style: TextStyle(...)`) or wrapper widgets (such
+  as `Padding` or `Center`).
+</Callout>
+
+## 3. State Management
+
+In React, we have `useState`. In Flutter, the most direct equivalent is `setState`, which lives inside a `StatefulWidget`.
+
+```dart
+class Counter extends StatefulWidget {
+  @override
+  _CounterState createState() => _CounterState();
+}
+
+class _CounterState extends State<Counter> {
+  int _count = 0;
+
+  void _increment() {
+    setState(() {
+      _count++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: _increment,
+      child: Text('Count: $_count'),
+    );
+  }
+}
+```
+
+It is more “verbose” (it requires more boilerplate) than a simple React Hook, but it works according to the same reactivity principle: change the state → the UI redraws.
+
+## 4. Performance
+
+This is Flutter's big promise.
+
+- **React Native:** Uses a “bridge” to communicate between JS and native components (although the new architecture, Fabric/JSI, improves this enormously).
+- **Flutter:** Compiles directly to ARM machine code (pure native code) and uses its own rendering engine (Skia or Impeller) to paint every pixel on the screen. It doesn't use the operating system's native components (such as iOS's `UIView`); it draws them itself!
+
+The result is consistently smoother animation (60fps/120fps) on low-end devices without much extra effort.
+
+## 5. DX (Developer Experience)
+
+- **Hot Reload:** In Flutter, it is _magical_. It is incredibly fast and preserves state very reliably.
+- **Tools:** Flutter's official tooling (Flutter Doctor, DevTools) is very robust.
+- **Libraries:** React Native has npm (infinite). Flutter has `pub.dev`. Although it is smaller, the average quality of official packages tends to be very high and standardized.
+
+## Conclusion: Which One Should You Learn?
+
+There is no absolute winner.
+
+- Stick with **React Native** if: You already love React, want to leverage the huge JS ecosystem, and your app depends heavily on platform-specific native visual components.
+- Try **Flutter** if: You want flawless graphics performance by default, like the safety of strict typing, and don't mind learning a new language (Dart).
+
+Personally, implementing that profile screen in Flutter was refreshing. The strict structure helps keep the code organized, although I missed the flexibility and concision of my React Hooks.

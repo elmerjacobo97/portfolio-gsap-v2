@@ -1,0 +1,225 @@
+---
+title: 'Expo vs React Native CLI: Which Should You Choose in 2026?'
+description: >-
+  The debate is no longer "managed vs bare." With CNG, development builds, and
+  Meta's official recommendation, the question has changed completely. Here's
+  when to choose each one.
+date: '2026-05-03'
+category: Mobile
+tags:
+  - React Native
+  - Expo
+  - Mobile
+  - TypeScript
+  - Tooling
+---
+
+If you've ever searched for "Expo vs React Native CLI," you probably found answers from 2022 or 2023 telling you that Expo was limited, that you couldn't use native modules, or that you had to "eject" if you wanted real control.
+
+**All of that has changed.**
+
+In 2026, the right question isn't whether to choose Expo or React Native CLI. The question is **how many Expo tools you're going to adopt**. And for most projects, the answer is: all of them.
+
+Let's see why.
+
+## What the debate USED to be
+
+The decision used to be binary:
+
+- **Expo (managed workflow)**: You didn't touch native code. There were no `android/` or `ios/` directories. You used Expo Go to test on your device. But if you needed a native module that wasn't in the SDK… you were stuck.
+- **React Native CLI (bare workflow)**: You had full access to the native code. You edited `AndroidManifest.xml`, `Info.plist`, and `Podfile`. But setting up the development environment was a headache, and upgrading React Native versions was a source of anxiety.
+
+That model **no longer exists**. Expo evolved, and the concept of "ejecting" became obsolete.
+
+## Continuous Native Generation: the change that transforms everything
+
+The most important change in the ecosystem is called **Continuous Native Generation (CNG)**.
+
+The idea is simple: instead of generating the `android/` and `ios/` directories once and maintaining them forever (as React Native CLI does), CNG **regenerates them on demand** from your configuration.
+
+```bash
+# Generate the native directories when you need them
+npx expo prebuild
+
+# Something broke? Clean and regenerate
+npx expo prebuild --clean
+```
+
+The native directories are **gitignored**. They occupy the same conceptual space as `node_modules`: derived dependencies that you can regenerate whenever you want.
+
+### Why does this change the rules?
+
+- **Upgrading React Native used to be the ecosystem's biggest pain point** (as the 2022 community survey confirmed). With CNG, bump the version, run `prebuild --clean`, and you're done. No merge conflicts in native files.
+- **No orphaned code**: when you uninstall a package, its config plugin throws an error instead of leaving phantom configuration in your native projects.
+- **White-labeling**: you can generate app variants by changing only the configuration.
+- **Complex features as configuration**: Safari extensions, App Clips, widgets, Firebase — all reduced to JSON through config plugins.
+
+The tradeoff? If you use CNG, you **can't edit** `android/` and `ios/` manually and expect those changes to survive a `prebuild --clean`. Every native modification must go through config plugins or local Expo Modules.
+
+But CNG is **100% optional**. You can generate the native directories and edit them directly if you prefer. You simply opt out of automatic regeneration.
+
+## Expo Go vs Development Builds: the biggest confusion
+
+Many people still think Expo means using Expo Go. It doesn't.
+
+### Expo Go
+
+It's a prebuilt **app player** that comes with a subset of native modules already compiled. It's useful for:
+
+- Rapid prototyping
+- Learning React Native
+- Testing apps that only use modules included in the Expo Go runtime
+
+It is **not suitable for** production. You can't install any native library you want. You can't write custom Swift or Kotlin code. Expo explicitly positions Go as "a playground for students and learners."
+
+### Development Builds
+
+These are custom builds of your app that include **exactly** the native dependencies you need. They're created with `expo-dev-client`:
+
+```bash
+npx expo install expo-dev-client
+```
+
+With development builds, you can:
+
+- Install **any** native library
+- Write custom native code (Swift, Kotlin, Objective-C)
+- Use config plugins to modify native configuration
+- Debug with React Native DevTools and Hermes
+
+**This is the recommended way to develop production apps with Expo.** It removes the old limitation that "Expo doesn't support native modules."
+
+## Config Plugins: the alternative to editing native files
+
+If you came from the CLI, you were probably used to opening `AndroidManifest.xml` or `Info.plist` and modifying them. With Expo, you use **config plugins**:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
+        }
+      ]
+    ]
+  }
+}
+```
+
+The most popular libraries already include their own config plugins:
+
+- Firebase, Sentry, Stripe, MapBox, react-native-ble-plx
+- Most camera, push notification, and Bluetooth libraries
+
+If a library doesn't have a config plugin, you have three options:
+
+1. Look for a community one under `@config-plugins/` on GitHub
+2. Write a local config plugin (JavaScript that modifies native files programmatically)
+3. Run `prebuild`, edit the native files manually, and stop regenerating them (opt out of CNG)
+
+## Expo Router vs React Navigation
+
+Expo Router doesn't compete with React Navigation. **It's built on top of React Navigation**.
+
+| Feature            | Expo Router                         | React Navigation         |
+| ----------------- | ----------------------------------- | ------------------------ |
+| Routing model     | File-based (`app/` directory)       | Code-based (components)  |
+| Deep linking      | Automatic for every route           | Manual configuration     |
+| Web support       | Built-in SSG and static rendering   | Not included             |
+| Bundle splitting  | Async Routes (lazy per route)       | Manual implementation    |
+| Typed routes      | `href` with automatic type-checking | Not available            |
+| Offline-first     | Built in                            | Manual                   |
+
+With Expo Router, you create an `app/about.tsx` file and automatically get the `/about` route with deep linking, types, and SSG for the web. With React Navigation, every route requires manual configuration.
+
+**You can still use React Navigation inside an Expo Router project.** It isn't exclusive.
+
+## EAS Build and EAS Submit
+
+If you came from the CLI, you probably used Fastlane plus manual CI to build and upload to the stores. EAS (Expo Application Services) simplifies all of this.
+
+### EAS Build
+
+```bash
+# Cloud build (you don't need a Mac for iOS)
+eas build --platform ios
+eas build --platform android
+
+# Local build if you prefer
+eas build --local --platform android
+```
+
+### EAS Submit
+
+Upload binaries to Google Play Console and App Store Connect from any platform — even from Windows or Linux for iOS.
+
+### EAS Update (CodePush replacement)
+
+CodePush was retired in March 2025. EAS Update is its official replacement for OTA updates in the Expo ecosystem.
+
+## Incremental adoption: it's not all or nothing
+
+This is the point most people don't know: **you can install Expo in an existing React Native CLI project**. You don't need to migrate anything.
+
+```bash
+# In any existing RN CLI project
+npx install-expo-modules@latest
+```
+
+From there, you can adopt whatever you want, gradually:
+
+1. **Step 1**: Use libraries from the Expo SDK
+2. **Step 2**: Install `expo-dev-client` for an improved development experience
+3. **Step 3**: Use EAS Build/Submit for CI/CD
+4. **Step 4**: Migrate to Expo Router for file-based routing
+5. **Step 5**: Adopt CNG when you're ready
+
+There is no finish line. You can stay at step 2 and remain productive.
+
+## When should you choose Expo?
+
+**For most new projects in 2026, Expo is the right answer.** Specifically:
+
+- Applications that don't require deeply custom native integration
+- Teams that prioritize development speed and DX
+- Apps that need web support in addition to mobile
+- Projects where iOS/Android configuration is a headache
+- Any app that wants OTA updates without configuring Fastlane
+
+## When should you choose React Native CLI?
+
+There are still legitimate reasons to stick with the pure CLI:
+
+- **Brownfield applications**: apps that live inside existing native apps
+- **Deep native integration**: when the app is essentially a native shell with RN screens
+- **Platforms outside iOS/Android**: macOS, Windows, or experimental platforms
+- **Teams with mature CI/CD pipelines**: if you already have Fastlane + GitHub Actions and they're working well
+
+Even in these cases, **you can adopt Expo tools incrementally**.
+
+## The official recommendation
+
+Since June 2024, the official React Native blog has stated that "you're either using a framework or you're building your own" — and explicitly recommends Expo as the framework. This isn't Expo marketing. It's the recommendation of the team that maintains React Native.
+
+## My experience
+
+I used React Native CLI for years. I configured Fastlane, wrestled with Xcode, and cherry-picked patches for specific versions. I don't miss it.
+
+With Expo SDK 54+ and CNG, my workflow is:
+
+1. `npx create-expo-app@latest` — project ready in seconds
+2. `npx expo start` — development with hot reload
+3. Install what I need — Firebase, Sentry, camera — all with config plugins
+4. `eas build` — build in the cloud without touching Xcode
+5. `eas submit` — upload to the stores from the terminal
+
+And when I need something custom and native, I write an Expo Module in Swift/Kotlin. No ejecting.
+
+## References
+
+- [Use a Framework to Build React Native Apps](https://reactnative.dev/blog/2024/06/25/use-a-framework-to-build-react-native-apps) — Official React Native blog
+- [Continuous Native Generation (CNG)](https://docs.expo.dev/workflow/continuous-native-generation) — Official documentation
+- [Development Builds](https://docs.expo.dev/develop/development-builds/introduction)
+- [EAS Build](https://docs.expo.dev/build/introduction)
