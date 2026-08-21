@@ -16,6 +16,7 @@ const en = {
     about: "About",
     contact: "Contact",
     collaborate: "Collaborate",
+    blog: "Blog",
     menu: "Menu",
     close: "Close",
     skipToContent: "Skip to content",
@@ -239,6 +240,24 @@ const en = {
     social: "Social",
     rights: "All rights reserved",
     builtWith: "Next.js · GSAP · Tailwind",
+  },
+
+  blog: {
+    index: "05",
+    title: "Blog",
+    lead: "I write about how digital products get built and kept alive: decisions, costs, and process for small and mid-sized businesses.",
+    empty: "No posts yet.",
+    readPost: "Read article",
+    backToBlog: "Back to blog",
+    readingUnit: "min read",
+    ctaTitle: "Let's talk about your product?",
+    ctaBody:
+      "If you want to build, improve, or review a digital product, tell me about your case and I will reply within 24 hours.",
+    cta: "Tell me about your case",
+    ctaSubject: "I read your blog and want to talk about my product",
+    ctaPrefill:
+      "Hi Elmer,\n\nI found your blog and I'd like to talk about a product I want to build or improve.\n\n",
+    ogAlt: "Elmer Jacobo's blog on digital products for businesses",
   },
 
   notFound: {

@@ -1,0 +1,10 @@
+- Prefiere construir su portafolio como una oferta de servicios de desarrollo full stack, orientada a captar clientes y mostrar capacidades, no como un CV para buscar empleo. Confidence: 0.98
+- Valora una dirección visual de alta calidad, con animaciones complejas, pulidas y bien ejecutadas como parte central del portafolio. Confidence: 0.95
+- Prefiere usar GSAP y técnicas sólidas de frontend para implementar y pulir las animaciones, especialmente en interacciones como hover, scroll y apertura/cambio de servicios. Confidence: 0.93
+- Prefiere validar el comportamiento visual directamente en el navegador usando Playwright CLI en modo headed, probando interacciones reales y corrigiendo los problemas encontrados. Confidence: 0.96
+- Prefiere un flujo de trabajo iterativo por fases, continuando con la siguiente fase o mejora sin detenerse innecesariamente cuando indica “sigue”. Confidence: 0.9
+- Se comunica principalmente en español y espera recibir el trabajo y las explicaciones en español. Confidence: 0.9
+- Su audiencia objetivo son pequeñas y medianas empresas (pymes) como clientes; el sitio evita deliberadamente elementos de búsqueda de empleo como la descarga de CV. Confidence: 0.85
+- Prefiere que el sitio orientado a clientes tenga un tono poco técnico y centrado en el negocio, no en reclutadores técnicos. Confidence: 0.8
+- Mantiene un blog (antes sobre temas técnicos de desarrollo) y quiere integrarlo como parte de su sitio personal orientado a conseguir clientes. Confidence: 0.75
+- Prefiere que los CTA de contacto para potenciales clientes abran directamente el cliente de correo mediante `mailto:`, con asunto y mensaje prellenados, en lugar de navegar a otra página. Confidence: 0.98

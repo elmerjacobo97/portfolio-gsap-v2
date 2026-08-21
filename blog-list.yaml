@@ -1,0 +1,524 @@
+- generic [active] [ref=e1]:
+  - link "Saltar al contenido" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Elmer Augusto Jacobo Otiniano, Product engineer · Full stack" [ref=e5] [cursor=pointer]:
+        - /url: /es
+        - generic [ref=e6]:
+          - img [ref=e7]
+          - generic [ref=e10]: Elmer Augusto Jacobo Otiniano, Product engineer · Full stack
+      - navigation "Primary" [ref=e11]:
+        - link "Proyectos" [ref=e12] [cursor=pointer]:
+          - /url: /es#projects
+        - link "Experiencia" [ref=e13] [cursor=pointer]:
+          - /url: /es#experience
+        - link "Sobre mí" [ref=e14] [cursor=pointer]:
+          - /url: /es#about
+        - link "Blog" [ref=e15] [cursor=pointer]:
+          - /url: /es/blog
+        - link "Colaborar" [ref=e16] [cursor=pointer]:
+          - /url: /es#contact
+      - generic [ref=e17]:
+        - link "ES EN — Ver en inglés" [ref=e18] [cursor=pointer]:
+          - /url: /en/blog
+          - generic [ref=e19]: ES
+          - generic [ref=e20]: /
+          - generic [ref=e21]: EN
+          - generic [ref=e22]: — Ver en inglés
+        - 'button "Cambiar tema: Activar modo claro" [ref=e23]':
+          - img [ref=e24]
+  - generic [ref=e36]:
+    - main [ref=e37]:
+      - heading "Blog" [level=1] [ref=e38]
+      - generic [ref=e40]:
+        - paragraph [ref=e41]: "05"
+        - heading "Blog" [level=2] [ref=e42]
+        - paragraph [ref=e43]: "Escribo sobre cómo se construyen y se mantienen los productos digitales: decisiones, costos y procesos para negocios pequeños y medianos."
+      - generic [ref=e45]:
+        - article [ref=e46]:
+          - generic [ref=e47]:
+            - generic [ref=e48]:
+              - generic [ref=e49]: "01"
+              - generic [ref=e50]: 17 ago. 2026
+              - generic [ref=e51]:
+                - generic [ref=e52]: /
+                - generic [ref=e53]: Producto digital
+              - generic [ref=e54]:
+                - generic [ref=e55]: /
+                - generic [ref=e56]: Mantenimiento
+            - generic [ref=e57]: 3 min de lectura
+          - generic [ref=e58]:
+            - heading "El costo real de mantener un producto digital" [level=3] [ref=e59]:
+              - link "El costo real de mantener un producto digital" [ref=e60] [cursor=pointer]:
+                - /url: /es/blog/el-costo-real-de-un-producto-digital
+            - paragraph [ref=e61]: "Lanzar es una parte pequeña del trabajo. Lo que define si un producto sobrevive es lo que pasa después: actualizaciones, datos, pagos y decisiones que nadie ve."
+          - link "Leer artículo" [ref=e63] [cursor=pointer]:
+            - /url: /es/blog/el-costo-real-de-un-producto-digital
+            - generic [ref=e64]: Leer artículo
+            - img [ref=e65]
+        - article [ref=e68]:
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - generic [ref=e71]: "02"
+              - generic [ref=e72]: 20 jun. 2026
+              - generic [ref=e73]:
+                - generic [ref=e74]: /
+                - generic [ref=e75]: IA
+              - generic [ref=e76]:
+                - generic [ref=e77]: /
+                - generic [ref=e78]: Psicología
+              - generic [ref=e79]:
+                - generic [ref=e80]: /
+                - generic [ref=e81]: Productividad
+              - generic [ref=e82]:
+                - generic [ref=e83]: /
+                - generic [ref=e84]: Opinión
+            - generic [ref=e85]: AI Engineering · 2 min de lectura
+          - generic [ref=e86]:
+            - heading "La ilusión de la creación infinita" [level=3] [ref=e87]:
+              - link "La ilusión de la creación infinita" [ref=e88] [cursor=pointer]:
+                - /url: /es/blog/illusion-of-infinite-creation
+            - paragraph [ref=e89]: La IA eliminó la fricción técnica. El problema es que esa fricción también filtraba las ideas malas, forzaba el compromiso y generaba aprendizaje real. Qué pasa cuando desaparece.
+          - link "Leer artículo" [ref=e91] [cursor=pointer]:
+            - /url: /es/blog/illusion-of-infinite-creation
+            - generic [ref=e92]: Leer artículo
+            - img [ref=e93]
+        - article [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]:
+              - generic [ref=e99]: "03"
+              - generic [ref=e100]: 16 jun. 2026
+              - generic [ref=e101]:
+                - generic [ref=e102]: /
+                - generic [ref=e103]: Laravel
+              - generic [ref=e104]:
+                - generic [ref=e105]: /
+                - generic [ref=e106]: PostgreSQL
+              - generic [ref=e107]:
+                - generic [ref=e108]: /
+                - generic [ref=e109]: MySQL
+              - generic [ref=e110]:
+                - generic [ref=e111]: /
+                - generic [ref=e112]: Stripe
+              - generic [ref=e113]:
+                - generic [ref=e114]: /
+                - generic [ref=e115]: Google Cloud
+              - generic [ref=e116]:
+                - generic [ref=e117]: /
+                - generic [ref=e118]: Migración
+            - generic [ref=e119]: Backend · 5 min de lectura
+          - generic [ref=e120]:
+            - heading "Migrando empresas de MySQL a PostgreSQL sin cobrarles de más en Stripe" [level=3] [ref=e121]:
+              - link "Migrando empresas de MySQL a PostgreSQL sin cobrarles de más en Stripe" [ref=e122] [cursor=pointer]:
+                - /url: /es/blog/migracion-mysql-postgresql-stripe-laravel
+            - paragraph [ref=e123]: Teníamos clientes con suscripciones activas en una cuenta Stripe vieja y una arquitectura nueva que no las reconocía. Este es el proceso para moverlas sin cobrar la diferencia.
+          - link "Leer artículo" [ref=e125] [cursor=pointer]:
+            - /url: /es/blog/migracion-mysql-postgresql-stripe-laravel
+            - generic [ref=e126]: Leer artículo
+            - img [ref=e127]
+        - article [ref=e130]:
+          - generic [ref=e131]:
+            - generic [ref=e132]:
+              - generic [ref=e133]: "04"
+              - generic [ref=e134]: 11 jun. 2026
+              - generic [ref=e135]:
+                - generic [ref=e136]: /
+                - generic [ref=e137]: Laravel
+              - generic [ref=e138]:
+                - generic [ref=e139]: /
+                - generic [ref=e140]: Docker
+              - generic [ref=e141]:
+                - generic [ref=e142]: /
+                - generic [ref=e143]: Render
+              - generic [ref=e144]:
+                - generic [ref=e145]: /
+                - generic [ref=e146]: PostgreSQL
+              - generic [ref=e147]:
+                - generic [ref=e148]: /
+                - generic [ref=e149]: Neon
+              - generic [ref=e150]:
+                - generic [ref=e151]: /
+                - generic [ref=e152]: Supervisord
+              - generic [ref=e153]:
+                - generic [ref=e154]: /
+                - generic [ref=e155]: PHP
+            - generic [ref=e156]: DevOps · 4 min de lectura
+          - generic [ref=e157]:
+            - heading "Cómo desplegar Laravel en Render con Docker (lo que los tutoriales no dicen)" [level=3] [ref=e158]:
+              - link "Cómo desplegar Laravel en Render con Docker (lo que los tutoriales no dicen)" [ref=e159] [cursor=pointer]:
+                - /url: /es/blog/como-desplegar-laravel-en-render-con-docker
+            - paragraph [ref=e160]: "Render no soporta PHP nativo — necesitas Docker. Lo difícil no es el Dockerfile: es el puerto dinámico que Render asigna, el pooler de Neon que rompe migraciones, y el HOME que hereda PHP-FPM de root."
+          - link "Leer artículo" [ref=e162] [cursor=pointer]:
+            - /url: /es/blog/como-desplegar-laravel-en-render-con-docker
+            - generic [ref=e163]: Leer artículo
+            - img [ref=e164]
+        - article [ref=e167]:
+          - generic [ref=e168]:
+            - generic [ref=e169]:
+              - generic [ref=e170]: "05"
+              - generic [ref=e171]: 6 jun. 2026
+              - generic [ref=e172]:
+                - generic [ref=e173]: /
+                - generic [ref=e174]: Claude Code
+              - generic [ref=e175]:
+                - generic [ref=e176]: /
+                - generic [ref=e177]: Google Cloud
+              - generic [ref=e178]:
+                - generic [ref=e179]: /
+                - generic [ref=e180]: Deploy
+              - generic [ref=e181]:
+                - generic [ref=e182]: /
+                - generic [ref=e183]: gcloud
+              - generic [ref=e184]:
+                - generic [ref=e185]: /
+                - generic [ref=e186]: Laravel
+              - generic [ref=e187]:
+                - generic [ref=e188]: /
+                - generic [ref=e189]: React
+            - generic [ref=e190]: DevOps · 4 min de lectura
+          - generic [ref=e191]:
+            - heading "Cómo automaticé mis deploys a Google Cloud con un agente de Claude Code" [level=3] [ref=e192]:
+              - link "Cómo automaticé mis deploys a Google Cloud con un agente de Claude Code" [ref=e193] [cursor=pointer]:
+                - /url: /es/blog/deploy-google-cloud-claude-code-agent
+            - paragraph [ref=e194]: Tenía tres proyectos en una VPS y un proceso de deploy que dependía de que yo no me saltara un paso. Lo resolví configurando un sub-agente de Claude Code con acceso a gcloud SSH.
+          - link "Leer artículo" [ref=e196] [cursor=pointer]:
+            - /url: /es/blog/deploy-google-cloud-claude-code-agent
+            - generic [ref=e197]: Leer artículo
+            - img [ref=e198]
+        - article [ref=e201]:
+          - generic [ref=e202]:
+            - generic [ref=e203]:
+              - generic [ref=e204]: "06"
+              - generic [ref=e205]: 2 jun. 2026
+              - generic [ref=e206]:
+                - generic [ref=e207]: /
+                - generic [ref=e208]: Obsidian
+              - generic [ref=e209]:
+                - generic [ref=e210]: /
+                - generic [ref=e211]: Claude Code
+              - generic [ref=e212]:
+                - generic [ref=e213]: /
+                - generic [ref=e214]: MCP
+              - generic [ref=e215]:
+                - generic [ref=e216]: /
+                - generic [ref=e217]: Productividad
+            - generic [ref=e218]: AI Engineering · 3 min de lectura
+          - generic [ref=e219]:
+            - heading "Cómo conecté Obsidian con Claude Code usando MCP" [level=3] [ref=e220]:
+              - link "Cómo conecté Obsidian con Claude Code usando MCP" [ref=e221] [cursor=pointer]:
+                - /url: /es/blog/obsidian-claude-code-mcp
+            - paragraph [ref=e222]: Configuré Obsidian como base de conocimiento conectada a Claude Code vía MCP. Te cuento el proceso, los problemas con SSL y la estructura de vault que terminó funcionando.
+          - link "Leer artículo" [ref=e224] [cursor=pointer]:
+            - /url: /es/blog/obsidian-claude-code-mcp
+            - generic [ref=e225]: Leer artículo
+            - img [ref=e226]
+        - article [ref=e229]:
+          - generic [ref=e230]:
+            - generic [ref=e231]:
+              - generic [ref=e232]: "07"
+              - generic [ref=e233]: 26 may. 2026
+              - generic [ref=e234]:
+                - generic [ref=e235]: /
+                - generic [ref=e236]: Next.js
+              - generic [ref=e237]:
+                - generic [ref=e238]: /
+                - generic [ref=e239]: Architecture
+              - generic [ref=e240]:
+                - generic [ref=e241]: /
+                - generic [ref=e242]: TypeScript
+              - generic [ref=e243]:
+                - generic [ref=e244]: /
+                - generic [ref=e245]: Frontend
+            - generic [ref=e246]: Next.js · 3 min de lectura
+          - generic [ref=e247]:
+            - heading "Cómo organizo mis proyectos Next.js usando feature-based architecture" [level=3] [ref=e248]:
+              - link "Cómo organizo mis proyectos Next.js usando feature-based architecture" [ref=e249] [cursor=pointer]:
+                - /url: /es/blog/feature-based-architecture-nextjs
+            - paragraph [ref=e250]: La estructura que uso en proyectos Next.js para mantener features más aisladas, escalables y fáciles de mantener.
+          - link "Leer artículo" [ref=e252] [cursor=pointer]:
+            - /url: /es/blog/feature-based-architecture-nextjs
+            - generic [ref=e253]: Leer artículo
+            - img [ref=e254]
+        - article [ref=e257]:
+          - generic [ref=e258]:
+            - generic [ref=e259]:
+              - generic [ref=e260]: "08"
+              - generic [ref=e261]: 6 may. 2026
+              - generic [ref=e262]:
+                - generic [ref=e263]: /
+                - generic [ref=e264]: OpenCode
+              - generic [ref=e265]:
+                - generic [ref=e266]: /
+                - generic [ref=e267]: MCP
+              - generic [ref=e268]:
+                - generic [ref=e269]: /
+                - generic [ref=e270]: Figma
+              - generic [ref=e271]:
+                - generic [ref=e272]: /
+                - generic [ref=e273]: AI
+            - generic [ref=e274]: AI Engineering · 6 min de lectura
+          - generic [ref=e275]:
+            - heading "Cómo conectar Figma con OpenCode usando MCP" [level=3] [ref=e276]:
+              - link "Cómo conectar Figma con OpenCode usando MCP" [ref=e277] [cursor=pointer]:
+                - /url: /es/blog/configurar-figma-mcp-opencode
+            - paragraph [ref=e278]: Configura el MCP de Figma en OpenCode para que tu agente pueda leer contexto de diseño y ayudarte a implementar interfaces con más precisión.
+          - link "Leer artículo" [ref=e280] [cursor=pointer]:
+            - /url: /es/blog/configurar-figma-mcp-opencode
+            - generic [ref=e281]: Leer artículo
+            - img [ref=e282]
+        - article [ref=e285]:
+          - generic [ref=e286]:
+            - generic [ref=e287]:
+              - generic [ref=e288]: "09"
+              - generic [ref=e289]: 2 may. 2026
+              - generic [ref=e290]:
+                - generic [ref=e291]: /
+                - generic [ref=e292]: React Native
+              - generic [ref=e293]:
+                - generic [ref=e294]: /
+                - generic [ref=e295]: Expo
+              - generic [ref=e296]:
+                - generic [ref=e297]: /
+                - generic [ref=e298]: Mobile
+              - generic [ref=e299]:
+                - generic [ref=e300]: /
+                - generic [ref=e301]: TypeScript
+              - generic [ref=e302]:
+                - generic [ref=e303]: /
+                - generic [ref=e304]: Tooling
+            - generic [ref=e305]: Mobile · 7 min de lectura
+          - generic [ref=e306]:
+            - 'heading "Expo vs React Native CLI: ¿Cuál elegir en 2026?" [level=3] [ref=e307]':
+              - 'link "Expo vs React Native CLI: ¿Cuál elegir en 2026?" [ref=e308] [cursor=pointer]':
+                - /url: /es/blog/expo-vs-react-native-cli
+            - paragraph [ref=e309]: El debate ya no es "managed vs bare". Con CNG, development builds y la recomendación oficial de Meta, la pregunta cambió por completo. Te explico cuándo elegir cada uno.
+          - link "Leer artículo" [ref=e311] [cursor=pointer]:
+            - /url: /es/blog/expo-vs-react-native-cli
+            - generic [ref=e312]: Leer artículo
+            - img [ref=e313]
+        - article [ref=e316]:
+          - generic [ref=e317]:
+            - generic [ref=e318]:
+              - generic [ref=e319]: "10"
+              - generic [ref=e320]: 18 mar. 2026
+              - generic [ref=e321]:
+                - generic [ref=e322]: /
+                - generic [ref=e323]: React
+              - generic [ref=e324]:
+                - generic [ref=e325]: /
+                - generic [ref=e326]: Next.js
+              - generic [ref=e327]:
+                - generic [ref=e328]: /
+                - generic [ref=e329]: TypeScript
+              - generic [ref=e330]:
+                - generic [ref=e331]: /
+                - generic [ref=e332]: State Management
+            - generic [ref=e333]: TypeScript · 4 min de lectura
+          - generic [ref=e334]:
+            - 'heading "Zustand vs Redux Toolkit: ¿Cuál Elegir en 2026?" [level=3] [ref=e335]':
+              - 'link "Zustand vs Redux Toolkit: ¿Cuál Elegir en 2026?" [ref=e336] [cursor=pointer]':
+                - /url: /es/blog/zustand-vs-redux-toolkit
+            - paragraph [ref=e337]: En 2026 Zustand ha superado a Redux. Descubre las razones por las cuales Zustand se convirtió en el ganador en simplicidad, mientras que RTK sigue siendo el rey de las apps enterprise.
+          - link "Leer artículo" [ref=e339] [cursor=pointer]:
+            - /url: /es/blog/zustand-vs-redux-toolkit
+            - generic [ref=e340]: Leer artículo
+            - img [ref=e341]
+        - article [ref=e344]:
+          - generic [ref=e345]:
+            - generic [ref=e346]:
+              - generic [ref=e347]: "11"
+              - generic [ref=e348]: 2 feb. 2026
+              - generic [ref=e349]:
+                - generic [ref=e350]: /
+                - generic [ref=e351]: Flutter
+              - generic [ref=e352]:
+                - generic [ref=e353]: /
+                - generic [ref=e354]: React Native
+              - generic [ref=e355]:
+                - generic [ref=e356]: /
+                - generic [ref=e357]: Mobile
+              - generic [ref=e358]:
+                - generic [ref=e359]: /
+                - generic [ref=e360]: Dart
+            - generic [ref=e361]: Mobile · 3 min de lectura
+          - generic [ref=e362]:
+            - 'heading "Flutter vs React Native: La perspectiva de un dev de React" [level=3] [ref=e363]':
+              - 'link "Flutter vs React Native: La perspectiva de un dev de React" [ref=e364] [cursor=pointer]':
+                - /url: /es/blog/flutter-vs-react-native
+            - paragraph [ref=e365]: Todo lo que un desarrollador de React necesita saber antes de saltar a Flutter. Diferencias clave en lenguaje, UI y gestión de estado.
+          - link "Leer artículo" [ref=e367] [cursor=pointer]:
+            - /url: /es/blog/flutter-vs-react-native
+            - generic [ref=e368]: Leer artículo
+            - img [ref=e369]
+        - article [ref=e372]:
+          - generic [ref=e373]:
+            - generic [ref=e374]:
+              - generic [ref=e375]: "12"
+              - generic [ref=e376]: 11 ene. 2026
+              - generic [ref=e377]:
+                - generic [ref=e378]: /
+                - generic [ref=e379]: pnpm
+              - generic [ref=e380]:
+                - generic [ref=e381]: /
+                - generic [ref=e382]: npm
+              - generic [ref=e383]:
+                - generic [ref=e384]: /
+                - generic [ref=e385]: yarn
+              - generic [ref=e386]:
+                - generic [ref=e387]: /
+                - generic [ref=e388]: Node.js
+              - generic [ref=e389]:
+                - generic [ref=e390]: /
+                - generic [ref=e391]: Tooling
+            - generic [ref=e392]: TypeScript · 4 min de lectura
+          - generic [ref=e393]:
+            - 'heading "pnpm vs npm vs yarn: por qué uso pnpm" [level=3] [ref=e394]':
+              - 'link "pnpm vs npm vs yarn: por qué uso pnpm" [ref=e395] [cursor=pointer]':
+                - /url: /es/blog/pnpm-vs-npm-yarn
+            - paragraph [ref=e396]: Comparativa práctica entre los tres package managers más populares. Velocidad, espacio en disco y por qué pnpm es mi elección.
+          - link "Leer artículo" [ref=e398] [cursor=pointer]:
+            - /url: /es/blog/pnpm-vs-npm-yarn
+            - generic [ref=e399]: Leer artículo
+            - img [ref=e400]
+        - article [ref=e403]:
+          - generic [ref=e404]:
+            - generic [ref=e405]:
+              - generic [ref=e406]: "13"
+              - generic [ref=e407]: 22 dic. 2025
+              - generic [ref=e408]:
+                - generic [ref=e409]: /
+                - generic [ref=e410]: React
+              - generic [ref=e411]:
+                - generic [ref=e412]: /
+                - generic [ref=e413]: TanStack Query
+              - generic [ref=e414]:
+                - generic [ref=e415]: /
+                - generic [ref=e416]: TypeScript
+              - generic [ref=e417]:
+                - generic [ref=e418]: /
+                - generic [ref=e419]: Data Fetching
+            - generic [ref=e420]: TypeScript · 2 min de lectura
+          - generic [ref=e421]:
+            - 'heading "TanStack Query: Guía práctica para empezar" [level=3] [ref=e422]':
+              - 'link "TanStack Query: Guía práctica para empezar" [ref=e423] [cursor=pointer]':
+                - /url: /es/blog/tanstack-query-getting-started
+            - paragraph [ref=e424]: Aprende a usar TanStack Query (antes React Query) para manejar datos del servidor en React. Fetching, caching y mutations en minutos.
+          - link "Leer artículo" [ref=e426] [cursor=pointer]:
+            - /url: /es/blog/tanstack-query-getting-started
+            - generic [ref=e427]: Leer artículo
+            - img [ref=e428]
+        - article [ref=e431]:
+          - generic [ref=e432]:
+            - generic [ref=e433]:
+              - generic [ref=e434]: "14"
+              - generic [ref=e435]: 19 nov. 2025
+              - generic [ref=e436]:
+                - generic [ref=e437]: /
+                - generic [ref=e438]: React Native
+              - generic [ref=e439]:
+                - generic [ref=e440]: /
+                - generic [ref=e441]: Sentry
+              - generic [ref=e442]:
+                - generic [ref=e443]: /
+                - generic [ref=e444]: Error Tracking
+              - generic [ref=e445]:
+                - generic [ref=e446]: /
+                - generic [ref=e447]: Debugging
+              - generic [ref=e448]:
+                - generic [ref=e449]: /
+                - generic [ref=e450]: Source Maps
+            - generic [ref=e451]: Mobile · 4 min de lectura
+          - generic [ref=e452]:
+            - 'heading "Sentry en React Native CLI: Guía Completa de Integración" [level=3] [ref=e453]':
+              - 'link "Sentry en React Native CLI: Guía Completa de Integración" [ref=e454] [cursor=pointer]':
+                - /url: /es/blog/sentry-react-native-cli
+            - paragraph [ref=e455]: Aprende a configurar Sentry en React Native CLI para capturar errores, source maps y tracking de navegación. Incluye troubleshooting y optimización del plan gratuito.
+          - link "Leer artículo" [ref=e457] [cursor=pointer]:
+            - /url: /es/blog/sentry-react-native-cli
+            - generic [ref=e458]: Leer artículo
+            - img [ref=e459]
+        - article [ref=e462]:
+          - generic [ref=e463]:
+            - generic [ref=e464]:
+              - generic [ref=e465]: "15"
+              - generic [ref=e466]: 7 nov. 2025
+              - generic [ref=e467]:
+                - generic [ref=e468]: /
+                - generic [ref=e469]: Next.js
+              - generic [ref=e470]:
+                - generic [ref=e471]: /
+                - generic [ref=e472]: React
+              - generic [ref=e473]:
+                - generic [ref=e474]: /
+                - generic [ref=e475]: App Router
+              - generic [ref=e476]:
+                - generic [ref=e477]: /
+                - generic [ref=e478]: TypeScript
+            - generic [ref=e479]: Next.js · 6 min de lectura
+          - generic [ref=e480]:
+            - heading "Diferencias entre App Router y Pages Router en Next.js" [level=3] [ref=e481]:
+              - link "Diferencias entre App Router y Pages Router en Next.js" [ref=e482] [cursor=pointer]:
+                - /url: /es/blog/nextjs-app-vs-pages-router
+            - paragraph [ref=e483]: Guía completa sobre las diferencias entre App Router (app/) y Pages Router (pages/) en Next.js. Cuál usar, cuándo migrar y ejemplos prácticos.
+          - link "Leer artículo" [ref=e485] [cursor=pointer]:
+            - /url: /es/blog/nextjs-app-vs-pages-router
+            - generic [ref=e486]: Leer artículo
+            - img [ref=e487]
+    - contentinfo [ref=e490]:
+      - generic [ref=e491]:
+        - generic [ref=e494]:
+          - generic [ref=e495]:
+            - generic [ref=e496]:
+              - generic [ref=e497]: Hablemos de tu producto
+              - img [ref=e498]
+            - generic [ref=e501]:
+              - generic [ref=e502]: De la idea a producción
+              - img [ref=e503]
+            - generic [ref=e506]:
+              - generic [ref=e507]: Mejoremos lo que ya existe
+              - img [ref=e508]
+            - generic [ref=e511]:
+              - generic [ref=e512]: Ordenemos el backend
+              - img [ref=e513]
+            - generic [ref=e516]:
+              - generic [ref=e517]: Decisiones claras, código que aguanta
+              - img [ref=e518]
+          - generic [ref=e521]:
+            - generic [ref=e522]:
+              - generic [ref=e523]: Hablemos de tu producto
+              - img [ref=e524]
+            - generic [ref=e527]:
+              - generic [ref=e528]: De la idea a producción
+              - img [ref=e529]
+            - generic [ref=e532]:
+              - generic [ref=e533]: Mejoremos lo que ya existe
+              - img [ref=e534]
+            - generic [ref=e537]:
+              - generic [ref=e538]: Ordenemos el backend
+              - img [ref=e539]
+            - generic [ref=e542]:
+              - generic [ref=e543]: Decisiones claras, código que aguanta
+              - img [ref=e544]
+        - generic [ref=e547]:
+          - generic [ref=e548]:
+            - generic [ref=e549]: Hora local
+            - generic [ref=e550]: 17:15:40 · Trujillo
+          - list [ref=e551]:
+            - listitem [ref=e552]:
+              - link "LinkedIn" [ref=e553] [cursor=pointer]:
+                - /url: https://linkedin.com/in/elmerjacobo97
+                - text: LinkedIn
+                - img [ref=e554]
+            - listitem [ref=e557]:
+              - link "GitHub" [ref=e558] [cursor=pointer]:
+                - /url: https://github.com/elmerjacobo97
+                - text: GitHub
+                - img [ref=e559]
+          - generic [ref=e562]:
+            - generic [ref=e563]: © 2026 Elmer Jacobo
+            - generic [ref=e564]: v1.0.5
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e570] [cursor=pointer]:
+    - img [ref=e571]
+  - alert [ref=e575]

@@ -14,6 +14,7 @@ const es = {
     about: "Sobre mí",
     contact: "Contacto",
     collaborate: "Colaborar",
+    blog: "Blog",
     menu: "Menú",
     close: "Cerrar",
     skipToContent: "Saltar al contenido",
@@ -236,6 +237,24 @@ const es = {
     social: "Redes",
     rights: "Todos los derechos reservados",
     builtWith: "Next.js · GSAP · Tailwind",
+  },
+
+  blog: {
+    index: "05",
+    title: "Blog",
+    lead: "Escribo sobre cómo se construyen y se mantienen los productos digitales: decisiones, costos y procesos para negocios pequeños y medianos.",
+    empty: "Todavía no hay publicaciones.",
+    readPost: "Leer artículo",
+    backToBlog: "Volver al blog",
+    readingUnit: "min de lectura",
+    ctaTitle: "¿Hablamos de tu producto?",
+    ctaBody:
+      "Si quieres construir, mejorar o revisar un producto digital, cuéntame el caso y te respondo en menos de 24 horas.",
+    cta: "Cuéntame tu caso",
+    ctaSubject: "Leí tu blog y quiero hablar de mi producto",
+    ctaPrefill:
+      "Hola Elmer,\n\nEncontré tu blog y me gustaría conversar sobre un producto que quiero construir o mejorar.\n\n",
+    ogAlt: "Blog de Elmer Jacobo sobre productos digitales para negocios",
   },
 
   notFound: {

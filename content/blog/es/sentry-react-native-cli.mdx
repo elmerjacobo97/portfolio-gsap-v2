@@ -1,0 +1,304 @@
+---
+title: 'Sentry en React Native CLI: Guía Completa de Integración'
+description: >-
+  Aprende a configurar Sentry en React Native CLI para capturar errores, source
+  maps y tracking de navegación. Incluye troubleshooting y optimización del plan
+  gratuito.
+date: '2025-11-20'
+category: Mobile
+tags:
+  - React Native
+  - Sentry
+  - Error Tracking
+  - Debugging
+  - Source Maps
+---
+
+Sentry es una plataforma esencial para el monitoreo de errores en aplicaciones móviles. En esta guía completa, aprenderás a configurar Sentry en React Native CLI, subir source maps, trackear navegación y optimizar el uso del plan gratuito.
+
+## ¿Por qué usar Sentry en React Native?
+
+Cuando tu app está en producción, los errores son inevitables. Sentry te permite:
+
+- Capturar errores automáticamente — JavaScript y crashes nativos
+- Ver código fuente original — Gracias a los source maps
+- Saber en qué pantalla crasheó — Con integración de React Navigation
+- Analizar performance — Tiempo de carga de pantallas
+- Capturar screenshots — Del momento exacto del crash
+
+## Instalación
+
+```bash
+# Instalar Sentry
+yarn add @sentry/react-native
+
+# Ejecutar el wizard (configura automáticamente)
+npx @sentry/wizard@latest -i reactNative
+```
+
+El wizard configura automáticamente:
+
+- `App.jsx` con `Sentry.init()`
+- `android/app/build.gradle` con el plugin de Sentry
+- `ios/` con scripts de Xcode
+- Archivos `sentry.properties`
+
+## Configuración Básica
+
+### Inicialización en App.jsx
+
+```javascript
+import * as Sentry from "@sentry/react-native";
+
+Sentry.init({
+  dsn: "TU_DSN_DE_SENTRY",
+  environment: __DEV__ ? "development" : "production",
+  enableAutoSessionTracking: true,
+  enableNativeCrashHandling: true,
+  attachScreenshot: true,
+  tracesSampleRate: __DEV__ ? 1.0 : 0.2,
+  profilesSampleRate: __DEV__ ? 1.0 : 0.1,
+});
+
+export default __DEV__ ? App : Sentry.wrap(App);
+```
+
+En desarrollo usa `1.0` (100%) para ver todo. En producción reduce a `0.1-0.2` para ahorrar cuota del plan gratuito.
+
+## Source Maps: El Corazón de Sentry
+
+**Sin source maps:**
+
+```
+Error at index.android.bundle:1:8234
+(¿Qué archivo? ¿Qué línea? Imposible saber)
+```
+
+**Con source maps:**
+
+```
+Error at src/screens/HomeScreen.js:42
+(¡Archivo y línea exactos!)
+```
+
+### Configuración Automática de Source Maps
+
+En `metro.config.js`:
+
+```javascript
+const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
+const { withSentryConfig } = require("@sentry/react-native/metro");
+
+const config = {};
+
+module.exports = withSentryConfig(
+  mergeConfig(getDefaultConfig(__dirname), config)
+);
+```
+
+En `android/app/build.gradle`:
+
+```gradle
+apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
+
+sentry {
+    uploadNativeSymbols = true
+    includeNativeSources = true
+}
+```
+
+### Subida Manual de Source Maps
+
+Si la subida automática falla, usa `sentry-cli`:
+
+```bash
+# 1. Login
+sentry-cli login
+
+# 2. Crear release
+sentry-cli releases new 1.0.0-2 --org tu-org --project tu-proyecto
+
+# 3. Subir source maps
+sentry-cli sourcemaps upload \
+  --org tu-org \
+  --project tu-proyecto \
+  --release 1.0.0-2 \
+  --dist 2 \
+  android/app/build/generated/sourcemaps/react/release/
+
+# 4. Finalizar release
+sentry-cli releases finalize 1.0.0-2 --org tu-org --project tu-proyecto
+```
+
+El `--dist` debe coincidir con el `versionCode` en `build.gradle`.
+
+## Tracking de Navegación
+
+Para que Sentry te diga **en qué pantalla** ocurrió el error, integra React Navigation:
+
+### En App.jsx:
+
+```javascript
+import * as Sentry from "@sentry/react-native";
+
+export const navigationIntegration = Sentry.reactNavigationIntegration({
+  enableTimeToInitialDisplay: true,
+});
+
+Sentry.init({
+  dsn: "TU_DSN",
+  integrations: [navigationIntegration],
+});
+```
+
+### En tu NavigationContainer:
+
+```javascript
+import {
+  NavigationContainer,
+  createNavigationContainerRef,
+} from "@react-navigation/native";
+import { navigationIntegration } from "../App";
+
+export const navigationRef = createNavigationContainerRef();
+
+function AppNavigator() {
+  return (
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        navigationIntegration.registerNavigationContainer(navigationRef);
+      }}
+    >
+      {/* Tu navegación */}
+    </NavigationContainer>
+  );
+}
+```
+
+## Probar la Integración
+
+Agrega un botón temporal para forzar un crash:
+
+```javascript
+import { TouchableOpacity, Text } from "react-native";
+
+// TEMPORAL - Eliminar después
+<TouchableOpacity
+  onPress={() => {
+    throw new Error("🔥 Test crash - Sentry integration");
+  }}
+  style={{ padding: 15, backgroundColor: "#FF4444", borderRadius: 8 }}
+>
+  <Text style={{ color: "white" }}>Test Sentry Crash</Text>
+</TouchableOpacity>;
+```
+
+## Optimización del Plan Gratuito
+
+El plan gratuito incluye 5,000 eventos de error/mes. Estrategias de optimización:
+
+### Sample Rate Diferenciado
+
+```javascript
+Sentry.init({
+  tracesSampleRate: __DEV__ ? 1.0 : 0.2,
+  profilesSampleRate: __DEV__ ? 1.0 : 0.1,
+});
+```
+
+### Filtrar Errores No Críticos
+
+```javascript
+Sentry.init({
+  beforeSend(event, hint) {
+    if (
+      event.exception?.values?.[0]?.value?.includes("Network request failed")
+    ) {
+      return null;
+    }
+    return event;
+  },
+});
+```
+
+### Usar Environments
+
+```javascript
+Sentry.init({
+  environment: __DEV__ ? "development" : "production",
+  // En dashboard, filtra solo 'production' para ahorrar cuota
+});
+```
+
+## Errores Comunes y Soluciones
+
+### "Processing source maps" pero no se suben
+
+Verifica que exista `android/sentry.properties` con tu auth token:
+
+```properties
+auth.token=TU_TOKEN_DE_SENTRY
+defaults.org=tu-organizacion
+defaults.project=tu-proyecto
+defaults.url=https://sentry.io/
+```
+
+### Crash en TextInput (NullPointerException)
+
+Bug conocido de Android 14 con Samsung + `KeyboardAwareScrollView`. Solución:
+
+```javascript
+<KeyboardAwareScrollView
+  enableResetScrollToCoords={false}
+  keyboardShouldPersistTaps="handled"
+>
+```
+
+### No aparece el nombre de la pantalla
+
+Asegúrate de haber configurado `navigationIntegration` como se mostró arriba.
+
+## Mejores Prácticas
+
+### Contexto de Usuario
+
+```javascript
+Sentry.setUser({
+  id: user.id,
+  email: user.email,
+  username: user.username,
+});
+
+// Limpiar al hacer logout
+Sentry.setUser(null);
+```
+
+### Capturar Excepciones Manejadas
+
+```javascript
+try {
+  await processPayment();
+} catch (error) {
+  Sentry.captureException(error, {
+    tags: { payment_step: "processing" },
+    contexts: { payment: { amount: 100 } },
+  });
+}
+```
+
+## Conclusión
+
+Con esta configuración:
+
+- Capturas todos los errores (JS y nativos)
+- Ves código fuente original (gracias a source maps)
+- Sabes en qué pantalla crashea la app
+- Tienes screenshots del momento del error
+- Optimizas el plan gratuito para no pasarte de cuota
+
+## Recursos
+
+- [Documentación oficial de Sentry](https://docs.sentry.io/platforms/react-native/)
+- [React Navigation Integration](https://docs.sentry.io/platforms/react-native/tracing/instrumentation/react-navigation/)
+- [Sentry CLI Reference](https://docs.sentry.io/cli/)

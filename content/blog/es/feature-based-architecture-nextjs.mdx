@@ -1,0 +1,98 @@
+---
+title: Cómo organizo mis proyectos Next.js usando feature-based architecture
+description: >-
+  La estructura que uso en proyectos Next.js para mantener features más
+  aisladas, escalables y fáciles de mantener.
+date: '2026-05-27'
+category: Next.js
+tags:
+  - Next.js
+  - Architecture
+  - TypeScript
+  - Frontend
+---
+
+Cuando un proyecto Next.js empieza a crecer, la carpeta `components` se convierte en un cajón de sastre. Hooks mezclados, utilidades que nadie sabe dónde quedaron, schemas perdidos. Al principio todo funciona bien, pero después de varias features mantener el contexto se vuelve difícil.
+
+Yo pasé por eso varias veces hasta que empecé a organizar el código por feature.
+
+## El problema de las estructuras tradicionales
+
+La mayoría empezamos con algo así:
+
+```text
+src/
+  components/
+  hooks/
+  services/
+  utils/
+```
+
+Parece ordenado, pero una feature de autenticación termina repartida en cuatro carpetas distintas. El hook de login está en `hooks`, el formulario en `components`, los schemas de validación quién sabe dónde. Para entender una sola funcionalidad tienes que navegar por todo el proyecto.
+
+Mientras más crece:
+
+- más carpetas hay que abrir para entender una pantalla
+- más contexto mental necesitas
+- más miedo da refactorizar porque nunca sabes qué está tocando qué
+
+## La estructura que uso ahora
+
+En vez de separar por tipo técnico, separo por dominio. En un proyecto real se ve así:
+
+```text
+src/
+  features/
+    auth/
+      components/    → login-form, verify-code, passkeys-settings
+      hooks/         → queries, mutations
+      schemas/       → validación con zod
+      services/      → llamadas a la API
+      types/         → interfaces del dominio
+      utils/
+    cards/
+      components/    → create-card-dialog, card-links, stats, gallery
+      hooks/         → queries, mutations
+      services/      → cards.service.ts, card-stats.service.ts
+      schemas/       → validación de formularios
+      types/         → Card, CreateCardRequest, CardLink, etc.
+      templates/     → plantillas de diseño
+      utils/
+```
+
+Cada feature contiene todo lo que necesita para funcionar. Si quieres entender cómo funciona auth, entras a `features/auth/` y tienes todo ahí.
+
+Esto hace que:
+
+- escalar sea más fácil — agregas una carpeta, no diez archivos sueltos
+- mover o eliminar features sea trivial — borras la carpeta y listo
+- el ownership sea claro — sabes qué le pertenece a qué
+- los tipos compartidos viajen por la feature, no por todo el proyecto
+
+Trabajo actualmente en un dashboard administrativo con más de 15 features (auth, cards, companies, contacts, subscriptions, leads, etc.) y esta estructura es lo que permite que el proyecto siga siendo mantenible.
+
+## Qué evito hoy
+
+Con el tiempo también fui aprendiendo qué no hacer:
+
+- **Barrel files (`index.ts`)** — parecen ordenados pero crean dependencias circulares y hacen que tu editor tarde en importar. Hoy prefiero imports directos.
+- **Carpetas `utils` gigantes** — si no puedes ponerle un nombre específico, probablemente esa función no debería existir.
+- **Lógica compleja dentro de componentes** — si un componente tiene más de 100 líneas o maneja estado que no es de UI, lo muevo a un hook o a un servicio separado.
+- **Mezclar lógica de servidor y cliente** — en Next.js App Router esto es clave. Lo que puede correr en el servidor, que corra en el servidor.
+
+## Stack con el que mejor funciona
+
+Esta estructura la he usado tanto en proyectos con Next.js App Router como en proyectos con React + Vite + TanStack Router. Funciona especialmente bien con:
+
+- Next.js App Router o TanStack Router
+- TypeScript (los tipos por feature ayudan un montón)
+- TanStack Query (queries y mutations organizadas por feature)
+- Zustand (stores chicos por feature)
+- zod (schemas de validación cerca de los formularios)
+- shadcn/ui (componentes atómicos en `components/ui/`, componentes de feature en `features/`)
+
+## ¿Cuándo vale la pena?
+
+Para proyectos chicos, un par de páginas, un MVP rápido — probablemente no lo necesites. Pero cuando trabajas en SaaS con múltiples módulos, dashboards con varias secciones, o proyectos donde van a meter mano varias personas, la diferencia se nota bastante.
+
+No es magia, no resuelve todos los problemas de arquitectura. Pero ayuda a mantener el código ordenado sin tener que pensar tanto en ello.

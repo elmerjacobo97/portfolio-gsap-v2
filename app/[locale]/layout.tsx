@@ -124,6 +124,7 @@ export default async function RootLayout({
 		{ href: `/${locale}#projects`, label: dict.nav.projects },
 		{ href: `/${locale}#experience`, label: dict.nav.experience },
 		{ href: `/${locale}#about`, label: dict.nav.about },
+		{ href: `/${locale}/blog`, label: dict.nav.blog },
 		{ href: `/${locale}#contact`, label: dict.nav.collaborate },
 	];
 

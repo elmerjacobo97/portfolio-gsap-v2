@@ -1,0 +1,87 @@
+---
+title: Cómo automaticé mis deploys a Google Cloud con un agente de Claude Code
+description: >-
+  Tenía tres proyectos en una VPS y un proceso de deploy que dependía de que yo
+  no me saltara un paso. Lo resolví configurando un sub-agente de Claude Code
+  con acceso a gcloud SSH.
+date: '2026-06-07'
+category: DevOps
+tags:
+  - Claude Code
+  - Google Cloud
+  - Deploy
+  - gcloud
+  - Laravel
+  - React
+---
+
+El año pasado me cansé de hacer deploys a mano. Tres proyectos en una sola instancia de Google Cloud — un backend en Laravel y dos SPAs en React — y cada deploy era el mismo ritual: conectarme por SSH, acordarme qué proyectos habían cambiado, hacer pull, revisar si el lock file tocó algo, build, limpiar caché, reiniciar. Veinte minutos que ya me sabía de memoria y que igual podía arruinar si me saltaba un paso.
+
+No armé un pipeline de CI/CD. Configuré un agente de Claude Code.
+
+## Sub-agentes en Claude Code
+
+Claude Code permite definir [agentes en archivos `.md`](https://github.com/anthropics/claude-code) dentro de `.claude/agents/`. Cada uno tiene nombre, modelo, herramientas disponibles y un prompt de sistema. Cuando lo invocas, Claude Code opera bajo ese contexto — como un modo especializado que solo sabe hacer una cosa.
+
+El mío se llama `deploy`. Tiene acceso solo a Bash y sabe todo lo que necesita sobre mi servidor: la zona de GCP, los paths de cada proyecto, el orden de deploy, qué comandos requieren confirmación y cuáles puede ejecutar solo.
+
+## El costo de cada conexión SSH
+
+[`gcloud compute ssh`](https://cloud.google.com/sdk/gcloud/reference/compute/ssh) no es instantáneo. Cada vez que abres una conexión nueva, el cliente negocia credenciales, verifica la instancia, y levanta la sesión — entre 1 y 3 segundos por llamada. Si abres una conexión por comando, un deploy de 8 pasos son 8 esperas innecesarias. El agente se vuelve lento.
+
+La solución fue forzar que todo corra en una sola llamada, encadenando con `&&` y `;`:
+
+```bash
+gcloud compute ssh my-server --zone=us-central1-a --ssh-flag="-q" \
+  --command "df -h / && echo '---' && free -h && echo '---' && systemctl is-active apache2"
+```
+
+Un pre-deploy que revisa git, disk, memoria y logs de Apache — una sola conexión. Sin esa regla, el agente era impredecible.
+
+## 1.9 GB de RAM y Vite
+
+El servidor tiene 1.9 GB de RAM. Vite quiere más. Sin configuración, el [build muere con un OOM](https://vitejs.dev/guide/build) silencioso — sin mensaje de error claro, solo falla.
+
+Dos cosas que tuve que aprender por las malas:
+
+Primero, `NODE_OPTIONS="--max-old-space-size=1536"`. Usa swap pero termina el build. Valores más altos (4096, lo que sugieren muchos tutoriales) crashean el servidor.
+
+Segundo, [NVM](https://github.com/nvm-sh/nvm) hay que sourcearla explícitamente. El PATH de una sesión SSH no-interactiva no tiene las mismas variables que tu shell normal — `pnpm` simplemente no existe para esa sesión si no haces el source:
+
+```bash
+export NVM_DIR='/home/your-user/.nvm' && source /home/your-user/.nvm/nvm.sh && \
+cd /var/www/html/my-app && \
+NODE_OPTIONS="--max-old-space-size=1536" pnpm exec vite build && \
+echo 'BUILD_OK' && ls dist/index.html
+```
+
+Si el output no contiene `BUILD_OK`, el agente para. No continúa asumiendo que el build funcionó porque no explotó.
+
+## Confirmaciones
+
+No quería un agente que ejecutara `php artisan migrate --force` sin preguntarme. El archivo define dos categorías: comandos de lectura (status, logs, git log) que corren solos, y comandos que modifican estado que siempre piden confirmación.
+
+Para operaciones destructivas hay una capa más — el usuario tiene que escribir una frase exacta. No "sí" ni "dale". Si quieres `migrate:fresh`, escribes `"confirm full fresh"`. El agente rechaza cualquier otra respuesta y explica lo que iba a pasar.
+
+Es incómodo a propósito.
+
+## El flujo completo
+
+Antes de conectarse al servidor, el agente revisa localmente que no haya commits sin pushear. Es el paso que más me habría salvado si lo hubiera tenido antes — hacer deploy de lo que ya está en producción porque olvidaste hacer push.
+
+Después, despliega en orden fijo: backend → frontend-admin → frontend-app. Al terminar cada uno, pregunta si continuar. Si un proyecto no tiene commits nuevos en `origin/development`, lo salta y lo dice.
+
+## Lo que aprendí
+
+El agente es bueno para lo predecible. Cuando algo falla de manera inesperada — un error de PHP que requiere leer contexto, un conflicto de dependencias — reporta el error exacto y para. Yo intervengo.
+
+Lo más difícil de configurar no fue el workflow. Fue decidir qué debe confirmar el agente y qué puede ejecutar solo. Esa línea es diferente para cada equipo y cada servidor.
+
+El archivo vive en `.claude/agents/deploy.md` dentro del proyecto. Sin infraestructura adicional — si ya usas Claude Code y tienes `gcloud` configurado con SSH a tu instancia, funciona desde el primer día.
+
+## Referencias
+
+- [Claude Code — documentación oficial](https://github.com/anthropics/claude-code)
+- [gcloud compute ssh — referencia de comandos](https://cloud.google.com/sdk/gcloud/reference/compute/ssh)
+- [Vite — opciones de build](https://vitejs.dev/guide/build)
+- [NVM — Node Version Manager](https://github.com/nvm-sh/nvm)

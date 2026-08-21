@@ -66,11 +66,11 @@ export function ArrowLink({
   )
 
   if (external) {
+    const isMail = href.startsWith('mailto:')
     return (
       <a
         href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+        {...(isMail ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
         data-analytics-event={analyticsEvent}
         data-analytics-source={analyticsSource}
         className={classes}

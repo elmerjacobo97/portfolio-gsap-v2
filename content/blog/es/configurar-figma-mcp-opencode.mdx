@@ -1,0 +1,275 @@
+---
+title: Cómo conectar Figma con OpenCode usando MCP
+description: >-
+  Configura el MCP de Figma en OpenCode para que tu agente pueda leer contexto
+  de diseño y ayudarte a implementar interfaces con más precisión.
+date: '2026-05-07'
+category: AI Engineering
+tags:
+  - OpenCode
+  - MCP
+  - Figma
+  - AI
+---
+
+Si trabajas con diseño y código, seguro te ha pasado: tienes el diseño en Figma, el proyecto abierto en tu editor y terminas copiando colores, medidas, textos y referencias a mano.
+
+No es que sea imposible. Es que es fricción innecesaria.
+
+Con [MCP](https://modelcontextprotocol.io/) puedes conectar herramientas externas a tu agente de código. En este caso, vamos a conectar [Figma](https://www.figma.com/) con [OpenCode](https://opencode.ai/) para que el agente pueda consultar contexto del diseño sin que tengas que copiar todo manualmente.
+
+## Qué vamos a configurar
+
+Vamos a configurar [`figma-developer-mcp`](https://www.npmjs.com/package/figma-developer-mcp), una integración MCP que permite que OpenCode consulte información de tus archivos de Figma usando un token personal.
+
+No necesitas instalar `figma-developer-mcp` como dependencia de tu proyecto ni instalarlo globalmente. En la configuración usaremos `npx`, así que OpenCode lo ejecutará cuando necesite levantar el MCP.
+
+La idea es esta:
+
+```text
+OpenCode
+  |
+  | usa MCP
+  v
+figma-developer-mcp
+  |
+  | usa tu token de Figma
+  v
+Figma API
+```
+
+OpenCode no se conecta mágicamente a Figma. Lee tu configuración, levanta esta integración MCP en tu máquina y usa tu token para consultar la [API de Figma](https://www.figma.com/developers/api) cuando el agente necesita información del diseño.
+
+## Requisitos
+
+Antes de empezar necesitas:
+
+- Tener [OpenCode](https://opencode.ai/) instalado.
+- Tener [Node.js](https://nodejs.org/) disponible, porque `npx` viene con npm.
+- Tener una cuenta de [Figma](https://www.figma.com/).
+- Crear un token personal de Figma desde la configuración de tu cuenta.
+- Tener acceso al archivo de Figma que quieres consultar.
+
+## Paso 1: crear un token de Figma
+
+Para esta configuración no necesitas crear una app OAuth en Figma. Solo necesitas un **Personal access token** para que OpenCode pueda consultar Figma a través del MCP.
+
+La guía oficial de Figma sobre tokens está aquí: [Manage personal access tokens](https://help.figma.com/hc/en-us/articles/8085703771159-Manage-personal-access-tokens)
+
+Luego:
+
+1. Entra a Figma con tu cuenta.
+2. Abre el menú de tu cuenta.
+3. Ve a **Settings**.
+4. Entra a la pestaña **Security**.
+5. Busca **Personal access tokens**.
+6. Crea un token nuevo.
+7. Copia el token.
+8. Guárdalo en un lugar seguro.
+
+No publiques ese token. No lo subas a GitHub. No lo pongas en screenshots.
+
+## Paso 2: guardar el token como variable de entorno
+
+La forma rápida para probarlo en tu terminal es exportarlo como variable de entorno:
+
+```bash
+export FIGMA_API_KEY="tu_token_de_figma"
+```
+
+Si usas `zsh`, puedes guardarlo en tu configuración de shell para no exportarlo manualmente cada vez.
+
+La idea importante es esta: el token vive fuera del archivo de configuración de OpenCode.
+
+OpenCode soporta esta sintaxis oficialmente:
+
+```json
+"FIGMA_API_KEY": "{env:FIGMA_API_KEY}"
+```
+
+Eso significa: "lee el valor desde una variable de entorno llamada `FIGMA_API_KEY`". Si esa variable no existe cuando OpenCode arranca, la reemplaza por un string vacío y el MCP no podrá autenticarse.
+
+Si las variables de entorno te dan problemas, una alternativa más estable es guardar el token en un archivo local privado y leerlo con `{file:...}`:
+
+```json
+"FIGMA_API_KEY": "{file:~/.secrets/figma-api-key}"
+```
+
+Ese archivo no debe subirse a Git.
+
+## Paso 3: configurar OpenCode
+
+El archivo global de configuración suele estar en:
+
+```text
+~/.config/opencode/opencode.json
+```
+
+Dentro de ese archivo agrega `figma` bajo la propiedad `mcp`:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "figma": {
+      "type": "local",
+      "command": ["npx", "-y", "figma-developer-mcp", "--stdio"],
+      "environment": {
+        "FIGMA_API_KEY": "{env:FIGMA_API_KEY}"
+      },
+      "enabled": true
+    }
+  }
+}
+```
+
+Si ya tienes otros MCP configurados, solo agrega la entrada `figma` dentro de `mcp`.
+
+## Qué significa cada parte
+
+```json
+"type": "local"
+```
+
+Le dice a OpenCode que este MCP se ejecuta en tu máquina.
+
+```json
+"command": ["npx", "-y", "figma-developer-mcp", "--stdio"]
+```
+
+Es el comando que OpenCode usará para levantar el servidor MCP.
+
+```json
+"environment": {
+  "FIGMA_API_KEY": "{env:FIGMA_API_KEY}"
+}
+```
+
+Le pasa tu token de Figma al proceso, leyéndolo desde una variable de entorno.
+
+## Paso 4: verificar que está conectado
+
+Después de guardar la configuración, ejecuta:
+
+```bash
+opencode mcp list
+```
+
+Si todo está bien, deberías ver algo parecido a esto:
+
+```text
+figma connected
+```
+
+Si aparece como desconectado, revisa tres cosas:
+
+- Que `npx` funcione en tu terminal.
+- Que `FIGMA_API_KEY` exista en tu entorno.
+- Que el token tenga permisos para leer el archivo de Figma.
+
+Puedes comprobar la variable con:
+
+```bash
+printenv FIGMA_API_KEY
+```
+
+## Paso 5: usar Figma desde OpenCode
+
+Una vez conectado, puedes pedirle a OpenCode que use el MCP de Figma.
+
+Por ejemplo:
+
+```text
+Usa figma para revisar este archivo y dime la jerarquía visual del frame principal:
+https://www.figma.com/design/FILE_KEY/Proyecto?node-id=123-456
+```
+
+O algo más orientado a implementación:
+
+```text
+Usa figma para leer este frame y luego implementa el componente respetando spacing,
+tipografía, colores y jerarquía visual del diseño.
+```
+
+También puedes pedir primero análisis y después implementación:
+
+```text
+Usa figma para analizar este diseño. No escribas código todavía.
+Primero dime estructura, componentes, colores y posibles estados interactivos.
+```
+
+Ese flujo es mejor que pedir código de una vez, porque primero validas que el agente entendió el diseño.
+
+## Cómo sacar el file key y el node id
+
+En una URL de Figma normalmente verás algo así:
+
+```text
+https://www.figma.com/design/ABC123MiFileKey/Mi-Proyecto?node-id=123-456
+```
+
+El `file key` es la parte después de `/design/`.
+
+El `node-id` viene en el query param `node-id`.
+
+## Buen flujo de trabajo
+
+No le digas simplemente "Haz esto igual a Figma." Eso suele producir resultados flojos.
+
+Mejor usa un flujo por pasos:
+
+1. Pídele que analice el frame.
+2. Pídele que identifique componentes reutilizables.
+3. Pídele que compare el diseño con el design system existente.
+4. Pídele que implemente el componente.
+5. Pídele que revise responsive, accesibilidad y estados.
+
+Ahí es donde MCP empieza a valer la pena: no solo le das una imagen al agente, le das contexto estructurado.
+
+## Seguridad: no pegues tokens en tu config
+
+Esto funciona pero no es recomendable para compartir o versionar:
+
+```json
+"environment": {
+  "FIGMA_API_KEY": "NO_PEGUES_TU_TOKEN_AQUI"
+}
+```
+
+Mejor usa:
+
+```json
+"environment": {
+  "FIGMA_API_KEY": "{env:FIGMA_API_KEY}"
+}
+```
+
+La diferencia parece pequeña, pero es enorme: en el primer caso tu secreto queda escrito en texto plano.
+
+## Troubleshooting rápido
+
+**El token no existe en tu entorno:**
+
+```bash
+printenv FIGMA_API_KEY
+```
+
+Si no imprime nada, exporta la variable otra vez.
+
+**`npx` no puede ejecutar el paquete:**
+
+```bash
+npx -y figma-developer-mcp --help
+```
+
+Si falla, revisa tu instalación de Node.js.
+
+**El archivo de Figma no es accesible:** El token solo puede leer lo que tu cuenta puede leer. Si el archivo es privado y tu usuario no tiene acceso, el MCP tampoco lo tendrá.
+
+**OpenCode estaba abierto antes del cambio:** Cierra y vuelve a abrir OpenCode para que cargue la nueva configuración.
+
+## Conclusión
+
+Configurar Figma con OpenCode usando MCP no es complicado. Lo importante es entender qué está pasando: OpenCode levanta un servidor MCP local, ese servidor habla con Figma usando tu token, y el agente obtiene herramientas para consultar contexto de diseño.
+
+La ganancia real no es "la IA hace todo". La ganancia real es que reduces fricción entre diseño y código.

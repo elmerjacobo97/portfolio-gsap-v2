@@ -1,0 +1,132 @@
+---
+title: Cómo desplegar Laravel en Render con Docker (lo que los tutoriales no dicen)
+description: >-
+  Render no soporta PHP nativo — necesitas Docker. Lo difícil no es el
+  Dockerfile: es el puerto dinámico que Render asigna, el pooler de Neon que
+  rompe migraciones, y el HOME que hereda PHP-FPM de root.
+date: '2026-06-12'
+category: DevOps
+tags:
+  - Laravel
+  - Docker
+  - Render
+  - PostgreSQL
+  - Neon
+  - Supervisord
+  - PHP
+---
+
+Render tiene un web service gratuito que acepta Docker y no pide tarjeta de crédito. Para proyectos personales o prototipos, funciona. El plan gratuito duerme después de 15 minutos sin tráfico, pero para probar algo real es suficiente.
+
+El problema: Render no soporta PHP de forma nativa. Si despliegas Laravel sin pasar por Docker, Render va a detectar el `package.json` de Vite y asumir que es un proyecto Node. El deploy falla. Hay que cambiar el runtime a Docker manualmente en la configuración del servicio — Render no avisa.
+
+## El contenedor
+
+Laravel en producción necesita varios procesos corriendo al mismo tiempo: Nginx para recibir peticiones, PHP-FPM para ejecutar el código de Laravel, y dependiendo del proyecto, un servidor de WebSockets y un queue worker. En Docker lo habitual es usar Supervisord para manejar todo eso desde un solo punto de entrada:
+
+```
+supervisord
+  ├── nginx
+  ├── php-fpm
+  ├── reverb:start   # si usas WebSockets
+  └── queue:work     # si tienes jobs
+```
+
+Nginx escucha en el puerto externo, hace fastcgi proxy a PHP-FPM en `:9000`, y si necesitas WebSockets, proxy a Reverb en `/app/` hacia `:6001`.
+
+Hasta ahí todo razonable. Los problemas vienen después.
+
+## El puerto dinámico de Render
+
+Este fue el error que más tiempo me costó. El síntoma es confuso porque parece inconsistente.
+
+Render asigna el puerto mediante la variable de entorno `$PORT`. El default es 10000. Si Nginx tiene hardcodeado el puerto 8080, Render intenta conectarse al contenedor en el puerto que asignó y no encuentra nada. El resultado: Cloudflare devuelve 404 en todas las rutas, pero el health check puede funcionar — porque Render lo ejecuta de forma diferente durante el startup.
+
+Eso hace que parezca que el contenedor levantó bien, cuando en realidad ningún request externo llega a Nginx.
+
+La solución es inyectar `$PORT` en la configuración de Nginx al arrancar el contenedor. `envsubst` lo hace en una línea:
+
+```bash
+export PORT="${PORT:-8080}"
+envsubst '${PORT}' < /etc/nginx/nginx.conf > /tmp/nginx.conf
+cp /tmp/nginx.conf /etc/nginx/nginx.conf
+```
+
+En `nginx.conf`, la línea del puerto queda así:
+
+```nginx
+listen ${PORT};
+```
+
+El argumento `'${PORT}'` entre comillas simples es importante. Sin él, `envsubst` sustituye todas las variables del archivo, incluidas las de Nginx como `$host` y `$http_upgrade`. Con las comillas simples, solo toca `$PORT`.
+
+`envsubst` viene del paquete `gettext`. En Alpine hay que instalarlo explícitamente:
+
+```dockerfile
+RUN apk add --no-cache nginx supervisor postgresql-dev gettext
+```
+
+## PostgreSQL con Neon y el problema del pooler
+
+Neon es PostgreSQL serverless gratuito. Funciona bien con Laravel, con una excepción que no está documentada de forma obvia: el pooler.
+
+Neon ofrece dos URLs de conexión. La directa y la pooler, que usa PgBouncer en modo `transaction`. PgBouncer en ese modo no mantiene el estado de transacciones abiertas entre llamadas del cliente — y las migraciones de Laravel envuelven operaciones DDL en transacciones. PgBouncer las corta a la mitad.
+
+El error:
+
+```
+SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:
+current transaction is aborted, commands ignored until
+end of transaction block
+```
+
+La solución es usar la URL de conexión directa. En Neon es la que no tiene `-pooler` en el hostname. Para migraciones y cualquier operación DDL, siempre conexión directa.
+
+## Supervisord hereda `HOME=/root` a PHP-FPM
+
+Supervisord corre como root. Los procesos hijos heredan el entorno del proceso padre, incluida `HOME=/root`.
+
+Cuando PHP-FPM se conecta a PostgreSQL con SSL, el cliente busca certificados en `~/.postgresql/`. Con `HOME=/root`, eso es `/root/.postgresql/`. El usuario `www-data` que corre PHP-FPM no puede leer ahí. El error que aparece es `Permission denied`, sin ninguna referencia a SSL ni a certificados, lo que lo hace difícil de diagnosticar.
+
+Hay que sobreescribir `HOME` en dos lugares. Primero en cada programa de supervisord que corra como `www-data`:
+
+```ini
+[program:php-fpm]
+user=www-data
+environment=HOME="/var/www/html"
+
+[program:queue]
+user=www-data
+environment=HOME="/var/www/html"
+```
+
+Y también en el pool de PHP-FPM:
+
+```ini
+[www]
+user = www-data
+env[HOME] = /var/www/html
+```
+
+Solo con uno de los dos no alcanza. PHP-FPM puede heredar `/root` en algunos contextos de ejecución aunque supervisord ya tenga el `environment` configurado.
+
+## Un error de CORS que no es CORS
+
+Si ves un error de CORS desde el browser, antes de tocar `config/cors.php` verifica que el request esté llegando al backend.
+
+Cuando Render no puede enrutar al contenedor, Cloudflare devuelve 404 con `content-type: text/plain`. El browser no recibe los headers CORS que esperaba y lo reporta como un error de CORS. La causa no tiene nada que ver con CORS.
+
+La forma rápida de verificar es con `curl`:
+
+```bash
+curl -I https://tu-api.onrender.com/api/cualquier-ruta
+```
+
+Si la respuesta tiene `server: cloudflare` y `x-render-origin-server: Render`, el request no está llegando a Nginx. El problema es el puerto, no CORS.
+
+## Referencias
+
+- [Render — Deploy a Docker image](https://render.com/docs/docker)
+- [Neon — Connection pooling](https://neon.tech/docs/connect/connection-pooling)
+- [Supervisord — Configuration file](http://supervisord.org/configuration.html)
+- [envsubst — linux.die.net](https://linux.die.net/man/1/envsubst)

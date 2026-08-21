@@ -1,0 +1,169 @@
+---
+title: 'TanStack Query: Guía práctica para empezar'
+description: >-
+  Aprende a usar TanStack Query (antes React Query) para manejar datos del
+  servidor en React. Fetching, caching y mutations en minutos.
+date: '2025-12-23'
+category: TypeScript
+tags:
+  - React
+  - TanStack Query
+  - TypeScript
+  - Data Fetching
+---
+
+Si todavía estás usando `useEffect` + `useState` para hacer fetch de datos, este post es para ti. TanStack Query simplifica todo el manejo de datos del servidor: caching, refetching, loading states, errores... todo automático.
+
+## Instalación
+
+```bash
+pnpm add @tanstack/react-query
+```
+
+Para las devtools (opcional pero recomendado):
+
+```bash
+pnpm add @tanstack/react-query-devtools
+```
+
+## Configuración inicial
+
+Crea el cliente y envuelve tu app con el provider:
+
+```tsx
+// main.tsx
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutos
+      retry: 1,
+    },
+  },
+});
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Router />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
+}
+```
+
+## Tu primera query
+
+El hook `useQuery` necesita dos cosas: una `queryKey` (identificador único) y una `queryFn` (función que obtiene los datos):
+
+```tsx
+import { useQuery } from "@tanstack/react-query";
+
+function UserProfile({ userId }: { userId: string }) {
+  const { data, isPending, error } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: () => fetch(`/api/users/${userId}`).then((res) => res.json()),
+  });
+
+  if (isPending) return <p>Cargando...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  return <h1>{data.name}</h1>;
+}
+```
+
+La `queryKey` es importante: TanStack Query la usa para cachear y refrescar datos. Si `userId` cambia, automáticamente hace un nuevo fetch.
+
+## Mutations (crear, actualizar, eliminar)
+
+Para modificar datos usa `useMutation`:
+
+```tsx
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+function CreatePost() {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (newPost: { title: string }) =>
+      fetch("/api/posts", {
+        method: "POST",
+        body: JSON.stringify(newPost),
+      }).then((res) => res.json()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+
+  return (
+    <button
+      onClick={() => mutation.mutate({ title: "Nuevo post" })}
+      disabled={mutation.isPending}
+    >
+      {mutation.isPending ? "Creando..." : "Crear post"}
+    </button>
+  );
+}
+```
+
+## Estados útiles
+
+```tsx
+const {
+  data,           // Los datos
+  isPending,      // Primera carga (sin datos en cache)
+  isFetching,     // Cualquier fetch (incluye refetch en background)
+  isError,        // Hubo error
+  error,          // El error
+  isSuccess,      // Fetch exitoso
+  refetch,        // Función para refetch manual
+} = useQuery({ ... });
+```
+
+<Callout type="info">
+  `isPending` es true solo cuando no hay datos en cache. `isFetching` es true
+  durante cualquier fetch, incluso refetches en background.
+</Callout>
+
+## Ejemplo con Axios y TypeScript
+
+Un patrón común es crear hooks personalizados:
+
+```tsx
+// hooks/use-posts.ts
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+
+interface Post {
+  id: number;
+  title: string;
+  body: string;
+}
+
+export function usePosts() {
+  return useQuery({
+    queryKey: ["posts"],
+    queryFn: () => axios.get<Post[]>("/api/posts").then((res) => res.data),
+  });
+}
+
+export function useCreatePost() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: Omit<Post, "id">) =>
+      axios.post<Post>("/api/posts", data).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+}
+```
+
+## Conclusión
+
+TanStack Query elimina mucho boilerplate del manejo de datos. Lo que antes requería múltiples `useState`, `useEffect` y lógica de caching manual, ahora son unas pocas líneas.
+
+Para profundizar más, revisa la [documentación oficial](https://tanstack.com/query/latest) que está muy completa.

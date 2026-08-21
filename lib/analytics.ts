@@ -3,6 +3,7 @@ import { track } from '@vercel/analytics'
 export const ANALYTICS_EVENTS = [
   'linkedin_click',
   'project_view',
+  'post_view',
   'contact_submit',
   'contact_cta_click',
 ] as const
