@@ -8,4 +8,5 @@
 - Su audiencia objetivo son pequeñas y medianas empresas (pymes) como clientes; el sitio evita deliberadamente elementos de búsqueda de empleo como la descarga de CV. Confidence: 0.85
 - Prefiere que el sitio orientado a clientes tenga un tono poco técnico y centrado en el negocio, no en reclutadores técnicos. Confidence: 0.8
 - Mantiene un blog (antes sobre temas técnicos de desarrollo) y quiere integrarlo como parte de su sitio personal orientado a conseguir clientes. Confidence: 0.75
+- Cuando solicita versiones en inglés del blog, prefiere traducir todos los posts faltantes con cuidado y preservar intactos los slugs, la estructura MDX, el frontmatter y los elementos técnicos como código, enlaces, tablas y componentes. Confidence: 0.97
 - Prefiere que los CTA de contacto para potenciales clientes abran directamente el cliente de correo mediante `mailto:`, con asunto y mensaje prellenados, en lugar de navegar a otra página. Confidence: 0.98
