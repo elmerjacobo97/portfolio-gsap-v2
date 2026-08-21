@@ -5,6 +5,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { hasLocale, localeTag } from "@/i18n/config";
 import { getPosts } from "@/lib/blog";
 import { buildAlternates } from "@/lib/seo";
+import { BlogSearch } from "@/components/blog/BlogSearch";
 import { PostCard } from "@/components/blog/PostCard";
 import { PostList } from "@/components/blog/PostList";
 import { SectionHeader } from "@/components/sections/SectionHeader";
@@ -77,18 +78,25 @@ export default async function BlogIndex({
 					</p>
 				</div>
 			) : (
-				<PostList>
-					{posts.map((post, i) => (
-						<PostCard
-							key={post.slug}
-							post={post}
-							locale={locale}
-							index={i}
-							readLabel={dict.blog.readPost}
-							readingUnit={dict.blog.readingUnit}
-						/>
-					))}
-				</PostList>
+				<BlogSearch
+					label={dict.blog.searchLabel}
+					placeholder={dict.blog.searchPlaceholder}
+					clearLabel={dict.blog.clearSearch}
+					noResults={dict.blog.noResults}
+				>
+					<PostList>
+						{posts.map((post, i) => (
+							<PostCard
+								key={post.slug}
+								post={post}
+								locale={locale}
+								index={i}
+								readLabel={dict.blog.readPost}
+								readingUnit={dict.blog.readingUnit}
+							/>
+						))}
+					</PostList>
+				</BlogSearch>
 			)}
 		</main>
 	);

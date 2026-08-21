@@ -36,6 +36,9 @@ export function PostCard({
 	return (
 		<article
 			className={cn("post-card group col-span-12", placement(index))}
+			data-post-search={[post.title, post.description, post.category, post.slug, ...post.tags]
+				.filter(Boolean)
+				.join(" ")}
 		>
 			<div className="flex items-baseline justify-between gap-6 border-rule border-y py-3">
 				<div className="u-meta text-text-dim flex min-w-0 flex-wrap gap-x-3 gap-y-1">
