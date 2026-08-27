@@ -9,3 +9,7 @@
 - Mantiene un blog (antes sobre temas técnicos de desarrollo) y quiere integrarlo como parte de su sitio personal orientado a conseguir clientes. Confidence: 0.75
 - Cuando solicita versiones en inglés del blog, prefiere traducir todos los posts faltantes con cuidado y preservar intactos los slugs, la estructura MDX, el frontmatter y los elementos técnicos como código, enlaces, tablas y componentes. Confidence: 0.97
 - Prefiere que los CTA de contacto para potenciales clientes abran directamente el cliente de correo mediante `mailto:`, con asunto y mensaje prellenados, en lugar de navegar a otra página. Confidence: 0.98
+- Prefiere instalar las skills de Command Code globalmente para que estén disponibles en todos sus proyectos. Confidence: 0.95
+- Prefiere centralizar las skills personalizadas en una fuente global y portable, disponible para todos sus agentes de IA (Claude Code, Pi Agent, OpenCode y Command Code), evitando mantener versiones separadas. Confidence: 0.97
+- Prefiere recibir primero una explicación clara y en palabras sencillas del propósito y la utilidad de una skill o cambio antes de que se realice la instalación o modificación. Confidence: 0.97
+- Considera útil aplicar un premortem al tener una idea de proyecto, antes de empezar a programarla, para detectar riesgos de alcance, confiabilidad, seguridad y rendimiento. Confidence: 0.88

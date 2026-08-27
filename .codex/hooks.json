@@ -1,12 +1,28 @@
 {
   "hooks": {
-    "PreToolUse": [
+    "PostToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Edit|Write|apply_patch",
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/elmerjacobo/.local/bin/graphify hook-check"
+            "command": "[ ! -f '/Users/elmerjacobo/.agents/skills/impeccable/scripts/hook.mjs' ] || node '/Users/elmerjacobo/.agents/skills/impeccable/scripts/hook.mjs'",
+            "timeout": 5,
+            "statusMessage": "Checking UI changes",
+            "commandWindows": "if exist \"/Users/elmerjacobo/.agents/skills/impeccable/scripts/hook.mjs\" (node \"/Users/elmerjacobo/.agents/skills/impeccable/scripts/hook.mjs\" & exit /b)"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f '/Users/elmerjacobo/.agents/skills/impeccable/scripts/hook.mjs' ] || node '/Users/elmerjacobo/.agents/skills/impeccable/scripts/hook.mjs'",
+            "timeout": 30,
+            "statusMessage": "Design deep pass",
+            "commandWindows": "if exist \"/Users/elmerjacobo/.agents/skills/impeccable/scripts/hook.mjs\" (node \"/Users/elmerjacobo/.agents/skills/impeccable/scripts/hook.mjs\" & exit /b)"
           }
         ]
       }
