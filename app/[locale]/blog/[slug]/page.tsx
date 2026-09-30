@@ -159,7 +159,7 @@ export default async function BlogArticle({ params }: { params: Params }) {
 							</span>
 						</div>
 
-						<h1 className="text-h1 u-wide mt-6">{post.title}</h1>
+						<h1 className="text-h2 u-wide mt-6">{post.title}</h1>
 						<p className="text-lead text-text-secondary mt-6 max-w-[58ch]">
 							{post.description}
 						</p>

@@ -29,9 +29,9 @@ export function PostCard({
 	readingUnit: string;
 }) {
 	const href = `/${locale}/blog/${post.slug}`;
-	const tags = post.tags.filter(
-		(tag) => tag.toLowerCase() !== post.category?.toLowerCase(),
-	);
+	const tags = post.tags
+		.filter((tag) => tag.toLowerCase() !== post.category?.toLowerCase())
+		.slice(0, 3);
 
 	return (
 		<article
@@ -46,14 +46,6 @@ export function PostCard({
 						{String(index + 1).padStart(2, "0")}
 					</span>
 					<span>{formatPostDate(post.date, locale)}</span>
-					{tags.map((tag) => (
-						<span key={tag} className="inline-flex gap-x-3">
-							<span aria-hidden className="text-outline">
-								/
-							</span>
-							<span>{tag}</span>
-						</span>
-					))}
 				</div>
 				<span className="u-label text-text-dim hidden shrink-0 sm:block">
 					{post.category ? `${post.category} · ` : ""}
@@ -62,7 +54,7 @@ export function PostCard({
 			</div>
 
 			<div className="mt-5">
-				<h3 className="text-h2 u-wide">
+				<h3 className="text-h2 u-wide line-clamp-3">
 					<TransitionLink
 						href={href}
 						className="transition-colors duration-300 group-hover:text-accent"
@@ -70,12 +62,12 @@ export function PostCard({
 						{post.title}
 					</TransitionLink>
 				</h3>
-				<p className="text-body text-text-secondary mt-3 max-w-[58ch]">
+				<p className="text-body text-text-secondary mt-3 line-clamp-3 max-w-[58ch]">
 					{post.description}
 				</p>
 			</div>
 
-			<div className="mt-5 border-rule border-t pt-3">
+			<div className="mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-rule border-t pt-3">
 				<ArrowLink
 					href={href}
 					analyticsEvent="post_view"
@@ -84,6 +76,13 @@ export function PostCard({
 				>
 					{readLabel}
 				</ArrowLink>
+				{tags.length > 0 && (
+					<ul className="u-label text-text-dim flex flex-wrap gap-x-3 gap-y-1">
+						{tags.map((tag) => (
+							<li key={tag}>{tag}</li>
+						))}
+					</ul>
+				)}
 			</div>
 		</article>
 	);
