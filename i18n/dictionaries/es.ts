@@ -50,6 +50,9 @@ const es = {
     title: "Proyectos",
     lead: "Estos son productos que he construido por iniciativa propia o publicado como open source. Aquí puedes revisar cómo pienso y cómo trabajo.",
     openProject: "Abrir proyecto",
+    activityLabel: "Actividad en GitHub",
+    activitySummary: "contribuciones en el último año",
+    activityCta: "Ver perfil en GitHub",
   },
 
   experience: {
@@ -71,7 +74,7 @@ const es = {
     ],
     stats: [
       { value: "4+", label: "años construyendo" },
-      { value: "380+", label: "usuarios activos" },
+      { value: "380+", label: "usuarios activos entre productos" },
       { value: "2+", label: "productos en producción" },
     ],
     portraitAlt: "Retrato de Elmer Jacobo Otiniano",
@@ -91,109 +94,27 @@ const es = {
     ],
   },
 
-  ai: {
-    index: "05",
-    title: "IA",
-    lead: "La IA tiene sentido cuando mejora una parte concreta del producto o del trabajo del equipo. Primero definimos la tarea; después elegimos entre integración, agente o skill.",
-    positionLabel: "Cómo trabajo",
-    positionTitle: "Empiezo por la tarea",
-    positionBody:
-      "Si ya tienes un producto, busco dónde puede ahorrar pasos o mejorar una respuesta. Si el trabajo es interno, diseño el agente o la skill con contexto, límites y revisión.",
-    cta: "Cuéntame qué quieres mejorar",
-    items: [
-      {
-        title: "IA dentro del producto",
-        body: "Integro asistentes, generación de contenido o extracción de datos en los pasos que ya usa tu cliente. El resultado queda dentro del producto, no en una demo aparte.",
-      },
-      {
-        title: "Agentes para operaciones",
-        body: "Construyo agentes que buscan información, consultan herramientas o preparan una primera respuesta. Cada acción tiene límites claros y una revisión antes de afectar el sistema.",
-      },
-      {
-        title: "Skills para tu equipo",
-        body: "Convierto tareas repetidas en skills versionadas, con contexto y pasos de revisión. Así el equipo puede trabajar con agentes sin depender de un prompt perdido en el chat.",
-      },
-    ],
-  },
-
   process: {
-    index: "06",
+    index: "05",
     title: "Proceso",
     lead: "Te enseño el trabajo mientras ocurre. Hablamos de los cambios antes de convertirlos en código y cada semana tienes algo que puedes abrir.",
   },
 
-  principles: {
-    index: "07",
-    title: "Principios",
-    lead: "Son las reglas que uso para trabajar con producto y código.",
-    items: [
-      {
-        title: "Pongo las decisiones sobre la mesa",
-        body: "Explico qué cambia, qué riesgo veo y qué alternativa descarto antes de convertirlo en código.",
-      },
-      {
-        title: "Entrego algo que puedas abrir",
-        body: "Trabajo en entregas visibles para que puedas revisar el producto, no solo recibir un resumen al final.",
-      },
-      {
-        title: "Distingo mi trabajo del del equipo",
-        body: "Digo qué hice yo, qué resolvió el equipo y dónde queda la responsabilidad de cada decisión.",
-      },
-      {
-        title: "Dejo el siguiente paso claro",
-        body: "Al cerrar una entrega, dejo el código, el deploy y las decisiones documentadas para que el próximo cambio tenga un punto de partida.",
-      },
-    ],
-  },
-
-  proof: {
-    index: "08",
-    title: "Evidencia",
-    lead: "Lo que aparece aquí son responsabilidades concretas, no promesas: arquitectura, migraciones, pagos y trabajo diario con producto en un SaaS real con usuarios activos.",
-    facts: [
-      {
-        label: "Arquitectura y PRs",
-        detail:
-          "Reviso PRs, tomo decisiones de arquitectura y coordino directamente con el liderazgo técnico.",
-      },
-      {
-        label: "Cambiar sin frenar",
-        detail:
-          "En Tarjetly migré el backend de Laravel 9 a 12 y reorganicé su arquitectura mientras el producto seguía avanzando.",
-      },
-      {
-        label: "Stripe recurrente",
-        detail:
-          "Implementé suscripciones, estados de pago y paneles administrativos conectados al negocio.",
-      },
-      {
-        label: "IA aplicada en SaaS",
-        detail:
-          "Integré Groq en Tarjetly para generar bios y sugerencias a partir de datos estructurados dentro del flujo real del producto.",
-      },
-      {
-        label: "200+ usuarios activos",
-        detail:
-          "Tarjetly tiene más de 200 usuarios activos; esta experiencia explica qué construí y qué decisiones tomé.",
-      },
-    ],
-  },
-
   testimonials: {
-    index: "09",
+    index: "06",
     title: "Lo que dicen",
     lead: "Referencias de personas con las que he trabajado: lo que vieron en mi trabajo, cómo colaboramos y qué cambió en los proyectos que construimos juntos.",
     source: "Ver original",
   },
 
   faq: {
-    index: "10",
+    index: "06",
     title: "Preguntas",
     lead: "Lo que suelen preguntarme antes de empezar: cómo trabajo, cuánto tarda, qué necesito de ti y cómo acordamos alcance y entrega.",
   },
 
   contact: {
-    index: "11",
+    index: "07",
     title: "Contacto",
     lead: "Cuéntame qué quieres construir, mejorar o destrabar. Respondo en menos de 24 horas.",
     channelsTitle: "Canales directos",

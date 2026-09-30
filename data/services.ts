@@ -108,4 +108,29 @@ export const services: readonly Service[] = [
 			],
 		},
 	},
+	{
+		code: "05",
+		title: {
+			es: "Añadir IA a un producto o a tu equipo",
+			en: "Add AI to a product or your team",
+		},
+		pitch: {
+			es: "La IA tiene sentido cuando mejora una parte concreta. Primero definimos la tarea; después elegimos entre integración, agente o skill.",
+			en: "AI makes sense when it improves one concrete part. We define the task first, then choose between an integration, an agent, or a skill.",
+		},
+		deliverables: {
+			es: [
+				"Asistentes, generación o extracción de datos dentro del producto",
+				"Agentes con límites claros y revisión antes de actuar",
+				"Skills versionadas con contexto para tu equipo",
+				"Documentación para mantenerlo sin depender de un prompt suelto",
+			],
+			en: [
+				"Assistants, generation, or data extraction inside the product",
+				"Agents with clear limits and review before they act",
+				"Versioned skills with context for your team",
+				"Documentation to maintain it without relying on a loose prompt",
+			],
+		},
+	},
 ];

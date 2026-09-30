@@ -52,6 +52,9 @@ const en = {
     title: "Projects",
     lead: "These are products I built by my own initiative or published as open source. They show how I think and how I work.",
     openProject: "Open project",
+    activityLabel: "GitHub activity",
+    activitySummary: "contributions in the last year",
+    activityCta: "View GitHub profile",
   },
 
   experience: {
@@ -73,7 +76,7 @@ const en = {
     ],
     stats: [
       { value: "4+", label: "years building" },
-      { value: "380+", label: "active users" },
+      { value: "380+", label: "active users across products" },
       { value: "2+", label: "products in production" },
     ],
     portraitAlt: "Portrait of Elmer Jacobo Otiniano",
@@ -93,109 +96,27 @@ const en = {
     ],
   },
 
-  ai: {
-    index: "05",
-    title: "AI",
-    lead: "AI makes sense when it improves one concrete part of the product or the team's work. We define the task first, then choose between an integration, an agent, or a skill.",
-    positionLabel: "How I work",
-    positionTitle: "I start with the task",
-    positionBody:
-      "If you already have a product, I look for a step where AI can remove work or improve a response. If the work is internal, I design the agent or skill with context, limits, and review.",
-    cta: "Tell me what you want to improve",
-    items: [
-      {
-        title: "AI inside the product",
-        body: "I integrate assistants, content generation, or data extraction into the steps your customer already uses. The result belongs inside the product, not in a separate demo.",
-      },
-      {
-        title: "Agents for operations",
-        body: "I build agents that find information, use tools, or prepare a first response. Each action has clear limits and a review step before it affects the system.",
-      },
-      {
-        title: "Skills for your team",
-        body: "I turn repeated tasks into versioned skills with context and review steps. The team can work with agents without relying on a prompt lost in chat.",
-      },
-    ],
-  },
-
   process: {
-    index: "06",
+    index: "05",
     title: "Process",
     lead: "I show you the work as it happens. We discuss changes before they become code, and every week you have something you can open.",
   },
 
-  principles: {
-    index: "07",
-    title: "Principles",
-    lead: "These are the rules I use when working with product and code.",
-    items: [
-      {
-        title: "I put decisions on the table",
-        body: "I explain what changes, what risk I see, and which alternative I am ruling out before it becomes code.",
-      },
-      {
-        title: "I deliver something you can open",
-        body: "I work in visible deliveries so you can review the product instead of receiving only a summary at the end.",
-      },
-      {
-        title: "I separate my work from the team’s",
-        body: "I say what I did, what the team solved, and where responsibility for each decision sits.",
-      },
-      {
-        title: "I leave the next step clear",
-        body: "At the end of a delivery, I leave the code, deployment, and decisions documented so the next change has a starting point.",
-      },
-    ],
-  },
-
-  proof: {
-    index: "08",
-    title: "Evidence",
-    lead: "These are concrete responsibilities, not claims: architecture, migrations, payments, and day-to-day product work in a live SaaS with real users.",
-    facts: [
-      {
-        label: "Architecture and PRs",
-        detail:
-          "I review PRs, make architecture decisions, and coordinate directly with technical leadership.",
-      },
-      {
-        label: "Change without slowing down",
-        detail:
-          "At Tarjetly, I migrated the backend from Laravel 9 to 12 and reworked its architecture while the product kept moving.",
-      },
-      {
-        label: "Recurring Stripe",
-        detail:
-          "I implemented subscriptions, payment states, and admin dashboards connected to the business.",
-      },
-      {
-        label: "AI applied in SaaS",
-        detail:
-          "I integrated Groq into Tarjetly to generate bios and suggestions from structured data inside the product's real workflow.",
-      },
-      {
-        label: "200+ active users",
-        detail:
-          "Tarjetly has more than 200 active users; this experience explains what I built and which decisions I made.",
-      },
-    ],
-  },
-
   testimonials: {
-    index: "09",
+    index: "06",
     title: "What they say",
     lead: "References from people I have worked with: what they saw in my work, how we collaborated, and what changed in the projects we built together.",
     source: "View original",
   },
 
   faq: {
-    index: "10",
+    index: "06",
     title: "Questions",
     lead: "What people usually ask before we start: how I work, how long it takes, what I need from you, and how we agree on scope and delivery.",
   },
 
   contact: {
-    index: "11",
+    index: "07",
     title: "Contact",
     lead: "Tell me what you want to build, improve, or unblock. I reply within 24 hours.",
     channelsTitle: "Direct channels",

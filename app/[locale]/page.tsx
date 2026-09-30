@@ -3,17 +3,15 @@ import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { hasLocale } from "@/i18n/config";
 import { About } from "@/components/sections/About";
-import { AISection } from "@/components/sections/AISection";
 import { Contact } from "@/components/sections/Contact";
 import { Faq } from "@/components/sections/Faq";
 // import { Testimonials } from "@/components/sections/Testimonials";
 import { Hero } from "@/components/sections/Hero";
 import { Experience } from "@/components/sections/Experience";
 import { Process } from "@/components/sections/Process";
-import { Principles } from "@/components/sections/Principles";
-import { Proof } from "@/components/sections/Proof";
 import { Services } from "@/components/sections/Services";
 import { Projects } from "@/components/sections/Projects";
+import { GithubActivity } from "@/components/sections/GithubActivity";
 
 export default async function Home({
   params,
@@ -30,12 +28,11 @@ export default async function Home({
       <Hero dict={dict.hero} />
       <Projects dict={dict.projects} locale={locale} />
       <Experience dict={dict.experience} locale={locale} />
-      <About dict={dict.about} />
+      <About dict={dict.about}>
+        <GithubActivity dict={dict.projects} />
+      </About>
       <Services dict={dict.services} locale={locale} />
-      <AISection dict={dict.ai} />
       <Process dict={dict.process} locale={locale} />
-      <Principles dict={dict.principles} />
-      <Proof dict={dict.proof} />
       {/* <Testimonials dict={dict.testimonials} locale={locale} /> */}
       <Faq dict={dict.faq} locale={locale} />
       <Contact

@@ -9,7 +9,13 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { DUR, EASE, OK } from "@/lib/motion";
 import { SectionHeader } from "./SectionHeader";
 
-export function About({ dict }: { dict: Dictionary["about"] }) {
+export function About({
+	dict,
+	children,
+}: {
+	dict: Dictionary["about"];
+	children?: React.ReactNode;
+}) {
 	const rootRef = useRef<HTMLElement>(null);
 
 	useGSAP(
@@ -120,6 +126,8 @@ export function About({ dict }: { dict: Dictionary["about"] }) {
 							</div>
 						))}
 					</dl>
+
+					{children}
 				</div>
 			</div>
 		</section>
