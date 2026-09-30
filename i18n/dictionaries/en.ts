@@ -151,7 +151,7 @@ const en = {
   proof: {
     index: "08",
     title: "Evidence",
-    lead: "These are concrete responsibilities: architecture, migrations, payments, and day-to-day product work.",
+    lead: "These are concrete responsibilities, not claims: architecture, migrations, payments, and day-to-day product work in a live SaaS with real users.",
     facts: [
       {
         label: "Architecture and PRs",
@@ -184,14 +184,14 @@ const en = {
   testimonials: {
     index: "09",
     title: "What they say",
-    lead: "References from people I have worked with.",
+    lead: "References from people I have worked with: what they saw in my work, how we collaborated, and what changed in the projects we built together.",
     source: "View original",
   },
 
   faq: {
     index: "10",
     title: "Questions",
-    lead: "What people usually ask before we start.",
+    lead: "What people usually ask before we start: how I work, how long it takes, what I need from you, and how we agree on scope and delivery.",
   },
 
   contact: {

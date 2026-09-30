@@ -8,6 +8,7 @@ import type { Locale } from "@/i18n/config";
 import { t } from "@/i18n/t";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { DUR, EASE, OK } from "@/lib/motion";
+import { SectionHeader } from "./SectionHeader";
 
 export function Testimonials({
 	dict,
@@ -69,20 +70,12 @@ export function Testimonials({
 		<section
 			id="testimonials"
 			ref={rootRef}
-			aria-labelledby="testimonials-title"
+			aria-label={dict.title}
 			className="border-rule border-t"
 		>
-			<header className="grid-page py-[var(--spacing-section)]">
-				<div className="col-span-12 lg:col-span-7">
-					<p className="u-label text-accent mb-5">{dict.index}</p>
-					<h2 id="testimonials-title" className="text-h1 u-wide max-w-[12ch]">
-						{dict.title}
-					</h2>
-					<p className="text-lead text-text-secondary mt-8 max-w-[44ch]">
-						{dict.lead}
-					</p>
-				</div>
-			</header>
+			<div className="grid-page pt-[var(--spacing-section)] pb-16 md:pb-20">
+				<SectionHeader index={dict.index} title={dict.title} lead={dict.lead} />
+			</div>
 
 			<div className="pb-[var(--spacing-section)]">
 				{testimonials.map((testimonial) => (

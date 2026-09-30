@@ -149,7 +149,7 @@ const es = {
   proof: {
     index: "08",
     title: "Evidencia",
-    lead: "Lo que aparece aquí son responsabilidades concretas: arquitectura, migraciones, pagos y trabajo diario con producto.",
+    lead: "Lo que aparece aquí son responsabilidades concretas, no promesas: arquitectura, migraciones, pagos y trabajo diario con producto en un SaaS real con usuarios activos.",
     facts: [
       {
         label: "Arquitectura y PRs",
@@ -182,14 +182,14 @@ const es = {
   testimonials: {
     index: "09",
     title: "Lo que dicen",
-    lead: "Referencias de personas con las que he trabajado.",
+    lead: "Referencias de personas con las que he trabajado: lo que vieron en mi trabajo, cómo colaboramos y qué cambió en los proyectos que construimos juntos.",
     source: "Ver original",
   },
 
   faq: {
     index: "10",
     title: "Preguntas",
-    lead: "Lo que suelen preguntarme antes de empezar.",
+    lead: "Lo que suelen preguntarme antes de empezar: cómo trabajo, cuánto tarda, qué necesito de ti y cómo acordamos alcance y entrega.",
   },
 
   contact: {

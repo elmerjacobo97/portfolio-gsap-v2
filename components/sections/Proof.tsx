@@ -5,6 +5,7 @@ import { useRef } from "react";
 import type { Dictionary } from "@/i18n/dictionary";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { DUR, EASE, OK } from "@/lib/motion";
+import { SectionHeader } from "./SectionHeader";
 
 export function Proof({ dict }: { dict: Dictionary["proof"] }) {
 	const rootRef = useRef<HTMLElement>(null);
@@ -22,14 +23,6 @@ export function Proof({ dict }: { dict: Dictionary["proof"] }) {
 				});
 
 				timeline
-					.from(".proof-copy > *", {
-						opacity: 0,
-						y: 20,
-						stagger: 0.08,
-						duration: DUR.base,
-						ease: EASE.settle,
-						immediateRender: false,
-					})
 					.from(
 						".proof-row",
 						{
@@ -40,7 +33,7 @@ export function Proof({ dict }: { dict: Dictionary["proof"] }) {
 							ease: EASE.brutal,
 							immediateRender: false,
 						},
-						"-=0.25",
+						0,
 					);
 			});
 
@@ -53,20 +46,12 @@ export function Proof({ dict }: { dict: Dictionary["proof"] }) {
 		<section
 			ref={rootRef}
 			className="border-rule border-t"
-			aria-labelledby="proof-title"
+			aria-label={dict.title}
 		>
 			<div className="grid-page py-[var(--spacing-section)]">
-				<div className="proof-copy col-span-12 lg:col-span-4">
-					<p className="u-label text-accent mb-5">{dict.index}</p>
-					<h2 id="proof-title" className="text-h1 u-wide max-w-[9ch]">
-						{dict.title}
-					</h2>
-					<p className="text-body text-text-secondary mt-6 max-w-[34ch]">
-						{dict.lead}
-					</p>
-				</div>
+				<SectionHeader index={dict.index} title={dict.title} lead={dict.lead} />
 
-				<div className="border-rule bg-surface-inset relative col-span-12 mt-16 overflow-hidden border-x border-b lg:col-span-7 lg:col-start-6 lg:mt-0 lg:border-t lg:border-l-0">
+				<div className="border-rule bg-surface-inset relative col-span-12 mt-16 overflow-hidden border md:mt-20">
 					<span aria-hidden className="plate-bed absolute inset-0 opacity-40" />
 					<dl className="relative z-10 p-6 sm:p-10 lg:p-12">
 						{dict.facts.map((fact, index) => (
