@@ -26,6 +26,6 @@
 
 ## Contact Form
 
-- For mail-enabled local development, run `cp .env.example .env.local` and set `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, and a domain-verified `CONTACT_FROM_EMAIL`. `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_WHATSAPP_NUMBER`, and `NEXT_PUBLIC_CAL_LINK` are public values; `data/site.ts` provides defaults.
+- For mail-enabled local development, run `cp .env.example .env.local` and set `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, and a domain-verified `CONTACT_FROM_EMAIL`. `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_WHATSAPP_NUMBER`, `NEXT_PUBLIC_CAL_LINK` (es) and `NEXT_PUBLIC_CAL_LINK_EN` (en, one Cal.com event type per locale) are public values; `data/site.ts` provides defaults.
 - `next.config.ts` caps Server Action bodies at `64kb`. `actions/contact.ts` keeps request headers, validation, and rate limiting in the action and intentionally does not revalidate the statically generated page.
 - `lib/rate-limit.ts` is an in-memory, per-instance speed bump, not durable distributed enforcement.

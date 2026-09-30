@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { site } from "@/data/site";
+import type { Locale } from "@/i18n/config";
 import { ChannelRow } from "./ChannelRow";
 
 /**
@@ -20,9 +21,11 @@ const CalEmbed = dynamic(() => import("./CalEmbed"), { ssr: false });
 export function CalButton({
 	label,
 	closeLabel,
+	locale,
 }: {
 	label: string;
 	closeLabel: string;
+	locale: Locale;
 }) {
 	const [open, setOpen] = useState(false);
 	const dialogRef = useRef<HTMLDialogElement>(null);
@@ -58,7 +61,7 @@ export function CalButton({
 				</button>
 			</div>
 			<div className="page-pad flex-1 overflow-auto pb-8">
-				<CalEmbed />
+				<CalEmbed locale={locale} />
 			</div>
 		</dialog>
 	);
@@ -68,7 +71,7 @@ export function CalButton({
 			<ChannelRow
 				label={label}
 				value="cal.com"
-				href={`https://cal.com/${site.calLink}`}
+				href={`https://cal.com/${site.calLinks[locale]}`}
 				icon={CalendarDays}
 				analyticsEvent="contact_cta_click"
 				analyticsSource="booking"

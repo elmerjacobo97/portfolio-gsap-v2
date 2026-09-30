@@ -107,7 +107,11 @@ export function Contact({
 					<div className="relative z-10 p-6 sm:p-10 lg:p-12">
 						<p className="u-label mb-2">{dict.channelsTitle}</p>
 						<WhatsAppLink label={dict.whatsapp} prefill={dict.whatsappPrefill} />
-						<CalButton label={dict.booking} closeLabel={closeLabel} />
+						<CalButton
+							label={dict.booking}
+							closeLabel={closeLabel}
+							locale={locale}
+						/>
 						<ChannelRow
 							label="Email"
 							value={site.email}
