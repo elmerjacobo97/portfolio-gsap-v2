@@ -62,7 +62,7 @@ export function ProjectCard({
 
 			<div className="mt-5 grid grid-cols-12 items-end gap-x-[var(--spacing-gutter)] gap-y-4">
 				<div className="col-span-12 lg:col-span-8">
-					<h3 className="text-h1 u-wide transition-colors duration-300 group-hover:text-accent">
+					<h3 className="text-h2 u-wide transition-colors duration-300 group-hover:text-accent">
 						{title}
 					</h3>
 					<p className="text-body text-text-secondary mt-3 max-w-[48ch]">

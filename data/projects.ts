@@ -225,7 +225,7 @@ export const projects: readonly Project[] = [
       "Markdown",
     ],
     role: { es: "Autor · Mantenedor", en: "Author · Maintainer" },
-    title: { es: "Tech Architecture Skills", en: "Tech Architecture Skills" },
+    title: { es: "Architecture Skills", en: "Architecture Skills" },
     tagline: {
       es: "Fija la arquitectura una vez, por tecnología.",
       en: "Fix the architecture once, per technology.",
@@ -244,8 +244,8 @@ export const projects: readonly Project[] = [
       width: 1898,
       height: 962,
       alt: {
-        es: "Repositorio GitHub de Tech Architecture Skills con sus skills y README",
-        en: "Tech Architecture Skills GitHub repository with its skills and README",
+        es: "Repositorio GitHub de Architecture Skills con sus skills y README",
+        en: "Architecture Skills GitHub repository with its skills and README",
       },
     },
     gallery: [],
