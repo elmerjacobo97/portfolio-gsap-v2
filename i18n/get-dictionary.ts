@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { getYearsOfExperience } from '@/data/site'
 import type { Dictionary } from './dictionary'
 import type { Locale } from './config'
 
@@ -14,5 +15,19 @@ const dictionaries = {
 } satisfies Record<Locale, () => Promise<Dictionary>>
 
 export async function getDictionary(locale: Locale): Promise<Dictionary> {
-  return dictionaries[locale]()
+  const dict = await dictionaries[locale]()
+  const years = String(getYearsOfExperience())
+  const fillYears = (text: string) => text.replaceAll('{years}', years)
+
+  return {
+    ...dict,
+    about: {
+      ...dict.about,
+      bio: dict.about.bio.map(fillYears),
+      stats: dict.about.stats.map((stat) => ({
+        ...stat,
+        value: fillYears(stat.value),
+      })),
+    },
+  }
 }

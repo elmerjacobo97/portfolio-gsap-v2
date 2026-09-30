@@ -1,3 +1,9 @@
+const CAREER_START_YEAR = 2022;
+
+export function getYearsOfExperience() {
+	return new Date().getFullYear() - CAREER_START_YEAR;
+}
+
 export const site = {
 	name: "Elmer Augusto Jacobo Otiniano",
 	shortName: "Elmer Jacobo",

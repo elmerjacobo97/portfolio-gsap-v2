@@ -71,11 +71,11 @@ const en = {
     title: "Approach",
     bio: [
       "I work with people who need to build, improve, or put an existing digital product in order. I connect a business decision to a clear interface and a technical foundation the team can maintain.",
-      "I have spent more than four years building web and mobile products in production: dashboards, SaaS products, APIs, payments, and internal tools. In my current work I have led architecture decisions for a SaaS platform with more than 200 active users, migrated its backend from Laravel 9 to 12, and integrated Stripe.",
+      "I have spent more than {years} years building web and mobile products in production: dashboards, SaaS products, APIs, payments, and internal tools. In my current work I have led architecture decisions for a SaaS platform with more than 200 active users, migrated its backend from Laravel 9 to 12, and integrated Stripe.",
       "I can join to define a first scope, improve a product that already has users, or prepare a backend that has become hard to change. You do not need everything figured out; you do need to explain what you want to build or what is slowing the product down.",
     ],
     stats: [
-      { value: "4+", label: "years building" },
+      { value: "{years}+", label: "years building" },
       { value: "380+", label: "active users across products" },
       { value: "2+", label: "products in production" },
     ],

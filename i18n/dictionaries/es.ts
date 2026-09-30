@@ -69,11 +69,11 @@ const es = {
     title: "Enfoque",
     bio: [
       "Trabajo con personas que necesitan construir, mejorar o poner en orden un producto digital. Conecto una decisión de negocio con una interfaz clara y una base técnica que el equipo pueda mantener.",
-      "Llevo más de cuatro años construyendo productos web y móviles en producción: dashboards, SaaS, APIs, pagos y herramientas internas. En mi trabajo actual he liderado decisiones de arquitectura de una plataforma SaaS con más de 200 usuarios activos, migré su backend de Laravel 9 a 12 e integré Stripe.",
+      "Llevo más de {years} años construyendo productos web y móviles en producción: dashboards, SaaS, APIs, pagos y herramientas internas. En mi trabajo actual he liderado decisiones de arquitectura de una plataforma SaaS con más de 200 usuarios activos, migré su backend de Laravel 9 a 12 e integré Stripe.",
       "Puedo entrar para definir un primer alcance, mejorar un producto que ya tiene usuarios o preparar un backend difícil de cambiar. No necesitas tener todo resuelto; sí poder contarme qué quieres construir o qué está frenando el producto.",
     ],
     stats: [
-      { value: "4+", label: "años construyendo" },
+      { value: "{years}+", label: "años construyendo" },
       { value: "380+", label: "usuarios activos entre productos" },
       { value: "2+", label: "productos en producción" },
     ],
