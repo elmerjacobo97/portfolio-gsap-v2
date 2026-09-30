@@ -68,15 +68,13 @@ const en = {
     title: "Approach",
     bio: [
       "I work with people who need to build, improve, or put an existing digital product in order. I connect a business decision to a clear interface and a technical foundation the team can maintain.",
-      "I have spent more than four years building web and mobile products in production. I have worked on admin dashboards, SaaS products, APIs, payments, and internal tools. I like working close to the person who knows the business, not only the codebase.",
-      "In my current work, I have led architecture decisions for a SaaS platform with more than 200 active users. I migrated a Laravel backend from version 9 to 12, integrated Stripe, and built dashboards the team uses to run the business.",
-      "I have also worked directly with clients to turn requirements into UI improvements without making the existing code harder to work with. I can join to define a first scope, improve a product that already has users, or prepare a backend that has become difficult to change.",
-      "I like to start with a concrete problem and enough context to discuss decisions. You do not need everything figured out. You do need to explain what you want to build or what is slowing the product down.",
+      "I have spent more than four years building web and mobile products in production: dashboards, SaaS products, APIs, payments, and internal tools. In my current work I have led architecture decisions for a SaaS platform with more than 200 active users, migrated its backend from Laravel 9 to 12, and integrated Stripe.",
+      "I can join to define a first scope, improve a product that already has users, or prepare a backend that has become hard to change. You do not need everything figured out; you do need to explain what you want to build or what is slowing the product down.",
     ],
     stats: [
       { value: "4+", label: "years building" },
-      { value: "380+", label: "active users" },
-      { value: "2", label: "products in production" },
+      { value: "380+", label: "active users in total" },
+      { value: "2+", label: "products in production" },
     ],
     portraitAlt: "Portrait of Elmer Jacobo Otiniano",
   },
@@ -96,7 +94,7 @@ const en = {
   },
 
 	ai: {
-		index: "06",
+		index: "05",
 		title: "AI",
 		lead: "AI makes sense when it improves one concrete part of the product or the team's work. We define the task first, then choose between an integration, an agent, or a skill.",
 		positionLabel: "How I work",
@@ -121,13 +119,13 @@ const en = {
   },
 
   process: {
-    index: "07",
+    index: "06",
     title: "Process",
     lead: "I show you the work as it happens. We discuss changes before they become code, and every week you have something you can open.",
   },
 
   principles: {
-    index: "08",
+    index: "07",
     title: "Principles",
     lead: "These are the rules I use when working with product and code.",
     items: [
@@ -151,7 +149,7 @@ const en = {
   },
 
   proof: {
-    index: "09",
+    index: "08",
     title: "Evidence",
     lead: "These are concrete responsibilities: architecture, migrations, payments, and day-to-day product work.",
     facts: [
@@ -183,8 +181,21 @@ const en = {
     ],
   },
 
-  contact: {
+  testimonials: {
+    index: "09",
+    title: "What they say",
+    lead: "References from people I have worked with.",
+    source: "View original",
+  },
+
+  faq: {
     index: "10",
+    title: "Questions",
+    lead: "What people usually ask before we start.",
+  },
+
+  contact: {
+    index: "11",
     title: "Contact",
     lead: "Tell me what you want to build, improve, or unblock. I reply within 24 hours.",
     channelsTitle: "Direct channels",

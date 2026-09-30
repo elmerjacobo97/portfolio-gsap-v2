@@ -5,6 +5,8 @@ import { hasLocale } from "@/i18n/config";
 import { About } from "@/components/sections/About";
 import { AISection } from "@/components/sections/AISection";
 import { Contact } from "@/components/sections/Contact";
+import { Faq } from "@/components/sections/Faq";
+import { Testimonials } from "@/components/sections/Testimonials";
 import { Hero } from "@/components/sections/Hero";
 import { Experience } from "@/components/sections/Experience";
 import { Process } from "@/components/sections/Process";
@@ -34,6 +36,8 @@ export default async function Home({
 			<Process dict={dict.process} locale={locale} />
 			<Principles dict={dict.principles} />
 			<Proof dict={dict.proof} />
+			<Testimonials dict={dict.testimonials} locale={locale} />
+			<Faq dict={dict.faq} locale={locale} />
 			<Contact
 				dict={dict.contact}
 				closeLabel={dict.nav.close}

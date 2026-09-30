@@ -66,14 +66,12 @@ const es = {
     title: "Enfoque",
     bio: [
       "Trabajo con personas que necesitan construir, mejorar o poner en orden un producto digital. Conecto una decisión de negocio con una interfaz clara y una base técnica que el equipo pueda mantener.",
-      "Llevo más de cuatro años construyendo productos web y móviles en producción. He trabajado en dashboards administrativos, SaaS, APIs, pagos y herramientas internas. Suelo trabajar cerca de quien conoce el negocio, no solo de la capa de código.",
-      "En mi trabajo actual he liderado decisiones de arquitectura para una plataforma SaaS con más de 200 usuarios activos. Migré un backend de Laravel de la versión 9 a la 12, integré Stripe y construí dashboards que el equipo usa para operar el negocio.",
-      "También he trabajado directamente con clientes para convertir requerimientos en mejoras de UI sin desordenar el código existente. Puedo entrar para definir un primer alcance, mejorar un producto que ya tiene usuarios o preparar un backend que se volvió difícil de cambiar.",
-      "Me gusta empezar con un problema concreto y suficiente contexto para hablar de decisiones. No necesitas tener todo resuelto; sí poder contarme qué quieres construir o qué está frenando el producto.",
+      "Llevo más de cuatro años construyendo productos web y móviles en producción: dashboards, SaaS, APIs, pagos y herramientas internas. En mi trabajo actual he liderado decisiones de arquitectura de una plataforma SaaS con más de 200 usuarios activos, migré su backend de Laravel 9 a 12 e integré Stripe.",
+      "Puedo entrar para definir un primer alcance, mejorar un producto que ya tiene usuarios o preparar un backend difícil de cambiar. No necesitas tener todo resuelto; sí poder contarme qué quieres construir o qué está frenando el producto.",
     ],
     stats: [
       { value: "4+", label: "años construyendo" },
-      { value: "380+", label: "usuarios activos" },
+      { value: "380+", label: "usuarios activos en total" },
       { value: "2+", label: "productos en producción" },
     ],
     portraitAlt: "Retrato de Elmer Jacobo Otiniano",
@@ -94,7 +92,7 @@ const es = {
   },
 
   ai: {
-    index: "06",
+    index: "05",
     title: "IA",
     lead: "La IA tiene sentido cuando mejora una parte concreta del producto o del trabajo del equipo. Primero definimos la tarea; después elegimos entre integración, agente o skill.",
     positionLabel: "Cómo trabajo",
@@ -119,13 +117,13 @@ const es = {
   },
 
   process: {
-    index: "07",
+    index: "06",
     title: "Proceso",
     lead: "Te enseño el trabajo mientras ocurre. Hablamos de los cambios antes de convertirlos en código y cada semana tienes algo que puedes abrir.",
   },
 
   principles: {
-    index: "08",
+    index: "07",
     title: "Principios",
     lead: "Son las reglas que uso para trabajar con producto y código.",
     items: [
@@ -149,7 +147,7 @@ const es = {
   },
 
   proof: {
-    index: "09",
+    index: "08",
     title: "Evidencia",
     lead: "Lo que aparece aquí son responsabilidades concretas: arquitectura, migraciones, pagos y trabajo diario con producto.",
     facts: [
@@ -181,8 +179,21 @@ const es = {
     ],
   },
 
-  contact: {
+  testimonials: {
+    index: "09",
+    title: "Lo que dicen",
+    lead: "Referencias de personas con las que he trabajado.",
+    source: "Ver original",
+  },
+
+  faq: {
     index: "10",
+    title: "Preguntas",
+    lead: "Lo que suelen preguntarme antes de empezar.",
+  },
+
+  contact: {
+    index: "11",
     title: "Contacto",
     lead: "Cuéntame qué quieres construir, mejorar o destrabar. Respondo en menos de 24 horas.",
     channelsTitle: "Canales directos",

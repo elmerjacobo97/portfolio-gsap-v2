@@ -1,8 +1,14 @@
+import { fileURLToPath } from 'node:url'
+
 import type { NextConfig } from 'next'
 
 import { defaultLocale } from './i18n/config'
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    // A stray lockfile in a parent directory makes Next infer the wrong root.
+    root: fileURLToPath(new URL('.', import.meta.url)),
+  },
   async headers() {
     return [
       {
