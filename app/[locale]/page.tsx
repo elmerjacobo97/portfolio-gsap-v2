@@ -6,7 +6,7 @@ import { About } from "@/components/sections/About";
 import { AISection } from "@/components/sections/AISection";
 import { Contact } from "@/components/sections/Contact";
 import { Faq } from "@/components/sections/Faq";
-import { Testimonials } from "@/components/sections/Testimonials";
+// import { Testimonials } from "@/components/sections/Testimonials";
 import { Hero } from "@/components/sections/Hero";
 import { Experience } from "@/components/sections/Experience";
 import { Process } from "@/components/sections/Process";
@@ -16,33 +16,33 @@ import { Services } from "@/components/sections/Services";
 import { Projects } from "@/components/sections/Projects";
 
 export default async function Home({
-	params,
+  params,
 }: {
-	params: Promise<{ locale: string }>;
+  params: Promise<{ locale: string }>;
 }) {
-	const { locale } = await params;
-	if (!hasLocale(locale)) notFound();
+  const { locale } = await params;
+  if (!hasLocale(locale)) notFound();
 
-	const dict = await getDictionary(locale);
+  const dict = await getDictionary(locale);
 
-	return (
-		<main id="main">
-			<Hero dict={dict.hero} />
-			<Projects dict={dict.projects} locale={locale} />
-			<Experience dict={dict.experience} locale={locale} />
-			<About dict={dict.about} />
-			<Services dict={dict.services} locale={locale} />
-			<AISection dict={dict.ai} />
-			<Process dict={dict.process} locale={locale} />
-			<Principles dict={dict.principles} />
-			<Proof dict={dict.proof} />
-			<Testimonials dict={dict.testimonials} locale={locale} />
-			<Faq dict={dict.faq} locale={locale} />
-			<Contact
-				dict={dict.contact}
-				closeLabel={dict.nav.close}
-				locale={locale}
-			/>
-		</main>
-	);
+  return (
+    <main id="main">
+      <Hero dict={dict.hero} />
+      <Projects dict={dict.projects} locale={locale} />
+      <Experience dict={dict.experience} locale={locale} />
+      <About dict={dict.about} />
+      <Services dict={dict.services} locale={locale} />
+      <AISection dict={dict.ai} />
+      <Process dict={dict.process} locale={locale} />
+      <Principles dict={dict.principles} />
+      <Proof dict={dict.proof} />
+      {/* <Testimonials dict={dict.testimonials} locale={locale} /> */}
+      <Faq dict={dict.faq} locale={locale} />
+      <Contact
+        dict={dict.contact}
+        closeLabel={dict.nav.close}
+        locale={locale}
+      />
+    </main>
+  );
 }
