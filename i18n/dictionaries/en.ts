@@ -73,7 +73,7 @@ const en = {
     ],
     stats: [
       { value: "4+", label: "years building" },
-      { value: "380+", label: "active users in total" },
+      { value: "380+", label: "active users" },
       { value: "2+", label: "products in production" },
     ],
     portraitAlt: "Portrait of Elmer Jacobo Otiniano",
@@ -93,28 +93,28 @@ const en = {
     ],
   },
 
-	ai: {
-		index: "05",
-		title: "AI",
-		lead: "AI makes sense when it improves one concrete part of the product or the team's work. We define the task first, then choose between an integration, an agent, or a skill.",
-		positionLabel: "How I work",
-		positionTitle: "I start with the task",
-		positionBody:
-			"If you already have a product, I look for a step where AI can remove work or improve a response. If the work is internal, I design the agent or skill with context, limits, and review.",
-		cta: "Tell me what you want to improve",
-		items: [
-			{
-				title: "AI inside the product",
-				body: "I integrate assistants, content generation, or data extraction into the steps your customer already uses. The result belongs inside the product, not in a separate demo.",
-			},
-			{
-				title: "Agents for operations",
-				body: "I build agents that find information, use tools, or prepare a first response. Each action has clear limits and a review step before it affects the system.",
-			},
-			{
-				title: "Skills for your team",
-				body: "I turn repeated tasks into versioned skills with context and review steps. The team can work with agents without relying on a prompt lost in chat.",
-			},
+  ai: {
+    index: "05",
+    title: "AI",
+    lead: "AI makes sense when it improves one concrete part of the product or the team's work. We define the task first, then choose between an integration, an agent, or a skill.",
+    positionLabel: "How I work",
+    positionTitle: "I start with the task",
+    positionBody:
+      "If you already have a product, I look for a step where AI can remove work or improve a response. If the work is internal, I design the agent or skill with context, limits, and review.",
+    cta: "Tell me what you want to improve",
+    items: [
+      {
+        title: "AI inside the product",
+        body: "I integrate assistants, content generation, or data extraction into the steps your customer already uses. The result belongs inside the product, not in a separate demo.",
+      },
+      {
+        title: "Agents for operations",
+        body: "I build agents that find information, use tools, or prepare a first response. Each action has clear limits and a review step before it affects the system.",
+      },
+      {
+        title: "Skills for your team",
+        body: "I turn repeated tasks into versioned skills with context and review steps. The team can work with agents without relying on a prompt lost in chat.",
+      },
     ],
   },
 

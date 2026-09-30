@@ -71,7 +71,7 @@ const es = {
     ],
     stats: [
       { value: "4+", label: "años construyendo" },
-      { value: "380+", label: "usuarios activos en total" },
+      { value: "380+", label: "usuarios activos" },
       { value: "2+", label: "productos en producción" },
     ],
     portraitAlt: "Retrato de Elmer Jacobo Otiniano",
