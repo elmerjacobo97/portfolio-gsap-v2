@@ -58,16 +58,16 @@ export const projects: readonly Project[] = [
     role: { es: "Autor · Mantenedor", en: "Author · Maintainer" },
     title: { es: "Forge", en: "Forge" },
     tagline: {
-      es: "Workspace para planificar, depurar y enviar software.",
-      en: "A workspace for planning, debugging, and shipping software.",
+      es: "Workspace de desarrollo con web, CLI y MCP sobre los mismos datos.",
+      en: "A developer workspace with web, CLI, and MCP on the same data.",
     },
     summary: {
-      es: "Forge reúne un Dev Board, herramientas de inspección HTTP, monitoreo de endpoints, recursos reutilizables y un CLI sincronizado en una misma cuenta.",
-      en: "Forge brings a Dev Board, HTTP inspection tools, endpoint monitoring, reusable resources, and a synced CLI into one account.",
+      es: "Dev Board, reuniones, ideas, recursos, Webhook Inspector y Uptime Monitor en una sola cuenta, con CLI y MCP para trabajar desde la terminal o un agente.",
+      en: "Dev Board, meetings, ideas, resources, Webhook Inspector, and Uptime Monitor in one account, with a CLI and MCP to work from the terminal or an agent.",
     },
     metrics: [
-      { value: "25", label: { es: "herramientas", en: "tools" } },
-      { value: "3", label: { es: "flujos CLI", en: "CLI workflows" } },
+      { value: "6", label: { es: "herramientas web", en: "web tools" } },
+      { value: "3", label: { es: "interfaces", en: "interfaces" } },
       { value: "MIT", label: { es: "licencia", en: "license" } },
     ],
     cover: {
@@ -75,8 +75,8 @@ export const projects: readonly Project[] = [
       width: 1440,
       height: 900,
       alt: {
-        es: "Repositorio GitHub público de Forge con código, README y herramientas web más CLI",
-        en: "Public Forge GitHub repository with code, README, and web plus CLI tooling",
+        es: "Repositorio de Forge en GitHub con la app web, el CLI, el MCP y las specs del proyecto",
+        en: "Forge repository on GitHub with the web app, CLI, MCP, and project specs",
       },
     },
     gallery: [],
@@ -88,8 +88,8 @@ export const projects: readonly Project[] = [
       {
         kind: "para",
         text: {
-          es: "Un espacio de trabajo para mantener cerca las tareas, las peticiones HTTP, los webhooks, el monitoreo y el conocimiento reutilizable que rodea cada entrega.",
-          en: "A workspace that keeps tasks, HTTP requests, webhooks, monitoring, and reusable knowledge close to every delivery.",
+          es: "Un workspace personal que junta lo que rodea cada entrega: tareas, notas de reuniones, ideas, enlaces de programación, webhooks y monitoreo. Web, CLI y MCP leen y escriben los mismos datos.",
+          en: "A personal workspace that gathers everything around a delivery: tasks, meeting notes, ideas, programming links, webhooks, and monitoring. Web, CLI, and MCP read and write the same data.",
         },
       },
       {
@@ -100,20 +100,20 @@ export const projects: readonly Project[] = [
         kind: "list",
         items: [
           {
-            es: "Dev Board con proyectos, tickets, prioridades y seguimiento automático de tiempo.",
-            en: "Dev Board with projects, tickets, priorities, and automatic time tracking.",
+            es: "Dev Board con proyectos, tickets y prioridades. Meetings e Ideas guardan notas, decisiones y pendientes.",
+            en: "Dev Board with projects, tickets, and priorities. Meetings and Ideas keep notes, decisions, and open items.",
           },
           {
-            es: "HTTP Tester, Webhook Inspector y Uptime Monitor para inspeccionar y vigilar sistemas.",
-            en: "HTTP Tester, Webhook Inspector, and Uptime Monitor for inspecting and watching systems.",
+            es: "Webhook Inspector y Uptime Monitor para inspeccionar peticiones y vigilar endpoints.",
+            en: "Webhook Inspector and Uptime Monitor to inspect requests and watch endpoints.",
           },
           {
-            es: "Bookmarks y Resources para conservar documentación, prompts, código y configuraciones.",
-            en: "Bookmarks and Resources for keeping documentation, prompts, code, and configurations.",
+            es: "Resources para guardar enlaces de programación, documentación y snippets.",
+            en: "Resources to save programming links, documentation, and snippets.",
           },
           {
-            es: "forge-cli sincroniza proyectos, bookmarks, resources y tickets con la misma cuenta y backend.",
-            en: "forge-cli syncs projects, bookmarks, resources, and tickets with the same account and backend.",
+            es: "forge-cli y un MCP remoto operan proyectos, tickets, ideas y recursos sobre el mismo backend. Hay skills para Claude Code, Cursor, Codex, OpenCode y Antigravity.",
+            en: "forge-cli and a remote MCP operate projects, tickets, ideas, and resources on the same backend. Skills ship for Claude Code, Cursor, Codex, OpenCode, and Antigravity.",
           },
         ],
       },
@@ -125,12 +125,12 @@ export const projects: readonly Project[] = [
         kind: "list",
         items: [
           {
-            es: "Monorepo con Next.js 16, React 19, TypeScript, Tailwind CSS 4 e InsForge.",
-            en: "Monorepo with Next.js 16, React 19, TypeScript, Tailwind CSS 4, and InsForge.",
+            es: "Monorepo con Next.js 16, React 19, TypeScript estricto, Tailwind CSS 4, shadcn/ui e InsForge (Postgres con RLS, auth y realtime).",
+            en: "Monorepo with Next.js 16, React 19, strict TypeScript, Tailwind CSS 4, shadcn/ui, and InsForge (Postgres with RLS, auth, and realtime).",
           },
           {
-            es: "Construido con Claude Code y Cursor, apoyado por specs, skills y pruebas para mantener decisiones explícitas.",
-            en: "Built with Claude Code and Cursor, supported by specs, skills, and tests that keep decisions explicit.",
+            es: "Cada feature nace de una spec versionada y se cubre con tests de Vitest. Construido con Claude Code y Cursor.",
+            en: "Every feature starts from a versioned spec and is covered by Vitest tests. Built with Claude Code and Cursor.",
           },
         ],
       },
@@ -151,21 +151,21 @@ export const projects: readonly Project[] = [
       en: "Spec-driven design for coding agents.",
     },
     summary: {
-      es: "Dos skills open source que separan la planificación, aprobación humana e implementación para evitar decisiones improvisadas por el agente.",
-      en: "Two open-source skills that separate planning, human approval, and implementation so agents cannot improvise product decisions.",
+      es: "Ocho skills open source que separan planificar, aprobar e implementar, para que el agente no improvise decisiones de producto.",
+      en: "Eight open-source skills that separate planning, approval, and implementation so the agent cannot improvise product decisions.",
     },
     metrics: [
-      { value: "2", label: { es: "skills", en: "skills" } },
+      { value: "8", label: { es: "skills", en: "skills" } },
       { value: "5+", label: { es: "agentes", en: "agents" } },
       { value: "MIT", label: { es: "licencia", en: "license" } },
     ],
     cover: {
       src: "/images/projects/spec-flow-skills.png",
-      width: 3796,
-      height: 1924,
+      width: 1440,
+      height: 900,
       alt: {
-        es: "README de Spec Flow Skills con el flujo de especificación e implementación",
-        en: "Spec Flow Skills README showing the specification and implementation flow",
+        es: "Repositorio de Spec Flow Skills en GitHub con las skills, el README y el instalador",
+        en: "Spec Flow Skills repository on GitHub with the skills, README, and installer",
       },
     },
     gallery: [],
@@ -189,20 +189,24 @@ export const projects: readonly Project[] = [
         kind: "list",
         items: [
           {
-            es: "spec hace preguntas, documenta decisiones y guarda un Draft versionado en git.",
-            en: "spec asks questions, documents decisions, and saves a Draft versioned in git.",
+            es: "/spec hace preguntas, documenta decisiones y guarda un Draft versionado en git. /product-spec y /spec-explore aclaran el caso de negocio y las opciones antes.",
+            en: "/spec asks questions, documents decisions, and saves a Draft versioned in git. /product-spec and /spec-explore clarify the business case and options first.",
           },
           {
             es: "La aprobación ocurre fuera del chat y requiere que una persona cambie el estado a Approved.",
             en: "Approval happens outside chat and requires a person to change the status to Approved.",
           },
           {
-            es: "spec-impl valida ese estado, crea una rama e implementa con pausas para revisar cada diff.",
-            en: "spec-impl validates that state, creates a branch, and implements with pauses to review each diff.",
+            es: "/spec-impl valida ese estado e implementa grupo por grupo, con pausa para revisar y commitear cada uno.",
+            en: "/spec-impl validates that state and implements group by group, pausing to review and commit each one.",
           },
           {
-            es: "El instalador cubre Claude Code, Cursor, Codex, Antigravity y OpenCode.",
-            en: "The installer supports Claude Code, Cursor, Codex, Antigravity, and OpenCode.",
+            es: "/spec-edit, /spec-verify, /spec-status y /spec-close mantienen la spec viva: editar, auditar contra el código, ver el tablero y cerrar.",
+            en: "/spec-edit, /spec-verify, /spec-status, and /spec-close keep the spec alive: edit, audit against code, view the board, and close.",
+          },
+          {
+            es: "Se instala con un comando en Claude Code, Cursor, Codex, Antigravity y OpenCode.",
+            en: "Installs with one command on Claude Code, Cursor, Codex, Antigravity, and OpenCode.",
           },
         ],
       },
