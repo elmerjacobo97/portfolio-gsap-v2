@@ -47,15 +47,23 @@ export async function submitContact(
   //    so a script that POSTs directly has no plausible value for it.
   const mountedAt = Number(formData.get('mountedAt') ?? 0)
   const elapsed = Date.now() - mountedAt
-  if (!mountedAt || elapsed < MIN_ELAPSED_MS || elapsed > MAX_ELAPSED_MS) {
+  if (!mountedAt || elapsed < MIN_ELAPSED_MS) {
     return { ok: false, formError: messages.tooFast, values }
+  }
+  if (elapsed > MAX_ELAPSED_MS) {
+    return { ok: false, formError: messages.expired, values }
   }
 
   // 3. Per-IP rate limit. `headers()` is safe here: a Server Action is a
   //    separate POST endpoint, not a render path, so it cannot opt the
   //    statically generated page into dynamic rendering.
-  const forwardedFor = (await headers()).get('x-forwarded-for')
-  const ip = forwardedFor?.split(',')[0]?.trim() || 'unknown'
+  //    Platform-set headers first: `x-forwarded-for` can be client-supplied.
+  const requestHeaders = await headers()
+  const ip =
+    requestHeaders.get('x-vercel-forwarded-for') ??
+    requestHeaders.get('x-real-ip') ??
+    requestHeaders.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    'unknown'
   if (!rateLimit(ip).ok) {
     return { ok: false, formError: messages.rateLimit, values }
   }
@@ -120,7 +128,9 @@ export async function submitContact(
     .join('')
 
   const safeMessage = escapeHtml(message).replace(/\n/g, '<br />')
-  const replyUrl = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(`Re: tu consulta para ${name}`)}`
+  const replyUrl = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(
+    locale === 'es' ? `Re: tu consulta para ${name}` : `Re: your inquiry, ${name}`,
+  )}`
   const text = `NUEVO CONTACTO\n\nNombre: ${name}\nEmail: ${email}\nEmpresa: ${company || '—'}\nTipo: ${scope || '—'}\nIdioma: ${locale}\n\nMENSAJE\n${message}`
   const html = `<!doctype html>
 <html lang="${locale}">

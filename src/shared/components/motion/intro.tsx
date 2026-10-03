@@ -4,6 +4,7 @@ import { useRef } from "react";
 
 import { gsap, ScrollSmoother, ScrollTrigger, useGSAP } from "@/shared/lib/gsap";
 import { markIntroDone } from "@/shared/lib/intro";
+import { REDUCED } from "@/shared/lib/motion";
 
 const SEEN_KEY = "intro-seen";
 
@@ -24,7 +25,7 @@ export function Intro() {
 			const bar = root.querySelector<HTMLElement>(".intro-bar");
 
 			const skip =
-				window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+				window.matchMedia(REDUCED).matches ||
 				sessionStorage.getItem(SEEN_KEY) === "1";
 
 			if (skip) {

@@ -9,7 +9,7 @@ import type { Locale } from "@/shared/i18n/config";
 import { t } from "@/shared/i18n/t";
 import { cn } from "@/shared/lib/cn";
 import { gsap, useGSAP } from "@/shared/lib/gsap";
-import { DUR, EASE, hoverDuration } from "@/shared/lib/motion";
+import { DUR, EASE, REDUCED, hoverDuration } from "@/shared/lib/motion";
 import { SectionHeader } from "@/shared/components/ui/section-header";
 
 export function Services({
@@ -52,9 +52,7 @@ export function Services({
 		);
 		const outgoing = panels[active];
 		const incoming = panels[next];
-		const reduced = window.matchMedia(
-			"(prefers-reduced-motion: reduce)",
-		).matches;
+		const reduced = window.matchMedia(REDUCED).matches;
 
 		if (!outgoing || !incoming) return;
 		transitionRef.current?.kill();

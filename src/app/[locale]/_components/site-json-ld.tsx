@@ -24,7 +24,7 @@ export function JsonLd({
 }) {
 	const personId = `${site.url}/#person`
 	const businessId = `${site.url}/#business`
-	const profileImage = `${site.url}/images/profile/elmer-jacobo-portrait.png`
+	const profileImage = `${site.url}/images/profile/elmer-jacobo-portrait.jpg`
 
 	const graph = [
 		{
@@ -35,7 +35,6 @@ export function JsonLd({
 			jobTitle: site.role,
 			image: profileImage,
 			email: `mailto:${site.email}`,
-			telephone: site.phone,
 			url: `${site.url}/${locale}`,
 			address: {
 				'@type': 'PostalAddress',
@@ -53,7 +52,6 @@ export function JsonLd({
 			url: `${site.url}/${locale}`,
 			image: profileImage,
 			email: `mailto:${site.email}`,
-			telephone: site.phone,
 			founder: { '@id': personId },
 			areaServed: 'Worldwide',
 			availableLanguage: Object.values(localeTag),

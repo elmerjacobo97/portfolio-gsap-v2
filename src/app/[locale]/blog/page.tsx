@@ -5,6 +5,7 @@ import { getDictionary } from "@/shared/i18n/get-dictionary";
 import { hasLocale, localeTag } from "@/shared/i18n/config";
 import { getPosts } from "@/features/blog/services/posts";
 import { buildAlternates } from "@/shared/lib/seo";
+import { site } from "@/shared/lib/site";
 import { BlogSearch } from "@/features/blog/components/blog-search";
 import { PostCard } from "@/features/blog/components/post-card";
 import { PostList } from "@/features/blog/components/post-list";
@@ -28,6 +29,7 @@ export async function generateMetadata({
 			type: "website",
 			url: `/${locale}/blog`,
 			locale: localeTag[locale].replace("-", "_"),
+			siteName: site.shortName,
 			title: dict.blog.title,
 			description: dict.blog.lead,
 			images: [
@@ -41,6 +43,8 @@ export async function generateMetadata({
 		},
 		twitter: {
 			card: "summary_large_image",
+			title: dict.blog.title,
+			description: dict.blog.lead,
 			images: [
 				{ url: `/${locale}/blog/opengraph-image`, alt: dict.blog.ogAlt },
 			],

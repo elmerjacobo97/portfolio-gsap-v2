@@ -66,12 +66,16 @@ export async function generateMetadata({
 			locale: localeTag[locale].replace("-", "_"),
 			title: post.title,
 			description: post.description,
+			siteName: site.shortName,
 			publishedTime: post.date.toISOString(),
+			modifiedTime: (post.updated ?? post.date).toISOString(),
 			authors: [site.name],
 			images: ogImage,
 		},
 		twitter: {
 			card: "summary_large_image",
+			title: post.title,
+			description: post.description,
 			images: ogImage,
 		},
 	};
@@ -98,15 +102,21 @@ export default async function BlogArticle({ params }: { params: Params }) {
 		(tag) => tag.toLowerCase() !== post.category?.toLowerCase(),
 	);
 
+	const personId = `${site.url}/#person`;
 	const jsonLd = serializeJsonLd({
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
 		headline: post.title,
 		description: post.description,
 		inLanguage: localeTag[locale],
+		image: new URL(
+			post.cover ?? `/${locale}/blog/opengraph-image`,
+			site.url,
+		).toString(),
 		datePublished: isoDate,
-		dateModified: isoDate,
-		author: { "@type": "Person", name: site.name, url: site.url },
+		dateModified: (post.updated ?? post.date).toISOString(),
+		author: { "@id": personId },
+		publisher: { "@id": personId },
 		mainEntityOfPage: `${site.url}/${locale}/blog/${slug}`,
 	});
 

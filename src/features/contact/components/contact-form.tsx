@@ -179,6 +179,7 @@ export function ContactForm({
 						style={{ transform: "scaleX(0)" }}
 					/>
 				</button>
+				<p className="text-meta text-text-dim">{dict.privacyNote}</p>
 				<p className="u-label min-h-[1em] text-text-dim" aria-live="polite">
 					{pending ? dict.sendingHint : ""}
 				</p>

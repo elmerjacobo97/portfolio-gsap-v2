@@ -10,7 +10,7 @@ async function getContributions() {
 	try {
 		const res = await fetch(
 			"https://github-contributions-api.jogruber.de/v4/elmerjacobo97?y=last",
-			{ next: { revalidate: 86400 } },
+			{ next: { revalidate: 86400 }, signal: AbortSignal.timeout(4000) },
 		);
 		if (!res.ok) return null;
 		const data = (await res.json()) as {

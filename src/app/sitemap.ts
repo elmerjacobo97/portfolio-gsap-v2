@@ -22,23 +22,31 @@ function alternates(path: string, available: readonly Locale[] = locales) {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const postsByLocale = await Promise.all(
+    locales.map(async (locale) => ({ locale, posts: await getPosts(locale) })),
+  )
+  const newestPost = postsByLocale
+    .flatMap(({ posts }) => posts.map((post) => post.updated ?? post.date))
+    .sort((a, b) => b.getTime() - a.getTime())[0]
+
   const staticPaths = [
     { path: '', changeFrequency: 'monthly' as const, priority: 1 },
-    { path: '/blog', changeFrequency: 'weekly' as const, priority: 0.8 },
+    {
+      path: '/blog',
+      lastModified: newestPost,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
   ]
 
   const staticEntries = locales.flatMap((locale) =>
-    staticPaths.map(({ path, changeFrequency, priority }) => ({
+    staticPaths.map(({ path, ...entry }) => ({
       url: url(`/${locale}${path}`),
-      changeFrequency,
-      priority,
+      ...entry,
       alternates: alternates(path),
     })),
   )
 
-  const postsByLocale = await Promise.all(
-    locales.map(async (locale) => ({ locale, posts: await getPosts(locale) })),
-  )
   const slugsByLocale = new Map(
     postsByLocale.map(({ locale, posts }) => [
       locale,
@@ -57,7 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return [
         {
           url: url(`/${locale}${path}`),
-          lastModified: post.date,
+          lastModified: post.updated ?? post.date,
           changeFrequency: 'weekly' as const,
           priority: 0.7,
           alternates: alternates(path, available),
