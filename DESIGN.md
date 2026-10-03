@@ -228,9 +228,9 @@ product dashboard. An explicit light theme is also supported through semantic
 runtime aliases; it preserves the same grid, typography, geometry, and interaction
 grammar instead of becoming a separate visual identity.
 
-The source of truth is the current code, especially `app/globals.css`,
-`app/[locale]/layout.tsx`, `lib/motion.ts`, and the reusable components under
-`components/`. This file records those choices; it does not introduce a new
+The source of truth is the current code, especially `src/app/globals.css`,
+`src/app/[locale]/layout.tsx`, `src/shared/lib/motion.ts`, and the reusable components under
+`src/shared/components/`. This file records those choices; it does not introduce a new
 palette, theme, layout, or component behavior. The token values above use the
 closest fixed values where the implementation is fluid. The exact responsive
 formulas are recorded below.
@@ -292,7 +292,7 @@ texture, not a decorative color gradient.
 
 ## Typography
 
-The type system uses two Google fonts loaded in `app/[locale]/layout.tsx`:
+The type system uses two Google fonts loaded in `src/app/[locale]/layout.tsx`:
 
 - **Archivo** is both `--font-display` and `--font-sans`. It carries the display
   voice, section headings, project titles, body copy, and lead copy. Its `wdth`
@@ -415,44 +415,44 @@ content.
 
 ### Global chrome
 
-- `components/layout/BrandMark.tsx` renders the EJ SVG mark with a 5px square
+- `src/shared/components/layout/brand-mark.tsx` renders the EJ SVG mark with a 5px square
   stroke. The E is chalk and the J is acid; hover/focus swaps those two colors.
-- `components/layout/Nav.tsx` provides the fixed translucent top bar, centered
+- `src/shared/components/layout/nav.tsx` provides the fixed translucent top bar, centered
   desktop links, locale switcher, theme toggle, and mobile-menu trigger. Controls
   use Space Mono labels and generous hit-area padding.
-- `components/layout/ThemeProvider.tsx` and `ThemeToggle.tsx` provide explicit
+- `src/shared/components/layout/theme-provider.tsx` and `theme-toggle.tsx` provide explicit
   dark/light switching through `next-themes`; system preference is not followed.
-- `components/layout/MobileMenu.tsx` is a native full-viewport acid dialog below
+- `src/shared/components/layout/mobile-menu.tsx` is a native full-viewport acid dialog below
   `md`. Its numbered links use expanded Archivo and dark ink labels.
-- `components/layout/GridOverlay.tsx` renders the fixed visible grid bed.
-- `components/layout/Footer.tsx` combines a bordered marquee band with a three-part
+- `src/shared/components/layout/grid-overlay.tsx` renders the fixed visible grid bed.
+- `src/shared/components/layout/footer.tsx` combines a bordered marquee band with a three-part
   grid for local time, social links, and copyright.
-- `components/layout/SkipLink.tsx` is an acid utility control that appears on
+- `src/shared/components/layout/skip-link.tsx` is an acid utility control that appears on
   keyboard focus. `ScrollProgress` is a 2px fixed rule at the top of the viewport.
   `ThemedToaster` keeps notifications aligned with the resolved theme.
 
 ### UI primitives
 
-- `components/ui/Rule.tsx` is the `rule-h` 1px horizontal motif used by section
+- `src/shared/components/ui/rule.tsx` is the `rule-h` 1px horizontal motif used by section
   headers and hero baselines.
-- `components/ui/ArrowLink.tsx` is the shared text-link affordance. It uses a
+- `src/shared/components/ui/arrow-link.tsx` is the shared text-link affordance. It uses a
   16px Lucide `ArrowUpRight`, acid hover color, and a small diagonal translate.
   Internal routes use `TransitionLink`; external routes open in a new tab.
-- `components/ui/Pill.tsx` is the availability badge: a square outlined label,
+- `src/shared/components/ui/pill.tsx` is the availability badge: a square outlined label,
   Space Mono micro type, and two-layer acid circular status dots, with the outer
   dot pulsing during the hero reveal.
-- `components/ui/Numeral.tsx` is the oversized transparent outlined number used
+- `src/shared/components/ui/numeral.tsx` is the oversized transparent outlined number used
   behind process steps and similar indices.
-- `components/sections/SectionHeader.tsx` establishes the repeated section
+- `src/shared/components/ui/section-header.tsx` establishes the repeated section
   pattern: acid monospace index, expanded Archivo title, optional chalk lead, and
   a drawn hairline.
 
 ### Content and work
 
-- `components/work/ProjectCard.tsx` is an editorial project block with a metadata
+- `src/features/portfolio/components/project-card.tsx` is an editorial project block with a metadata
   rail, media plate, title, tagline, stack, and external project link. Its desktop
   placements alternate so the portfolio does not read as a uniform card table.
-- `components/work/MediaPlate.tsx` provides a bordered `ink-850` media well with
+- `src/features/portfolio/components/media-plate.tsx` provides a bordered `ink-850` media well with
   responsive aspect ratio and either a real image or `ProjectPreview` fallback.
 - The home sections (`Hero`, `Projects`, `Experience`, `About`, `Services`, `Process`,
   `Principles`, `Proof`, and `Contact`) are composed from these primitives rather
@@ -460,11 +460,11 @@ content.
 
 ### Contact and forms
 
-- `components/contact/Field.tsx` is a transparent field with a 1px rule and an
+- `src/features/contact/components/field.tsx` is a transparent field with a 1px rule and an
   acid underline that draws from left to right on focus. Error state swaps the
   rule/underline to alert red, adds a monospace error label, and uses a restrained
   horizontal shake when motion is allowed.
-- `components/contact/ChannelRow.tsx` is a full-width bordered row. Hover/focus
+- `src/features/contact/components/channel-row.tsx` is a full-width bordered row. Hover/focus
   sweeps an acid fill across the row, inverts its text to ink, and moves the arrow
   diagonally.
 - `ContactForm` uses a 32px vertical rhythm, two columns from `sm`, outline-acid
@@ -479,14 +479,14 @@ content.
 The motion system reinforces the same visual grammar: clip-path reveals, rules that
 draw from the left, acid fills that sweep across rows, arrows that travel
 diagonally, and restrained vertical/opacity entrances. Shared motion vocabulary
-lives in `lib/motion.ts`: `expo.out`/`power4.out` settles, `power3.out` sweeps,
+lives in `src/shared/lib/motion.ts`: `expo.out`/`power4.out` settles, `power3.out` sweeps,
 `power3.in` retreats, and `expo.inOut` cuts. `DUR.fast`, `DUR.base`, and `DUR.slow`
 are the shared duration bands. The custom cursor exists only for fine pointers and
 enlarges over links and buttons; touch devices do not receive it. `ScrollProgress`
 is a direct scroll-position readout and remains available in reduced-motion mode.
 
 Every animated section branches on `prefers-reduced-motion` through shared queries
-in `lib/motion.ts`; pointer hover tweens resolve to zero duration in reduced mode.
+in `src/shared/lib/motion.ts`; pointer hover tweens resolve to zero duration in reduced mode.
 CSS also collapses transitions, marquees, and keyframe-like effects for reduced-
 motion users. The process pin and horizontal track are not created in reduced mode,
 and mobile never receives the desktop pin. The intro preloader skips itself for

@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url'
 
 import type { NextConfig } from 'next'
 
-import { defaultLocale } from './i18n/config'
+import { defaultLocale } from './src/shared/i18n/config'
 
 const nextConfig: NextConfig = {
   turbopack: {
