@@ -161,11 +161,11 @@ const es = {
 
   footer: {
     marquee: [
-      "Hablemos de tu producto",
-      "De la idea a producción",
-      "Mejoremos lo que ya existe",
-      "Ordenemos el backend",
-      "Decisiones claras, código que aguanta",
+      "Cuéntame tu caso",
+      "Producto nuevo o existente",
+      "Sesión para destrabar",
+      "Respuesta en menos de 24 horas",
+      "Remoto desde Trujillo",
     ],
     localTime: "Hora local",
     social: "Redes",

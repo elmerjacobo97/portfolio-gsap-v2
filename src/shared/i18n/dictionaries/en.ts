@@ -164,11 +164,11 @@ const en = {
 
   footer: {
     marquee: [
-      "Let's talk about your product",
-      "From idea to production",
-      "Improve what already exists",
-      "Bring order to the backend",
-      "Clear decisions, code that holds up",
+      "Tell me about your case",
+      "New or existing product",
+      "One session to unblock",
+      "Reply within 24 hours",
+      "Remote from Trujillo",
     ],
     localTime: "Local time",
     social: "Social",
