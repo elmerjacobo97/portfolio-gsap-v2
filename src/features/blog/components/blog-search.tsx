@@ -3,6 +3,8 @@
 import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { PLACEMENTS, placement } from "./post-placement";
+
 function normalize(value: string) {
 	return value
 		.toLocaleLowerCase()
@@ -16,15 +18,20 @@ export function BlogSearch({
 	placeholder,
 	clearLabel,
 	noResults,
+	categories,
+	allLabel,
 }: {
 	children: React.ReactNode;
 	label: string;
 	placeholder: string;
 	clearLabel: string;
 	noResults: string;
+	categories: string[];
+	allLabel: string;
 }) {
 	const rootRef = useRef<HTMLDivElement>(null);
 	const [query, setQuery] = useState("");
+	const [category, setCategory] = useState("");
 
 	useEffect(() => {
 		const root = rootRef.current;
@@ -38,18 +45,26 @@ export function BlogSearch({
 
 		for (const card of cards) {
 			const matches =
-				!normalizedQuery ||
-				normalize(card.dataset.postSearch ?? "").includes(normalizedQuery);
+				(!category || card.dataset.postCategory === category) &&
+				(!normalizedQuery ||
+					normalize(card.dataset.postSearch ?? "").includes(normalizedQuery));
 			card.hidden = !matches;
 			card.setAttribute("aria-hidden", String(!matches));
-			if (matches) visible += 1;
+			if (!matches) continue;
+
+			// Re-pack the editorial grid so hidden posts leave no gaps.
+			card.classList.remove(...PLACEMENTS);
+			card.classList.add(...placement(visible).split(" "));
+			const number = card.querySelector("[data-post-number]");
+			if (number) number.textContent = String(visible + 1).padStart(2, "0");
+			visible += 1;
 		}
 
 		const noResultsMessage = root.querySelector<HTMLElement>(
 			"[data-no-results]",
 		);
 		if (noResultsMessage) noResultsMessage.hidden = visible > 0;
-	}, [query]);
+	}, [query, category]);
 
 	return (
 		<div ref={rootRef}>
@@ -96,6 +111,25 @@ export function BlogSearch({
 						) : null}
 					</div>
 				</form>
+
+				<ul className="col-span-12 mt-4 flex flex-wrap gap-2 lg:col-span-10 lg:col-start-2">
+					{["", ...categories].map((item) => (
+						<li key={item}>
+							<button
+								type="button"
+								onClick={() => setCategory(item)}
+								aria-pressed={category === item}
+								className={`u-label border-rule border px-3 py-2 transition-colors duration-200 ${
+									category === item
+										? "bg-accent text-surface border-accent"
+										: "text-text-dim hover:text-accent"
+								}`}
+							>
+								{item || allLabel}
+							</button>
+						</li>
+					))}
+				</ul>
 			</div>
 
 			{children}

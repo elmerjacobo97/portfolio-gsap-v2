@@ -181,6 +181,7 @@ const es = {
     searchPlaceholder: "Título, tema o tecnología...",
     clearSearch: "Limpiar búsqueda",
     noResults: "No encontré artículos con esa búsqueda.",
+    allCategories: "Todos",
     empty: "Todavía no hay publicaciones.",
     readPost: "Leer artículo",
     backToBlog: "Volver al blog",

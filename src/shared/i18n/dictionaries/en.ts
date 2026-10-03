@@ -184,6 +184,7 @@ const en = {
     searchPlaceholder: "Title, topic, or technology...",
     clearSearch: "Clear search",
     noResults: "No articles match that search.",
+    allCategories: "All",
     empty: "No posts yet.",
     readPost: "Read article",
     backToBlog: "Back to blog",

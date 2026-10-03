@@ -23,6 +23,7 @@ export const site = {
 	social: [
 		{ label: "LinkedIn", href: "https://linkedin.com/in/elmerjacobo97" },
 		{ label: "GitHub", href: "https://github.com/elmerjacobo97" },
+		{ label: "TikTok", href: "https://www.tiktok.com/@elmerjacobo.dev" },
 	],
 	/** Shared technology vocabulary for metadata and project context. */
 	stack: [

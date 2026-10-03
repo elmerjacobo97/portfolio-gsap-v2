@@ -1,20 +1,12 @@
 import type { BlogPostMeta } from "../services/posts";
 import { formatPostDate } from "../services/posts";
 import type { Locale } from "@/shared/i18n/config";
+import { placement } from "./post-placement";
 import { cn } from "@/shared/lib/cn";
 import { TransitionLink } from "@/shared/components/motion/transition-link";
 import { ArrowLink } from "@/shared/components/ui/arrow-link";
 
 /** Editorial post link. Motion belongs to the list entrance, not hover. */
-const WIDE = "lg:col-span-10 lg:col-start-2";
-const LEFT = "lg:col-span-6 lg:col-start-1";
-const RIGHT = "lg:col-span-6 lg:col-start-7";
-
-function placement(index: number) {
-	if (index === 0) return WIDE;
-	return index % 2 === 1 ? LEFT : RIGHT;
-}
-
 export function PostCard({
 	post,
 	locale,
@@ -36,13 +28,14 @@ export function PostCard({
 	return (
 		<article
 			className={cn("post-card group col-span-12", placement(index))}
+			data-post-category={post.category}
 			data-post-search={[post.title, post.description, post.category, post.slug, ...post.tags]
 				.filter(Boolean)
 				.join(" ")}
 		>
 			<div className="flex items-baseline justify-between gap-6 border-rule border-y py-3">
 				<div className="u-meta text-text-dim flex min-w-0 flex-wrap gap-x-3 gap-y-1">
-					<span className="text-accent">
+					<span data-post-number className="text-accent">
 						{String(index + 1).padStart(2, "0")}
 					</span>
 					<span>{formatPostDate(post.date, locale)}</span>

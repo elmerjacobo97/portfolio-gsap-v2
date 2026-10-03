@@ -37,6 +37,17 @@ const nextConfig: NextConfig = {
         // would fight the Accept-Language negotiation planned for Phase 6.
         permanent: false,
       },
+      // Locale-less short links for social posts (watermarks, bios).
+      {
+        source: '/blog',
+        destination: `/${defaultLocale}/blog`,
+        permanent: false,
+      },
+      {
+        source: '/blog/:slug',
+        destination: `/${defaultLocale}/blog/:slug`,
+        permanent: false,
+      },
     ]
   },
   experimental: {

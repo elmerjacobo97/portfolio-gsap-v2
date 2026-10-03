@@ -87,6 +87,10 @@ export default async function BlogIndex({
 					placeholder={dict.blog.searchPlaceholder}
 					clearLabel={dict.blog.clearSearch}
 					noResults={dict.blog.noResults}
+					categories={[
+						...new Set(posts.flatMap((post) => post.category ?? [])),
+					]}
+					allLabel={dict.blog.allCategories}
 				>
 					<PostList>
 						{posts.map((post, i) => (
