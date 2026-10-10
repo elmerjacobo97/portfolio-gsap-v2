@@ -158,7 +158,11 @@ export default async function RootLayout({
 					 * block, so a fixed element nested inside it would scroll with the
 					 * page instead of staying pinned to the viewport.
 					 */}
-					<JsonLd locale={locale} description={dict.meta.description} />
+					<JsonLd
+						locale={locale}
+						description={dict.meta.description}
+						role={dict.hero.role}
+					/>
 
 					<SkipLink label={dict.nav.skipToContent} />
 					<GridOverlay />

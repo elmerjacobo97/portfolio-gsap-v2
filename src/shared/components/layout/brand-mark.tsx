@@ -1,25 +1,24 @@
 import { site } from '@/shared/lib/site'
+import { brandMarkPaths, brandMarkViewBox } from '@/shared/lib/brand-mark'
 
 export function BrandMark() {
   return (
     <span className="inline-flex items-center">
       <svg
         aria-hidden
-        viewBox="70 35 320 388"
+        viewBox={brandMarkViewBox}
         className="h-8 w-auto overflow-visible"
       >
-        <path
-          d="M170.94748 0.1459l-88.43497 16.2725c-8.51001 1.55249-17.59502 5.06-21.44751 7.24501-2.1275 1.20749-2.93251 2.875-3.27749 5.23249l-3.39251 23.7475 60.89251-8.51001-14.54752 113.275c-2.41498 19.55001-17.6525 31.33752-32.71748 31.33752-15.065 0-23.5175-10.63751-22.94252-26.9675 0.28752-6.49753 1.89752-14.20251 2.41502-19.0325 0.5175-5.11752-2.53001-7.1875-6.785-6.55502l-37.14501 6.20999c-1.265 9.43002-3.565 23.23001-3.565 32.71753 0 38.00751 28.34749 54.16498 60.145 54.16498 46.575 0 77.9125-27.13999 81.8225-69.0575l11.04001-112.12498c0.40249-4.25502-0.28751-7.59-1.55252-9.43001l16.90503-2.76c3.85247-0.69002 6.15249-3.27751 6.66998-7.13 0.92001-6.90001 2.01251-16.96251 2.29999-22.77001 0.345-4.82999-2.58747-6.55499-6.38251-5.86499z"
-          transform="translate(176.72229427135701 153.04497007453193) scale(1.1206874545888104 1.1206874545888106) translate(0 0)"
-          className="fill-accent transition-colors duration-300 group-hover:fill-text group-focus-visible:fill-text"
-        />
-        <path
-          d="M180.54474 142.06137l-125.52248 21.21751c-2.3575 0.34499-3.16251-0.2875-2.875-2.35749l5.23249-33.86751 85.09999-15.985c3.73751-0.80499 7.36001-2.07001 8.5675-2.99001 1.035-0.74749 1.495-1.83999 1.72501-3.56498 1.38-9.43001 3.22-23.05752 3.91-29.55501 0.345-2.875-2.01251-3.85251-5.17502-3.33501l-88.14748 16.10001 3.795-26.45c0.4025-2.99 2.41499-4.715 5.69249-5.29l99.87749-18.2275c5.00253-0.92 7.70502-3.9675 8.22251-8.28l2.415-22.08c0.69001-6.0375-2.93249-8.1075-9.14248-7.1875l-128.34001 22.2525c-12.13251 2.07001-20.125 10.005-21.6775 21.6775l-23.69 144.7275c-0.7475 5.0025-0.63249 8.97 0.05749 12.07501 1.72501 7.35999 9.83251 10.57999 18.17 9.42999l157.20502-27.3125 4.59998-40.99751z"
-          transform="translate(84.51526843266254 50) scale(1.1206874545888104 1.1206874545888104) translate(0 0)"
-          className="fill-accent transition-colors duration-300 group-hover:fill-text group-focus-visible:fill-text"
-        />
+        {brandMarkPaths.map((path) => (
+          <path
+            key={path.transform}
+            d={path.d}
+            transform={path.transform}
+            className="fill-accent transition-colors duration-300 group-hover:fill-text group-focus-visible:fill-text"
+          />
+        ))}
       </svg>
-      <span className="sr-only">{site.name}, {site.role}</span>
+      <span className="sr-only">{site.name}</span>
     </span>
   )
 }

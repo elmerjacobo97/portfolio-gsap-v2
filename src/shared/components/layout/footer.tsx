@@ -43,7 +43,7 @@ export function Footer({
             </span>
           </div>
 
-          <ul className="col-span-6 flex gap-6 md:col-span-6 md:justify-center">
+          <ul className="col-span-6 flex flex-wrap gap-x-6 gap-y-2 md:col-span-6 md:justify-center">
             {site.social.map((item) => (
               <li key={item.label}>
                 <a

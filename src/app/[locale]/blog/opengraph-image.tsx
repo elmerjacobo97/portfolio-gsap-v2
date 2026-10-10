@@ -3,6 +3,7 @@ import { ImageResponse } from 'next/og'
 import { site } from '@/shared/lib/site'
 import { defaultLocale, hasLocale, locales } from '@/shared/i18n/config'
 import { getDictionary } from '@/shared/i18n/get-dictionary'
+import { OgLogo } from '../_components/og-logo'
 
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
@@ -41,25 +42,30 @@ export default async function OpengraphImage({
           fontFamily: 'sans-serif',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 24, letterSpacing: 4, color: '#8A8A82' }}>
-          <span>{site.shortName.toUpperCase()}</span>
-          <span style={{ color: '#D4FF3F' }}>{site.city.toUpperCase()}, {site.country}</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <OgLogo />
+            <span style={{ fontSize: 24, letterSpacing: 4, color: '#8A8A82' }}>
+              {site.shortName.toUpperCase()}
+            </span>
+          </div>
+          <span style={{ fontSize: 24, letterSpacing: 4, color: '#D4FF3F' }}>
+            {site.city.toUpperCase()}, {site.country}
+          </span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ fontSize: 132, fontWeight: 800, lineHeight: 0.9, letterSpacing: -4 }}>
             {dict.blog.title.toUpperCase()}
           </div>
+          <div style={{ fontSize: 40, fontWeight: 800, letterSpacing: 2, marginTop: 16, color: '#C9C9C2' }}>
+            {dict.hero.role.toUpperCase()}
+          </div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div style={{ display: 'flex', height: 2, background: '#D4FF3F' }} />
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 48, fontSize: 28 }}>
-            <span style={{ color: '#C9C9C2' }}>{lead}</span>
-            <span style={{ color: '#8A8A82', letterSpacing: 3, flexShrink: 0 }}>
-              {site.role.toUpperCase()}
-            </span>
-          </div>
+          <div style={{ display: 'flex', fontSize: 28, color: '#C9C9C2' }}>{lead}</div>
         </div>
       </div>
     ),

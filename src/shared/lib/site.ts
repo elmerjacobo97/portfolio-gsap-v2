@@ -7,7 +7,6 @@ export function getYearsOfExperience() {
 export const site = {
 	name: "Elmer Augusto Jacobo Otiniano",
 	shortName: "Elmer Jacobo",
-	role: "Product engineer · Full stack",
 	email: "contacto@elmerjacobo.dev",
 	phone: "+51 927 347 691",
 	city: "Trujillo",
@@ -24,6 +23,8 @@ export const site = {
 		{ label: "LinkedIn", href: "https://linkedin.com/in/elmerjacobo97" },
 		{ label: "GitHub", href: "https://github.com/elmerjacobo97" },
 		{ label: "TikTok", href: "https://www.tiktok.com/@elmerjacobo.dev" },
+		{ label: "Instagram", href: "https://www.instagram.com/elmerjacobo.dev/" },
+		{ label: "Facebook", href: "https://www.facebook.com/elmerjacobo.dev" },
 	],
 	/** Shared technology vocabulary for metadata and project context. */
 	stack: [

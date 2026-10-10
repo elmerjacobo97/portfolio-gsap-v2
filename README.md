@@ -1,6 +1,6 @@
 # Elmer Jacobo Portfolio
 
-Bilingual portfolio for Elmer Jacobo, a product engineer and full-stack developer based in Trujillo, Peru. The site presents open-source projects, professional experience, services, applied AI work, and a direct contact flow.
+Bilingual portfolio for Elmer Jacobo, a freelance full-stack developer based in Trujillo, Peru. The site presents open-source projects, professional experience, services, applied AI work, and a direct contact flow.
 
 **Live site:** [elmerjacobo.dev](https://elmerjacobo.dev)
 

@@ -1,9 +1,9 @@
 const es = {
   meta: {
-    title: "Elmer Jacobo — Ingeniero de producto · Full stack",
+    title: "Elmer Jacobo — Desarrollador full stack · Webs, apps y sistemas",
     description:
-      "Ingeniero de producto y desarrollador full stack en Trujillo, Perú. Construyo productos digitales con frontend, backend, pagos, despliegue e IA aplicada.",
-    ogAlt: "Elmer Jacobo, ingeniero de producto y desarrollador full stack",
+      "Desarrollador full stack freelance en Trujillo, Perú, para clientes en LatAm y remoto. Creo landing pages, webs, apps móviles y sistemas a medida.",
+    ogAlt: "Elmer Jacobo, desarrollador full stack freelance: webs, apps móviles y sistemas",
   },
 
   nav: {
@@ -27,12 +27,12 @@ const es = {
   hero: {
     lineOne: "Elmer",
     lineTwo: "Jacobo",
-    role: "Product engineer · Full stack",
-    statement: "Construyo productos digitales que pasan de idea a uso real.",
+    role: "Desarrollador full stack",
+    statement: "Creo landing pages, webs, apps móviles y sistemas a medida para negocios.",
     supporting:
-      "Trabajo contigo desde definir el producto hasta el lanzamiento: interfaz, lógica, pagos y una base que tu equipo pueda mantener. Uso IA cuando resuelve una tarea concreta.",
+      "Trabajo contigo desde la idea hasta el lanzamiento: diseño, lógica, pagos y una base que tu equipo pueda mantener. Freelance, remoto desde Perú.",
     meta: ["Trujillo, PE", "Remoto · UTC−5"],
-    available: "Hablemos de tu producto",
+    available: "Cuéntame tu proyecto",
     projectsCta: "Ver proyectos",
     scroll: "Explorar",
     artifactLabel: "De problema a producto",
@@ -68,9 +68,9 @@ const es = {
     index: "03",
     title: "Enfoque",
     bio: [
-      "Trabajo con personas que necesitan construir, mejorar o poner en orden un producto digital. Conecto una decisión de negocio con una interfaz clara y una base técnica que el equipo pueda mantener.",
+      "Trabajo con negocios y emprendedores que necesitan una web, una app o un sistema. Conecto una decisión de negocio con una interfaz clara y una base técnica que el equipo pueda mantener.",
       "Llevo más de {years} años construyendo productos web y móviles en producción: dashboards, SaaS, APIs, pagos y herramientas internas. En mi trabajo actual he liderado decisiones de arquitectura de una plataforma SaaS con más de 200 usuarios activos, migré su backend de Laravel 9 a 12 e integré Stripe.",
-      "Puedo entrar para definir un primer alcance, mejorar un producto que ya tiene usuarios o preparar un backend difícil de cambiar. No necesitas tener todo resuelto; sí poder contarme qué quieres construir o qué está frenando el producto.",
+      "Puedo entrar para definir un primer alcance, mejorar un proyecto que ya tiene usuarios o preparar un backend difícil de cambiar. No necesitas tener todo resuelto; sí poder contarme qué quieres construir o qué está frenando tu proyecto.",
     ],
     stats: [
       { value: "{years}+", label: "años construyendo" },
@@ -83,7 +83,7 @@ const es = {
   services: {
     index: "04",
     title: "Servicios",
-    lead: "Puedo entrar cuando todavía hay que decidir qué construir, cuando el producto ya existe o cuando una decisión técnica está frenando al equipo. También podemos empezar con una sesión puntual para ordenar el siguiente paso.",
+    lead: "Elijo la entrega según lo que tu negocio necesita: desde una landing hasta un sistema a medida. Podemos empezar con una sesión corta para definir el alcance.",
     modeLabel: "Modo",
     deliverables: "Qué queda",
     fitTitle: "Buen encaje si...",
@@ -129,11 +129,12 @@ const es = {
       company: "Empresa",
       scope: "Qué necesitas resolver",
       scopeOptions: [
-        "Producto nuevo",
-        "Producto existente",
-        "Backend y arquitectura",
-        "Sesión para destrabar un producto",
-        "IA en producto o automatización",
+        "Landing o sitio web",
+        "App móvil",
+        "Sistema a medida",
+        "Backend, APIs y pagos",
+        "IA o automatización",
+        "Sesión de consultoría",
         "Todavía lo estoy definiendo",
       ],
       message: "Cuéntame qué quieres resolver",
@@ -162,7 +163,7 @@ const es = {
   footer: {
     marquee: [
       "Cuéntame tu caso",
-      "Producto nuevo o existente",
+      "Landing, web, app o sistema",
       "Sesión para destrabar",
       "Respuesta en menos de 24 horas",
       "Remoto desde Trujillo",
@@ -186,14 +187,14 @@ const es = {
     readPost: "Leer artículo",
     backToBlog: "Volver al blog",
     readingUnit: "min de lectura",
-    ctaTitle: "¿Hablamos de tu producto?",
+    ctaTitle: "¿Hablamos de tu proyecto?",
     ctaBody:
-      "Si quieres construir, mejorar o revisar un producto digital, cuéntame el caso y te respondo en menos de 24 horas.",
+      "Si quieres una web, una app o un sistema, cuéntame el caso y te respondo en menos de 24 horas.",
     cta: "Cuéntame tu caso",
-    ctaSubject: "Leí tu blog y quiero hablar de mi producto",
+    ctaSubject: "Leí tu blog y quiero hablar de mi proyecto",
     ctaPrefill:
-      "Hola Elmer,\n\nEncontré tu blog y me gustaría conversar sobre un producto que quiero construir o mejorar.\n\n",
-    ogAlt: "Blog de Elmer Jacobo sobre productos digitales para negocios",
+      "Hola Elmer,\n\nEncontré tu blog y me gustaría conversar sobre un proyecto que quiero construir o mejorar.\n\n",
+    ogAlt: "Blog de Elmer Jacobo sobre webs, apps y sistemas para negocios",
   },
 
   notFound: {
