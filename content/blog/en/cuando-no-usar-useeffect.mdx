@@ -1,0 +1,155 @@
+---
+title: 'When not to use useEffect: 4 common React cases'
+description: >-
+  Four situations where useEffect is unnecessary and what to use instead:
+  deriving data, resetting state, reacting to events, and fetching data.
+date: '2026-10-10'
+category: React & Tooling
+tags:
+  - React
+  - useEffect
+  - Hooks
+  - TanStack Query
+---
+
+A `useEffect` that calls `setState` every time something changes usually means that state was not needed. The React docs describe Effects as an escape hatch: they exist to synchronize a component with something outside React. If no external system is involved, you almost always can do without one.
+
+Removing unnecessary Effects makes code easier to follow and faster to run. Here are four cases where you can do it, with the code before and after.
+
+## Deriving data
+
+If a value can be calculated from props or state, calculate it while rendering. Storing it in another piece of state and updating it with an Effect adds an extra render, and for a moment the screen shows the old value.
+
+```tsx
+// Before
+function Cart({ items }: { items: Item[] }) {
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    setTotal(items.reduce((sum, item) => sum + item.price, 0));
+  }, [items]);
+
+  return <p>Total: {total}</p>;
+}
+```
+
+```tsx
+// After
+function Cart({ items }: { items: Item[] }) {
+  const total = items.reduce((sum, item) => sum + item.price, 0);
+
+  return <p>Total: {total}</p>;
+}
+```
+
+If the calculation is really expensive, measure it first and then wrap it in `useMemo`.
+
+## Resetting state
+
+When a prop changes and you want the component to start fresh, change its `key`. React discards the component and creates a new one with clean state. You do not need an Effect to clear it by hand.
+
+```tsx
+// Before
+function ProfilePage({ userId }: { userId: string }) {
+  const [comment, setComment] = useState("");
+
+  useEffect(() => {
+    setComment("");
+  }, [userId]);
+
+  return <CommentBox userId={userId} value={comment} onChange={setComment} />;
+}
+```
+
+```tsx
+// After
+function ProfilePage({ userId }: { userId: string }) {
+  return <Profile key={userId} userId={userId} />;
+}
+
+function Profile({ userId }: { userId: string }) {
+  const [comment, setComment] = useState("");
+
+  return <CommentBox userId={userId} value={comment} onChange={setComment} />;
+}
+```
+
+With the Effect, the component first renders with the previous user's comment and is cleared afterwards. With the `key`, the new state starts clean on the first render.
+
+## Reacting to an event
+
+Ask yourself why that code runs. If it runs because the user did something, it belongs in the event handler. If it runs because the component appeared on screen, that is where an Effect fits.
+
+```tsx
+// Before
+function BuyButton({ product }: { product: Product }) {
+  const [bought, setBought] = useState(false);
+
+  useEffect(() => {
+    if (bought) {
+      addToCart(product);
+      showToast(`${product.name} added`);
+    }
+  }, [bought]);
+
+  return <button onClick={() => setBought(true)}>Buy</button>;
+}
+```
+
+```tsx
+// After
+function BuyButton({ product }: { product: Product }) {
+  function handleClick() {
+    addToCart(product);
+    showToast(`${product.name} added`);
+  }
+
+  return <button onClick={handleClick}>Buy</button>;
+}
+```
+
+In the first version the click only changes a state, and the Effect watches it to do the work. That is a detour, and the linter will ask you to add `product` and `addToCart` to the dependencies. In the handler, the code runs exactly when the user clicks.
+
+## Fetching data
+
+A `fetch` inside a `useEffect` works until the user switches screens quickly. The first user's response can arrive after the second one's and overwrite it. To prevent that you need a cleanup flag in the Effect, and you still lack loading and error states, and a cache.
+
+```tsx
+// Before
+function UserProfile({ userId }: { userId: string }) {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/users/${userId}`)
+      .then((res) => res.json())
+      .then(setUser);
+  }, [userId]);
+
+  if (!user) return <p>Loading...</p>;
+  return <h1>{user.name}</h1>;
+}
+```
+
+For server data, use a library built for it, such as TanStack Query:
+
+```tsx
+// After
+function UserProfile({ userId }: { userId: string }) {
+  const { data: user, isPending, error } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: () => fetch(`/api/users/${userId}`).then((res) => res.json()),
+  });
+
+  if (isPending) return <p>Loading...</p>;
+  if (error) return <p>Something went wrong.</p>;
+  return <h1>{user.name}</h1>;
+}
+```
+
+The `queryKey` includes the `userId`, so each user gets their own cache entry and responses do not overwrite each other. For the full setup, see [TanStack Query: a practical getting-started guide](/en/blog/tanstack-query-getting-started). In Next.js, the data is often fetched in a Server Component, so no Effect is needed at all.
+
+## When useEffect is the right tool
+
+Use it when you need to synchronize the component with something external: subscribing to a browser event or a WebSocket, running a timer, or connecting a non-React library such as a map. It also fits code that must run because the component was displayed, like logging a page view for analytics.
+
+Go through your project and look for `useEffect` calls whose only job is to call `setState`. Those are almost always the first ones you can delete. The full guide is in the React docs: [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect).

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import rehypeShiki from "@shikijs/rehype";
 import remarkGfm from "remark-gfm";
 import { ArrowLeft } from "lucide-react";
 
@@ -187,7 +188,23 @@ export default async function BlogArticle({ params }: { params: Params }) {
 						<MDXRemote
 							source={post.content}
 							components={mdxComponents}
-							options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+							options={{
+								mdxOptions: {
+									remarkPlugins: [remarkGfm],
+									rehypePlugins: [
+										[
+											rehypeShiki,
+											{
+												themes: {
+													light: "github-light-high-contrast",
+													dark: "github-dark-default",
+												},
+												defaultColor: false,
+											},
+										],
+									],
+								},
+							}}
 						/>
 					</div>
 

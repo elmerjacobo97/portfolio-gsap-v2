@@ -65,9 +65,11 @@ Read 2 existing posts before writing (`deploy-google-cloud-claude-code-agent.mdx
 
 ## Steps
 
+0. Gate: write the article only if at least two are true: someone would search it in 6 months, it needs more than 6 slides to explain well, it works as proof for clients. Otherwise say so and stop. Rows with goal "Clientes" use the contact CTA, not a blog link.
 1. Gather sources; decide slug, category, tags.
 2. Write the ES version.
 3. Run the prose through the **humanizer** skill (leave frontmatter and code untouched).
 4. Translate to EN: same order, same code blocks, natural (not literal) English. Run humanizer on it too.
-5. With the dev server running (`pnpm dev`), check that `/es/blog/<slug>` and `/en/blog/<slug>` return 200 and the post shows in the list with its category chip. If the frontmatter fails the schema, the post silently disappears.
-6. Report in 3 lines: files created, category, which fact Elmer should double-check.
+5. Run `pnpm lint && pnpm exec tsc --noEmit && pnpm build` and check that `/es/blog/<slug>` and `/en/blog/<slug>` appear in the build output. Do not start `pnpm dev`. If the frontmatter fails the schema, the post silently disappears.
+6. If the topic came from a Notion calendar row, update that row's captions: TikTok and Instagram get "Guía completa con ejemplos en elmerjacobo.dev (sección Blog) 🔗" (Instagram: "en el link de mi bio"), Facebook gets `https://elmerjacobo.dev/es/blog/<slug>`. Add a "Antes de publicar: despliega el artículo" note at the top of the row.
+7. Report in 3 lines: files created, category, which fact Elmer should double-check.
