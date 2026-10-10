@@ -34,13 +34,13 @@ const en = {
     supporting:
       "I work with you from idea to launch: design, development, payments, and a foundation your team can maintain. Freelance, remote from Peru.",
     meta: ["Trujillo, PE", "Remote · UTC−5"],
-    available: "Available for freelance projects",
+    available: "Available for projects",
     whatsappCta: "Message me on WhatsApp",
     projectsCta: "View projects",
     trust: [
       { value: "{years}+", label: "years building" },
-      { value: "380+", label: "active users across products" },
-      { value: "3", label: "countries with an app in use" },
+      { value: "380+", label: "active users" },
+      { value: "3", label: "countries with an app" },
     ],
     scroll: "Explore",
     artifactLabel: "From problem to product",
@@ -66,7 +66,7 @@ const en = {
   experience: {
     index: "03",
     title: "Experience",
-    lead: "Products I have contributed to professionally. I show my responsibility and context without presenting them as personal property.",
+    lead: "Products from companies and clients I worked on. I explain what I did in each one.",
     contribution: "Professional contribution",
     role: "Role",
     openProject: "Open project",
@@ -78,11 +78,11 @@ const en = {
     bio: [
       "I work with businesses and founders who need a website, an app, or a system. I connect a business decision to a clear interface and a technical foundation the team can maintain.",
       "I have spent more than {years} years building web and mobile products that people use every day: dashboards, subscription platforms, payments, and internal tools. In my current work I led technical decisions for a platform with more than 200 active users, updated its technical base, and integrated Stripe payments.",
-      "I can join to define a first scope, improve something that already has users, or bring order to a system that keeps getting harder to change. You do not need everything figured out; just tell me what you want to achieve or what is slowing you down.",
+      "I can join to define a first version, improve something that already has users, or bring order to a system that keeps getting harder to change. You do not need everything figured out; just tell me what you want to achieve or what is slowing you down.",
     ],
     stats: [
       { value: "{years}+", label: "years building" },
-      { value: "380+", label: "active users across products" },
+      { value: "380+", label: "active users" },
       { value: "2+", label: "products in production" },
     ],
     portraitAlt: "Portrait of Elmer Jacobo Otiniano",
@@ -91,9 +91,9 @@ const en = {
   services: {
     index: "01",
     title: "Services",
-    lead: "I choose the delivery based on what your business needs: from a landing page to a custom system. We can also start with a short session to define the scope.",
-    modeLabel: "Mode",
-    deliverables: "What stays",
+    lead: "I choose the delivery based on what your business needs: from a landing page to a custom system. We can also start with a short session to define what will be done.",
+    modeLabel: "Service",
+    deliverables: "What is included",
     fitTitle: "A good fit if...",
     fit: [
       "You can explain the problem you want to solve.",
@@ -118,7 +118,7 @@ const en = {
   faq: {
     index: "06",
     title: "Questions",
-    lead: "What people usually ask before we start: how I work, how long it takes, what I need from you, and how we agree on scope and delivery.",
+    lead: "What people usually ask before we start: how I work, how long it takes, what I need from you, and how we agree on what gets delivered and when.",
   },
 
   contact: {
@@ -140,7 +140,7 @@ const en = {
         "Landing page or website",
         "Mobile app",
         "Custom system",
-        "Backend, APIs, and payments",
+        "Payments, integrations, and internal systems",
         "AI or automation",
         "Consulting session",
         "I am still defining it",

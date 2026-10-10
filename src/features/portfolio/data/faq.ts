@@ -14,8 +14,8 @@ export const faq: readonly FaqItem[] = [
 			en: "How do we work together?",
 		},
 		answer: {
-			es: "Hay tres formas de empezar: una sesión corta para resolver una duda o decisión, un trabajo con alcance cerrado para construir o mejorar algo concreto, o trabajo continuo por semanas cuando el proyecto ya está en marcha. Lo definimos en la primera conversación.",
-			en: "There are three ways to start: a short session to settle a question or decision, a fixed-scope job to build or improve something specific, or ongoing weekly work when the project is already running. We define it in the first conversation.",
+			es: "Hay tres formas de empezar: una sesión corta para resolver una duda o decisión, un trabajo con precio y entregables definidos desde el inicio para construir o mejorar algo concreto, o trabajo continuo por semanas cuando el proyecto ya está en marcha. Lo definimos en la primera conversación.",
+			en: "There are three ways to start: a short session to settle a question or decision, a job with price and deliverables agreed up front to build or improve something specific, or ongoing weekly work when the project is already running. We define it in the first conversation.",
 		},
 	},
 	{

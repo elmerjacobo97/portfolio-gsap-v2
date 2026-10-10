@@ -7,7 +7,7 @@ export function SocialLinks({
   source,
   className,
 }: {
-  source: 'footer' | 'hero'
+  source: 'footer'
   className?: string
 }) {
   return (

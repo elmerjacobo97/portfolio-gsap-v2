@@ -32,13 +32,13 @@ const es = {
     supporting:
       "Trabajo contigo desde la idea hasta el lanzamiento: diseño, programación, pagos y una base que tu equipo pueda mantener. Freelance, remoto desde Perú.",
     meta: ["Trujillo, PE", "Remoto · UTC−5"],
-    available: "Disponible para proyectos freelance",
+    available: "Disponible para proyectos",
     whatsappCta: "Escríbeme por WhatsApp",
     projectsCta: "Ver proyectos",
     trust: [
       { value: "{years}+", label: "años construyendo" },
-      { value: "380+", label: "usuarios activos entre productos" },
-      { value: "3", label: "países con una app en uso" },
+      { value: "380+", label: "usuarios activos" },
+      { value: "3", label: "países con una app" },
     ],
     scroll: "Explorar",
     artifactLabel: "De problema a producto",
@@ -64,7 +64,7 @@ const es = {
   experience: {
     index: "03",
     title: "Experiencia",
-    lead: "Productos en los que he contribuido profesionalmente. Muestro mi responsabilidad y contexto, no los presento como propiedad personal.",
+    lead: "Productos de empresas y clientes en los que trabajé. Explico qué hice yo en cada uno.",
     contribution: "Contribución profesional",
     role: "Rol",
     openProject: "Abrir proyecto",
@@ -76,11 +76,11 @@ const es = {
     bio: [
       "Trabajo con negocios y emprendedores que necesitan una web, una app o un sistema. Conecto una decisión de negocio con una interfaz clara y una base técnica que el equipo pueda mantener.",
       "Llevo más de {years} años construyendo productos web y móviles que se usan de verdad: paneles de control, plataformas con suscripción, pagos y herramientas internas. En mi trabajo actual lideré decisiones técnicas de una plataforma con más de 200 usuarios activos, actualicé su base técnica e integré pagos con Stripe.",
-      "Puedo entrar para definir un primer alcance, mejorar algo que ya tiene usuarios u ordenar un sistema que cada vez cuesta más cambiar. No necesitas tener todo resuelto; basta con contarme qué quieres lograr o qué te está frenando.",
+      "Puedo entrar para definir una primera versión, mejorar algo que ya tiene usuarios u ordenar un sistema que cada vez cuesta más cambiar. No necesitas tener todo resuelto; basta con contarme qué quieres lograr o qué te está frenando.",
     ],
     stats: [
       { value: "{years}+", label: "años construyendo" },
-      { value: "380+", label: "usuarios activos entre productos" },
+      { value: "380+", label: "usuarios activos" },
       { value: "2+", label: "productos en producción" },
     ],
     portraitAlt: "Retrato de Elmer Jacobo Otiniano",
@@ -89,9 +89,9 @@ const es = {
   services: {
     index: "01",
     title: "Servicios",
-    lead: "Elijo la entrega según lo que tu negocio necesita: desde una landing hasta un sistema a medida. Podemos empezar con una sesión corta para definir el alcance.",
-    modeLabel: "Modo",
-    deliverables: "Qué queda",
+    lead: "Elijo la entrega según lo que tu negocio necesita: desde una landing hasta un sistema a medida. Podemos empezar con una sesión corta para definir qué se va a hacer.",
+    modeLabel: "Servicio",
+    deliverables: "Qué incluye",
     fitTitle: "Buen encaje si...",
     fit: [
       "Puedes explicar qué problema quieres resolver.",
@@ -116,7 +116,7 @@ const es = {
   faq: {
     index: "06",
     title: "Preguntas",
-    lead: "Lo que suelen preguntarme antes de empezar: cómo trabajo, cuánto tarda, qué necesito de ti y cómo acordamos alcance y entrega.",
+    lead: "Lo que suelen preguntarme antes de empezar: cómo trabajo, cuánto tarda, qué necesito de ti y cómo acordamos qué se entrega y cuándo.",
   },
 
   contact: {
@@ -138,7 +138,7 @@ const es = {
         "Landing o sitio web",
         "App móvil",
         "Sistema a medida",
-        "Backend, APIs y pagos",
+        "Pagos, conexiones y sistema interno",
         "IA o automatización",
         "Sesión de consultoría",
         "Todavía lo estoy definiendo",

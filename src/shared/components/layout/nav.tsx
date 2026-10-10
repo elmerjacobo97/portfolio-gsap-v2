@@ -66,14 +66,14 @@ export function Nav({
               hit box, under the 24px minimum touch target (axe: target-size). */}
 					<TransitionLink
 						href={`/${locale}`}
-						className="group col-span-6 inline-flex w-fit items-center py-1 md:col-span-4"
+						className="group col-span-6 inline-flex w-fit items-center py-1 xl:col-span-3"
 					>
 						<BrandMark />
 					</TransitionLink>
 
 					<nav
 						aria-label="Primary"
-						className="col-span-4 hidden justify-center gap-8 md:flex"
+						className="col-span-6 hidden justify-center gap-2 xl:flex"
 					>
 						{links.map((link) => (
 							<TransitionLink
@@ -86,7 +86,7 @@ export function Nav({
 						))}
 					</nav>
 
-					<div className="col-span-6 flex items-center justify-end gap-4 md:col-span-4">
+					<div className="col-span-6 flex items-center justify-end gap-4 xl:col-span-3">
 						<LocaleSwitcher locale={locale} label={switchLabel} />
 						<ThemeToggle
 							label={themeLabel}
@@ -98,7 +98,7 @@ export function Nav({
 							onClick={() => setOpen(true)}
 							aria-expanded={open}
 							className={cn(
-								"u-label text-text hover:text-accent inline-flex items-center gap-2 py-2 transition-colors duration-200 md:hidden",
+								"u-label text-text hover:text-accent inline-flex items-center gap-2 py-2 transition-colors duration-200 xl:hidden",
 							)}
 						>
 							{menuLabel}

@@ -11,8 +11,8 @@ export const processSteps: readonly ProcessStep[] = [
 		code: "01",
 		title: { es: "Entender el problema", en: "Understand the problem" },
 		body: {
-			es: "Hablamos de lo que vendes, de quién lo usa y de qué te está frenando. Salgo de esa conversación con el alcance por escrito y las preguntas que aún faltan por resolver.",
-			en: "We talk about what you sell, who uses it, and what is slowing you down. I leave that conversation with the scope in writing and the questions we still need to answer.",
+			es: "Hablamos de lo que vendes, de quién lo usa y de qué te está frenando. Salgo de esa conversación con lo que vamos a hacer por escrito y las preguntas que aún faltan por resolver.",
+			en: "We talk about what you sell, who uses it, and what is slowing you down. I leave that conversation with what we will do in writing and the questions we still need to answer.",
 		},
 	},
 	{

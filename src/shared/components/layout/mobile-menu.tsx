@@ -41,7 +41,7 @@ export function MobileMenu({
 				e.preventDefault();
 				onCloseAction();
 			}}
-			className="bg-accent-fill text-on-accent overscroll-contain fixed inset-0 z-[60] m-0 h-dvh max-h-none w-full max-w-none flex-col p-0 backdrop:bg-scrim/80 open:flex md:hidden"
+			className="bg-accent-fill text-on-accent overscroll-contain fixed inset-0 z-[60] m-0 h-dvh max-h-none w-full max-w-none flex-col p-0 backdrop:bg-scrim/80 open:flex xl:hidden"
 		>
 			<div className="grid-page items-center py-4">
 				<button
