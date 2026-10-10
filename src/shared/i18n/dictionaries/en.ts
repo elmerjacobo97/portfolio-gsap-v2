@@ -32,10 +32,16 @@ const en = {
     role: "Full-stack developer",
     statement: "I build landing pages, websites, mobile apps, and custom software for businesses.",
     supporting:
-      "I work with you from idea to launch: design, logic, payments, and a foundation your team can maintain. Freelance, remote from Peru.",
+      "I work with you from idea to launch: design, development, payments, and a foundation your team can maintain. Freelance, remote from Peru.",
     meta: ["Trujillo, PE", "Remote · UTC−5"],
-    available: "Tell me about your project",
+    available: "Available for freelance projects",
+    whatsappCta: "Message me on WhatsApp",
     projectsCta: "View projects",
+    trust: [
+      { value: "{years}+", label: "years building" },
+      { value: "380+", label: "active users across products" },
+      { value: "3", label: "countries with an app in use" },
+    ],
     scroll: "Explore",
     artifactLabel: "From problem to product",
     artifactKind: "Method",
@@ -48,9 +54,9 @@ const en = {
   },
 
   projects: {
-    index: "01",
+    index: "04",
     title: "Projects",
-    lead: "These are products I built by my own initiative or published as open source. They show how I think and how I work.",
+    lead: "Personal and open-source projects. They show how I think and work when I build software.",
     openProject: "Open project",
     activityLabel: "GitHub activity",
     activitySummary: "contributions in the last year",
@@ -58,7 +64,7 @@ const en = {
   },
 
   experience: {
-    index: "02",
+    index: "03",
     title: "Experience",
     lead: "Products I have contributed to professionally. I show my responsibility and context without presenting them as personal property.",
     contribution: "Professional contribution",
@@ -67,12 +73,12 @@ const en = {
   },
 
   about: {
-    index: "03",
-    title: "Approach",
+    index: "05",
+    title: "About",
     bio: [
       "I work with businesses and founders who need a website, an app, or a system. I connect a business decision to a clear interface and a technical foundation the team can maintain.",
-      "I have spent more than {years} years building web and mobile products in production: dashboards, SaaS products, APIs, payments, and internal tools. In my current work I have led architecture decisions for a SaaS platform with more than 200 active users, migrated its backend from Laravel 9 to 12, and integrated Stripe.",
-      "I can join to define a first scope, improve a project that already has users, or prepare a backend that has become hard to change. You do not need everything figured out; you do need to explain what you want to build or what is slowing your project down.",
+      "I have spent more than {years} years building web and mobile products that people use every day: dashboards, subscription platforms, payments, and internal tools. In my current work I led technical decisions for a platform with more than 200 active users, updated its technical base, and integrated Stripe payments.",
+      "I can join to define a first scope, improve something that already has users, or bring order to a system that keeps getting harder to change. You do not need everything figured out; just tell me what you want to achieve or what is slowing you down.",
     ],
     stats: [
       { value: "{years}+", label: "years building" },
@@ -83,7 +89,7 @@ const en = {
   },
 
   services: {
-    index: "04",
+    index: "01",
     title: "Services",
     lead: "I choose the delivery based on what your business needs: from a landing page to a custom system. We can also start with a short session to define the scope.",
     modeLabel: "Mode",
@@ -92,12 +98,12 @@ const en = {
     fit: [
       "You can explain the problem you want to solve.",
       "There is context and unfinished decisions to review together.",
-      "You want a clear decision before committing to development.",
+      "You want to be clear on what will be built before paying for development.",
     ],
   },
 
   process: {
-    index: "05",
+    index: "02",
     title: "Process",
     lead: "I show you the work as it happens. We discuss changes before they become code, and every week you have something you can open.",
   },
@@ -118,7 +124,7 @@ const en = {
   contact: {
     index: "07",
     title: "Contact",
-    lead: "Tell me what you want to build, improve, or unblock. I reply within 24 hours.",
+    lead: "Tell me what you want to build, improve, or fix. I reply within 24 hours.",
     channelsTitle: "Direct channels",
     whatsapp: "WhatsApp",
     booking: "Book 30 min",
@@ -167,7 +173,7 @@ const en = {
     marquee: [
       "Tell me about your case",
       "Landing, website, app, or system",
-      "One session to unblock",
+      "Consulting session",
       "Reply within 24 hours",
       "Remote from Trujillo",
     ],

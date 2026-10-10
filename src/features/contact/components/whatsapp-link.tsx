@@ -1,6 +1,7 @@
 import { MessageCircle } from 'lucide-react'
 
 import { site } from '@/shared/lib/site'
+import { whatsappUrl } from '@/shared/lib/whatsapp'
 import { ChannelRow } from './channel-row'
 
 export function WhatsAppLink({
@@ -10,13 +11,11 @@ export function WhatsAppLink({
   label: string
   prefill: string
 }) {
-  const href = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(prefill)}`
-
   return (
     <ChannelRow
       label={label}
       value={site.phone}
-      href={href}
+      href={whatsappUrl(prefill)}
       icon={MessageCircle}
       external
       analyticsEvent="contact_cta_click"

@@ -6,12 +6,20 @@ import { ArrowDown } from "lucide-react";
 import { ArrowLink } from "@/shared/components/ui/arrow-link";
 import { Pill } from "@/shared/components/ui/pill";
 import { Rule } from "@/shared/components/ui/rule";
+import { SocialLinks } from "@/shared/components/ui/social-links";
 import type { Dictionary } from "@/shared/i18n/dictionary";
 import { gsap, SplitText, useGSAP } from "@/shared/lib/gsap";
 import { introDone } from "@/shared/lib/intro";
 import { OK } from "@/shared/lib/motion";
+import { whatsappUrl } from "@/shared/lib/whatsapp";
 
-export function Hero({ dict }: { dict: Dictionary["hero"] }) {
+export function Hero({
+	dict,
+	whatsappPrefill,
+}: {
+	dict: Dictionary["hero"];
+	whatsappPrefill: string;
+}) {
 	const rootRef = useRef<HTMLElement>(null);
 
 	useGSAP(
@@ -186,14 +194,18 @@ export function Hero({ dict }: { dict: Dictionary["hero"] }) {
 		{ scope: rootRef, dependencies: [] },
 	);
 
-	return <HeroView dict={dict} rootRef={rootRef} />;
+	return (
+		<HeroView dict={dict} whatsappPrefill={whatsappPrefill} rootRef={rootRef} />
+	);
 }
 
 function HeroView({
 	dict,
+	whatsappPrefill,
 	rootRef,
 }: {
 	dict: Dictionary["hero"];
+	whatsappPrefill: string;
 	rootRef: RefObject<HTMLElement | null>;
 }) {
 	return (
@@ -238,6 +250,14 @@ function HeroView({
 							<li key={item}>{item}</li>
 						))}
 					</ul>
+					<dl className="mt-10 space-y-4">
+						{dict.trust.map((item) => (
+							<div key={item.label}>
+								<dt className="u-meta text-text-dim">{item.label}</dt>
+								<dd className="text-lead u-wide text-text">{item.value}</dd>
+							</div>
+						))}
+					</dl>
 				</div>
 
 				<div className="hero-copy order-1 col-span-12 mt-10 max-w-[42ch] lg:order-none lg:col-span-6 lg:mt-14">
@@ -248,10 +268,20 @@ function HeroView({
 						{dict.supporting}
 					</p>
 					<div className="mt-8 flex flex-wrap gap-x-7 gap-y-4">
-						<ArrowLink href="#projects" direction="down" tone="action">
+						<ArrowLink
+							href={whatsappUrl(whatsappPrefill)}
+							external
+							tone="action"
+							analyticsEvent="contact_cta_click"
+							analyticsSource="hero"
+						>
+							{dict.whatsappCta}
+						</ArrowLink>
+						<ArrowLink href="#projects" direction="down">
 							{dict.projectsCta}
 						</ArrowLink>
 					</div>
+					<SocialLinks source="hero" className="mt-6" />
 				</div>
 
 				<div className="hero-artifact border-rule bg-surface-inset order-3 col-span-12 mt-10 border lg:order-none lg:col-span-5 lg:col-start-8 lg:mt-14">

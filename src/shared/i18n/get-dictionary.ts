@@ -21,6 +21,13 @@ export async function getDictionary(locale: Locale): Promise<Dictionary> {
 
   return {
     ...dict,
+    hero: {
+      ...dict.hero,
+      trust: dict.hero.trust.map((stat) => ({
+        ...stat,
+        value: fillYears(stat.value),
+      })),
+    },
     about: {
       ...dict.about,
       bio: dict.about.bio.map(fillYears),

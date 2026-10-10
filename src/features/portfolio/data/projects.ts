@@ -40,7 +40,7 @@ export const projects: readonly Project[] = [
   {
     slug: "forge",
     category: "project",
-    order: 1,
+    order: 2,
     year: 2026,
     client: { es: "Open source · InsForge", en: "Open source · InsForge" },
     liveUrl: "https://forge.elmerjacobo.dev/",
@@ -139,7 +139,7 @@ export const projects: readonly Project[] = [
   {
     slug: "spec-flow-skills",
     category: "project",
-    order: 2,
+    order: 3,
     year: 2026,
     client: { es: "Open source · Individual", en: "Open source · Individual" },
     repoUrl: "https://github.com/elmerjacobo97/spec-flow-skills",
@@ -215,7 +215,7 @@ export const projects: readonly Project[] = [
   {
     slug: "tech-architecture-skills",
     category: "project",
-    order: 3,
+    order: 4,
     year: 2026,
     client: { es: "Open source · Individual", en: "Open source · Individual" },
     repoUrl: "https://github.com/elmerjacobo97/tech-architecture-skills",
@@ -258,7 +258,7 @@ export const projects: readonly Project[] = [
   {
     slug: "driftwatch",
     category: "project",
-    order: 4,
+    order: 5,
     year: 2026,
     client: { es: "Open source · Individual", en: "Open source · Individual" },
     liveUrl: "https://www.npmjs.com/package/@codigoconelmer/driftwatch",
@@ -274,7 +274,7 @@ export const projects: readonly Project[] = [
     role: { es: "Autor · Mantenedor", en: "Author · Maintainer" },
     title: { es: "DriftWatch", en: "DriftWatch" },
     tagline: {
-      es: "Detecta cambios de schema antes de que rompan tu app.",
+      es: "Detecta a tiempo cambios que rompen tu aplicación.",
       en: "Detect schema changes before they break your app.",
     },
     summary: {
@@ -340,17 +340,17 @@ export const projects: readonly Project[] = [
     category: "experience",
     order: 3,
     year: 2025,
-    client: { es: "Tarjetly · SaaS B2B", en: "Tarjetly · B2B SaaS" },
+    client: { es: "Tarjetly · plataforma B2B con suscripción", en: "Tarjetly · B2B SaaS" },
     liveUrl: "https://tarjetly.com",
     stack: ["React", "TypeScript", "Laravel", "MySQL", "Groq", "Stripe", "GCP"],
-    role: { es: "Full Stack Developer", en: "Full Stack Developer" },
+    role: { es: "Desarrollador full stack", en: "Full Stack Developer" },
     title: { es: "Tarjetly", en: "Tarjetly" },
     tagline: {
       es: "Tarjetas digitales corporativas con pagos e IA aplicada.",
       en: "Corporate digital cards with payments and applied AI.",
     },
     summary: {
-      es: "Dashboard para crear y gestionar tarjetas digitales, con suscripciones Stripe y generación de contenido mediante Groq a partir de datos reales.",
+      es: "Panel para crear y gestionar tarjetas digitales, con suscripciones de pago (Stripe) y textos generados con IA a partir de los datos reales de cada perfil.",
       en: "A dashboard for creating and managing digital cards, with Stripe subscriptions and Groq-powered content generated from real profile data.",
     },
     metrics: [
@@ -427,7 +427,7 @@ export const projects: readonly Project[] = [
   {
     slug: "gastly",
     category: "project",
-    order: 5,
+    order: 1,
     year: 2025,
     client: { es: "Producto personal", en: "Personal product" },
     repoUrl: "https://github.com/elmerjacobo97/Gastly",
@@ -441,7 +441,7 @@ export const projects: readonly Project[] = [
       "Recharts",
       "Zod",
     ],
-    role: { es: "Solo founder · Full Stack", en: "Solo founder · Full Stack" },
+    role: { es: "Fundador y desarrollador", en: "Solo founder · Full Stack" },
     title: { es: "Gastly", en: "Gastly" },
     tagline: {
       es: "Finanzas personales diseñadas alrededor de uso diario real.",
@@ -519,14 +519,14 @@ export const projects: readonly Project[] = [
     client: { es: "ABEHA · Operaciones", en: "ABEHA · Operations" },
     liveUrl: "https://sismol.c2e.mx/",
     stack: ["React", "TypeScript", "Laravel", "PostgreSQL"],
-    role: { es: "Full Stack Developer", en: "Full Stack Developer" },
+    role: { es: "Desarrollador full stack", en: "Full Stack Developer" },
     title: { es: "Sismol", en: "Sismol" },
     tagline: {
       es: "Panel operativo para sistemas de captación de agua.",
       en: "Operations dashboard for water harvesting systems.",
     },
     summary: {
-      es: "Dashboard interno con sensores, métricas, alertas y reportes para centralizar la operación del sistema de captación pluvial de ABEHA.",
+      es: "Panel interno con sensores, métricas, alertas y reportes para centralizar la operación del sistema de captación pluvial de ABEHA.",
       en: "An internal dashboard with sensors, metrics, alerts, and reports that centralizes operations for ABEHA rainwater harvesting systems.",
     },
     metrics: [
@@ -597,14 +597,14 @@ export const projects: readonly Project[] = [
     client: { es: "ABEHA · Institución académica", en: "ABEHA · Academic institution" },
     liveUrl: "https://admin.tlalocapp.com",
     stack: ["React", "React Native", "TypeScript", "Laravel", "PostgreSQL", "PostGIS", "GCP"],
-    role: { es: "Full Stack Developer", en: "Full Stack Developer" },
+    role: { es: "Desarrollador full stack", en: "Full Stack Developer" },
     title: { es: "TlalocApp", en: "TlalocApp" },
     tagline: {
       es: "Monitoreo de captación pluvial en web y Android.",
       en: "Rainwater harvesting monitoring on web and Android.",
     },
     summary: {
-      es: "App móvil de campo y dashboard web con mapas geoespaciales, datos de precipitación satelital, reportes en Excel y notificaciones push. Más de 180 usuarios activos en dos plataformas.",
+      es: "App móvil de campo y panel web con mapas geoespaciales, datos de lluvia por satélite, reportes en Excel y notificaciones push. Más de 180 usuarios activos en dos plataformas.",
       en: "A field mobile app and web dashboard with geospatial maps, satellite rainfall data, Excel reports, and push notifications. More than 180 active users across two platforms.",
     },
     metrics: [

@@ -14,8 +14,8 @@ export const faq: readonly FaqItem[] = [
 			en: "How do we work together?",
 		},
 		answer: {
-			es: "Hay tres formas de empezar: una sesión puntual para destrabar una decisión, un alcance cerrado para construir o mejorar algo concreto, o trabajo continuo por semanas cuando el producto ya está en marcha. Lo definimos en la primera conversación.",
-			en: "There are three ways to start: a focused session to unblock a decision, a fixed scope to build or improve something specific, or ongoing weekly work when the product is already moving. We define it in the first conversation.",
+			es: "Hay tres formas de empezar: una sesión corta para resolver una duda o decisión, un trabajo con alcance cerrado para construir o mejorar algo concreto, o trabajo continuo por semanas cuando el proyecto ya está en marcha. Lo definimos en la primera conversación.",
+			en: "There are three ways to start: a short session to settle a question or decision, a fixed-scope job to build or improve something specific, or ongoing weekly work when the project is already running. We define it in the first conversation.",
 		},
 	},
 	{
@@ -36,8 +36,8 @@ export const faq: readonly FaqItem[] = [
 			en: "What do I need before reaching out?",
 		},
 		answer: {
-			es: "Solo poder explicar qué quieres construir o qué está frenando tu producto. No necesitas diseños, especificaciones ni stack definido; eso lo ordenamos juntos.",
-			en: "You only need to explain what you want to build or what is holding your product back. You do not need designs, specs, or a chosen stack; we sort that out together.",
+			es: "Solo poder explicar qué quieres construir o qué te está frenando. No necesitas diseños, documentos técnicos ni haber elegido tecnologías; eso lo definimos juntos.",
+			en: "Only the ability to explain what you want to build or what is slowing you down. You do not need designs, technical documents, or chosen technologies; we decide that together.",
 		},
 	},
 	{
@@ -47,8 +47,8 @@ export const faq: readonly FaqItem[] = [
 			en: "Can you work on a product that already exists?",
 		},
 		answer: {
-			es: "Sí. Empiezo revisando el flujo y el código para ver dónde se acumula el problema, y entrego los cambios por partes para que puedas revisarlos.",
-			en: "Yes. I start by reviewing the flow and the code to see where the problem accumulates, and I deliver changes in parts so you can review them.",
+			es: "Sí. Empiezo revisando cómo funciona y el código para ver dónde se acumula el problema, y entrego los cambios por partes para que puedas revisarlos.",
+			en: "Yes. I start by reviewing how it works and the code to see where the problem builds up, then deliver the changes in parts so you can review them.",
 		},
 	},
 	{
@@ -58,8 +58,8 @@ export const faq: readonly FaqItem[] = [
 			en: "What happens when the project ends?",
 		},
 		answer: {
-			es: "Recibes el código en tu repositorio, el deploy funcionando y las decisiones documentadas. Después acordamos si sigo dando mantenimiento o si lo toma tu equipo.",
-			en: "You get the code in your repository, a working deployment, and the decisions documented. Then we agree on whether I keep maintaining it or your team takes over.",
+			es: "Recibes el código en tu cuenta, el proyecto publicado y funcionando, y las decisiones documentadas. Después acordamos si sigo dando mantenimiento o si lo toma tu equipo.",
+			en: "You get the code in your account, the project published and working, and the decisions documented. Then we agree on whether I keep maintaining it or your team takes over.",
 		},
 	},
 	{

@@ -30,10 +30,16 @@ const es = {
     role: "Desarrollador full stack",
     statement: "Creo landing pages, webs, apps móviles y sistemas a medida para negocios.",
     supporting:
-      "Trabajo contigo desde la idea hasta el lanzamiento: diseño, lógica, pagos y una base que tu equipo pueda mantener. Freelance, remoto desde Perú.",
+      "Trabajo contigo desde la idea hasta el lanzamiento: diseño, programación, pagos y una base que tu equipo pueda mantener. Freelance, remoto desde Perú.",
     meta: ["Trujillo, PE", "Remoto · UTC−5"],
-    available: "Cuéntame tu proyecto",
+    available: "Disponible para proyectos freelance",
+    whatsappCta: "Escríbeme por WhatsApp",
     projectsCta: "Ver proyectos",
+    trust: [
+      { value: "{years}+", label: "años construyendo" },
+      { value: "380+", label: "usuarios activos entre productos" },
+      { value: "3", label: "países con una app en uso" },
+    ],
     scroll: "Explorar",
     artifactLabel: "De problema a producto",
     artifactKind: "Método",
@@ -46,9 +52,9 @@ const es = {
   },
 
   projects: {
-    index: "01",
+    index: "04",
     title: "Proyectos",
-    lead: "Estos son productos que he construido por iniciativa propia o publicado como open source. Aquí puedes revisar cómo pienso y cómo trabajo.",
+    lead: "Proyectos personales y open source. Aquí puedes ver cómo pienso y cómo trabajo al construir software.",
     openProject: "Abrir proyecto",
     activityLabel: "Actividad en GitHub",
     activitySummary: "contribuciones en el último año",
@@ -56,7 +62,7 @@ const es = {
   },
 
   experience: {
-    index: "02",
+    index: "03",
     title: "Experiencia",
     lead: "Productos en los que he contribuido profesionalmente. Muestro mi responsabilidad y contexto, no los presento como propiedad personal.",
     contribution: "Contribución profesional",
@@ -65,12 +71,12 @@ const es = {
   },
 
   about: {
-    index: "03",
-    title: "Enfoque",
+    index: "05",
+    title: "Sobre mí",
     bio: [
       "Trabajo con negocios y emprendedores que necesitan una web, una app o un sistema. Conecto una decisión de negocio con una interfaz clara y una base técnica que el equipo pueda mantener.",
-      "Llevo más de {years} años construyendo productos web y móviles en producción: dashboards, SaaS, APIs, pagos y herramientas internas. En mi trabajo actual he liderado decisiones de arquitectura de una plataforma SaaS con más de 200 usuarios activos, migré su backend de Laravel 9 a 12 e integré Stripe.",
-      "Puedo entrar para definir un primer alcance, mejorar un proyecto que ya tiene usuarios o preparar un backend difícil de cambiar. No necesitas tener todo resuelto; sí poder contarme qué quieres construir o qué está frenando tu proyecto.",
+      "Llevo más de {years} años construyendo productos web y móviles que se usan de verdad: paneles de control, plataformas con suscripción, pagos y herramientas internas. En mi trabajo actual lideré decisiones técnicas de una plataforma con más de 200 usuarios activos, actualicé su base técnica e integré pagos con Stripe.",
+      "Puedo entrar para definir un primer alcance, mejorar algo que ya tiene usuarios u ordenar un sistema que cada vez cuesta más cambiar. No necesitas tener todo resuelto; basta con contarme qué quieres lograr o qué te está frenando.",
     ],
     stats: [
       { value: "{years}+", label: "años construyendo" },
@@ -81,7 +87,7 @@ const es = {
   },
 
   services: {
-    index: "04",
+    index: "01",
     title: "Servicios",
     lead: "Elijo la entrega según lo que tu negocio necesita: desde una landing hasta un sistema a medida. Podemos empezar con una sesión corta para definir el alcance.",
     modeLabel: "Modo",
@@ -90,12 +96,12 @@ const es = {
     fit: [
       "Puedes explicar qué problema quieres resolver.",
       "Hay contexto y decisiones pendientes para revisar juntos.",
-      "Quieres una decisión clara antes de comprometer un desarrollo.",
+      "Quieres tener claro qué se va a construir antes de pagar el desarrollo.",
     ],
   },
 
   process: {
-    index: "05",
+    index: "02",
     title: "Proceso",
     lead: "Te enseño el trabajo mientras ocurre. Hablamos de los cambios antes de convertirlos en código y cada semana tienes algo que puedes abrir.",
   },
@@ -116,7 +122,7 @@ const es = {
   contact: {
     index: "07",
     title: "Contacto",
-    lead: "Cuéntame qué quieres construir, mejorar o destrabar. Respondo en menos de 24 horas.",
+    lead: "Cuéntame qué quieres construir, mejorar o resolver. Respondo en menos de 24 horas.",
     channelsTitle: "Canales directos",
     whatsapp: "WhatsApp",
     booking: "Agendar 30 min",
@@ -164,7 +170,7 @@ const es = {
     marquee: [
       "Cuéntame tu caso",
       "Landing, web, app o sistema",
-      "Sesión para destrabar",
+      "Sesión de consultoría",
       "Respuesta en menos de 24 horas",
       "Remoto desde Trujillo",
     ],

@@ -11,16 +11,16 @@ export const processSteps: readonly ProcessStep[] = [
 		code: "01",
 		title: { es: "Entender el problema", en: "Understand the problem" },
 		body: {
-			es: "Hablamos de lo que vendes, de quién lo usa y de qué está frenando el producto. Salgo de esa conversación con el alcance escrito y las preguntas que todavía tenemos que resolver.",
-			en: "We talk about what you sell, who uses it, and what is holding the product back. I leave that conversation with the scope written down and the questions we still need to answer.",
+			es: "Hablamos de lo que vendes, de quién lo usa y de qué te está frenando. Salgo de esa conversación con el alcance por escrito y las preguntas que aún faltan por resolver.",
+			en: "We talk about what you sell, who uses it, and what is slowing you down. I leave that conversation with the scope in writing and the questions we still need to answer.",
 		},
 	},
 	{
 		code: "02",
-		title: { es: "Decidir la arquitectura", en: "Decide the architecture" },
+		title: { es: "Decidir cómo se construye", en: "Decide how it gets built" },
 		body: {
-			es: "Elijo el stack según lo que el producto tiene que soportar. Te explico cada decisión, el coste que tiene y qué dejaría preparado para después.",
-			en: "I choose the stack based on what the product needs to support. I explain each decision, its cost, and what I would leave ready for later.",
+			es: "Elijo las tecnologías según lo que tu proyecto necesita soportar. Te explico cada decisión, cuánto cuesta y qué queda preparado para después.",
+			en: "I choose the technologies based on what your project needs to handle. I explain each decision, what it costs, and what I would leave ready for later.",
 		},
 	},
 	{
@@ -33,10 +33,10 @@ export const processSteps: readonly ProcessStep[] = [
 	},
 	{
 		code: "04",
-		title: { es: "Entregar y sostener", en: "Ship and support" },
+		title: { es: "Entregar y acompañar", en: "Deliver and support" },
 		body: {
-			es: "Dejo el deploy, el dominio, el monitoreo y el código documentado en tu repositorio. Después acordamos si sigo manteniéndolo o si lo toma tu equipo.",
-			en: "I leave the deployment, domain, monitoring, and documented code in your repository. Then we agree on whether I keep maintaining it or your team takes over.",
+			es: "Dejo el proyecto publicado con tu dominio, con seguimiento para que siga funcionando y el código documentado en tu cuenta. Después acordamos si sigo dando mantenimiento o si lo toma tu equipo.",
+			en: "I leave the project published on your domain, monitored so it keeps working, with the code documented in your account. Then we agree on whether I keep maintaining it or your team takes over.",
 		},
 	},
 ];

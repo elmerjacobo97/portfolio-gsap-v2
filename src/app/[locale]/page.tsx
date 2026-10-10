@@ -25,14 +25,14 @@ export default async function Home({
 
   return (
     <main id="main">
-      <Hero dict={dict.hero} />
-      <Projects dict={dict.projects} locale={locale} />
+      <Hero dict={dict.hero} whatsappPrefill={dict.contact.whatsappPrefill} />
+      <Services dict={dict.services} locale={locale} />
+      <Process dict={dict.process} locale={locale} />
       <Experience dict={dict.experience} locale={locale} />
+      <Projects dict={dict.projects} locale={locale} />
       <About dict={dict.about}>
         <GithubActivity dict={dict.projects} />
       </About>
-      <Services dict={dict.services} locale={locale} />
-      <Process dict={dict.process} locale={locale} />
       {/* <Testimonials dict={dict.testimonials} locale={locale} /> */}
       <Faq dict={dict.faq} locale={locale} />
       <Contact
