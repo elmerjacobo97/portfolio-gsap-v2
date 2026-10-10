@@ -40,7 +40,7 @@ export const projects: readonly Project[] = [
   {
     slug: "forge",
     category: "project",
-    order: 1,
+    order: 2,
     year: 2026,
     client: { es: "Open source · InsForge", en: "Open source · InsForge" },
     liveUrl: "https://forge.elmerjacobo.dev/",
@@ -58,12 +58,12 @@ export const projects: readonly Project[] = [
     role: { es: "Autor · Mantenedor", en: "Author · Maintainer" },
     title: { es: "Forge", en: "Forge" },
     tagline: {
-      es: "Workspace de desarrollo con web, CLI y MCP sobre los mismos datos.",
-      en: "A developer workspace with web, CLI, and MCP on the same data.",
+      es: "Un espacio de trabajo para programadores, en web y terminal.",
+      en: "A workspace for developers, on the web and in the terminal.",
     },
     summary: {
-      es: "Dev Board, reuniones, ideas, recursos, Webhook Inspector y Uptime Monitor en una sola cuenta, con CLI y MCP para trabajar desde la terminal o un agente.",
-      en: "Dev Board, meetings, ideas, resources, Webhook Inspector, and Uptime Monitor in one account, with a CLI and MCP to work from the terminal or an agent.",
+      es: "Tablero de tareas, reuniones, ideas y recursos en una sola cuenta, con herramientas para usarlo desde la terminal o con un asistente de IA.",
+      en: "A task board, meetings, ideas, and resources in one account, with tools to use it from the terminal or with an AI assistant.",
     },
     metrics: [
       { value: "6", label: { es: "herramientas web", en: "web tools" } },
@@ -71,7 +71,7 @@ export const projects: readonly Project[] = [
       { value: "MIT", label: { es: "licencia", en: "license" } },
     ],
     cover: {
-      src: "/images/projects/forge.png",
+      src: "/images/projects/forge.webp",
       width: 1440,
       height: 900,
       alt: {
@@ -139,7 +139,7 @@ export const projects: readonly Project[] = [
   {
     slug: "spec-flow-skills",
     category: "project",
-    order: 2,
+    order: 3,
     year: 2026,
     client: { es: "Open source · Individual", en: "Open source · Individual" },
     repoUrl: "https://github.com/elmerjacobo97/spec-flow-skills",
@@ -147,12 +147,12 @@ export const projects: readonly Project[] = [
     role: { es: "Autor · Mantenedor", en: "Author · Maintainer" },
     title: { es: "Spec Flow Skills", en: "Spec Flow Skills" },
     tagline: {
-      es: "Diseño guiado por specs para agentes de código.",
-      en: "Spec-driven design for coding agents.",
+      es: "Un método para que los asistentes de IA planifiquen antes de programar.",
+      en: "A method for AI assistants to plan before they code.",
     },
     summary: {
-      es: "Ocho skills open source que separan planificar, aprobar e implementar, para que el agente no improvise decisiones de producto.",
-      en: "Eight open-source skills that separate planning, approval, and implementation so the agent cannot improvise product decisions.",
+      es: "Ocho instrucciones open source que separan planificar, aprobar y programar, para que el asistente no improvise decisiones de producto.",
+      en: "Eight open-source instructions that separate planning, approval, and coding, so the assistant does not improvise product decisions.",
     },
     metrics: [
       { value: "8", label: { es: "skills", en: "skills" } },
@@ -160,7 +160,7 @@ export const projects: readonly Project[] = [
       { value: "MIT", label: { es: "licencia", en: "license" } },
     ],
     cover: {
-      src: "/images/projects/spec-flow-skills.png",
+      src: "/images/projects/spec-flow-skills.webp",
       width: 1440,
       height: 900,
       alt: {
@@ -215,7 +215,7 @@ export const projects: readonly Project[] = [
   {
     slug: "tech-architecture-skills",
     category: "project",
-    order: 3,
+    order: 4,
     year: 2026,
     client: { es: "Open source · Individual", en: "Open source · Individual" },
     repoUrl: "https://github.com/elmerjacobo97/tech-architecture-skills",
@@ -231,12 +231,12 @@ export const projects: readonly Project[] = [
     role: { es: "Autor · Mantenedor", en: "Author · Maintainer" },
     title: { es: "Architecture Skills", en: "Architecture Skills" },
     tagline: {
-      es: "Fija la arquitectura una vez, por tecnología.",
-      en: "Fix the architecture once, per technology.",
+      es: "Reglas de organización del código, una vez por tecnología.",
+      en: "Rules for organizing code, set once per technology.",
     },
     summary: {
-      es: "Skills open source que fijan estructura, estado, rutas, HTTP y testing para Next.js, React, Nuxt y Flutter, para que el agente no improvise la arquitectura en cada proyecto.",
-      en: "Open-source skills that fix structure, state, routing, HTTP, and testing for Next.js, React, Nuxt, and Flutter, so the agent stops improvising architecture on every project.",
+      es: "Instrucciones open source que fijan cómo se organizan el código, el estado, las rutas y las pruebas en Next.js, React, Nuxt y Flutter, para que el asistente no improvise en cada proyecto.",
+      en: "Open-source instructions that fix how code, state, routing, and tests are organized in Next.js, React, Nuxt, and Flutter, so the assistant does not improvise on every project.",
     },
     metrics: [
       { value: "4", label: { es: "stacks", en: "stacks" } },
@@ -244,7 +244,7 @@ export const projects: readonly Project[] = [
       { value: "MIT", label: { es: "licencia", en: "license" } },
     ],
     cover: {
-      src: "/images/projects/tech-architecture-skills.png",
+      src: "/images/projects/tech-architecture-skills.webp",
       width: 1898,
       height: 962,
       alt: {
@@ -258,7 +258,7 @@ export const projects: readonly Project[] = [
   {
     slug: "driftwatch",
     category: "project",
-    order: 4,
+    order: 5,
     year: 2026,
     client: { es: "Open source · Individual", en: "Open source · Individual" },
     liveUrl: "https://www.npmjs.com/package/@codigoconelmer/driftwatch",
@@ -274,12 +274,12 @@ export const projects: readonly Project[] = [
     role: { es: "Autor · Mantenedor", en: "Author · Maintainer" },
     title: { es: "DriftWatch", en: "DriftWatch" },
     tagline: {
-      es: "Detecta cambios de schema antes de que rompan tu app.",
+      es: "Detecta a tiempo cambios que rompen tu aplicación.",
       en: "Detect schema changes before they break your app.",
     },
     summary: {
-      es: "CLI y daemon que monitorea endpoints HTTP y alerta por Telegram, Slack o Discord cuando cambia la estructura de una respuesta.",
-      en: "A CLI and daemon that monitors HTTP endpoints and alerts through Telegram, Slack, or Discord when a response structure changes.",
+      es: "Programa que vigila servicios externos y avisa por Telegram, Slack o Discord cuando cambia la forma de sus respuestas.",
+      en: "A program that watches external services and alerts you on Telegram, Slack, or Discord when the shape of their responses changes.",
     },
     metrics: [
       { value: "Node.js", label: { es: "runtime", en: "runtime" } },
@@ -287,7 +287,7 @@ export const projects: readonly Project[] = [
       { value: "MIT", label: { es: "licencia", en: "license" } },
     ],
     cover: {
-      src: "/images/projects/driftwatch-showcase.png",
+      src: "/images/projects/driftwatch-showcase.webp",
       width: 1586,
       height: 992,
       alt: {
@@ -340,18 +340,18 @@ export const projects: readonly Project[] = [
     category: "experience",
     order: 3,
     year: 2025,
-    client: { es: "Tarjetly · SaaS B2B", en: "Tarjetly · B2B SaaS" },
+    client: { es: "Tarjetly · plataforma B2B con suscripción", en: "Tarjetly · B2B SaaS" },
     liveUrl: "https://tarjetly.com",
     stack: ["React", "TypeScript", "Laravel", "MySQL", "Groq", "Stripe", "GCP"],
-    role: { es: "Full Stack Developer", en: "Full Stack Developer" },
+    role: { es: "Desarrollador full stack", en: "Full Stack Developer" },
     title: { es: "Tarjetly", en: "Tarjetly" },
     tagline: {
       es: "Tarjetas digitales corporativas con pagos e IA aplicada.",
       en: "Corporate digital cards with payments and applied AI.",
     },
     summary: {
-      es: "Dashboard para crear y gestionar tarjetas digitales, con suscripciones Stripe y generación de contenido mediante Groq a partir de datos reales.",
-      en: "A dashboard for creating and managing digital cards, with Stripe subscriptions and Groq-powered content generated from real profile data.",
+      es: "Panel para crear y gestionar tarjetas digitales, con suscripciones de pago (Stripe) y textos generados con IA a partir de los datos reales de cada perfil.",
+      en: "A panel for creating and managing digital cards, with paid Stripe subscriptions and AI-written content built from real profile data.",
     },
     metrics: [
       { value: "200+", label: { es: "usuarios activos", en: "active users" } },
@@ -365,7 +365,7 @@ export const projects: readonly Project[] = [
       },
     ],
     cover: {
-      src: "/images/projects/tarjetly-showcase.png",
+      src: "/images/projects/tarjetly-showcase.webp",
       width: 1586,
       height: 992,
       alt: {
@@ -427,7 +427,7 @@ export const projects: readonly Project[] = [
   {
     slug: "gastly",
     category: "project",
-    order: 5,
+    order: 1,
     year: 2025,
     client: { es: "Producto personal", en: "Personal product" },
     repoUrl: "https://github.com/elmerjacobo97/Gastly",
@@ -441,7 +441,7 @@ export const projects: readonly Project[] = [
       "Recharts",
       "Zod",
     ],
-    role: { es: "Solo founder · Full Stack", en: "Solo founder · Full Stack" },
+    role: { es: "Fundador y desarrollador", en: "Solo founder · Full Stack" },
     title: { es: "Gastly", en: "Gastly" },
     tagline: {
       es: "Finanzas personales diseñadas alrededor de uso diario real.",
@@ -463,7 +463,7 @@ export const projects: readonly Project[] = [
       },
     ],
     cover: {
-      src: "/images/projects/gastly.png",
+      src: "/images/projects/gastly.webp",
       width: 3794,
       height: 1928,
       alt: {
@@ -519,15 +519,15 @@ export const projects: readonly Project[] = [
     client: { es: "ABEHA · Operaciones", en: "ABEHA · Operations" },
     liveUrl: "https://sismol.c2e.mx/",
     stack: ["React", "TypeScript", "Laravel", "PostgreSQL"],
-    role: { es: "Full Stack Developer", en: "Full Stack Developer" },
+    role: { es: "Desarrollador full stack", en: "Full Stack Developer" },
     title: { es: "Sismol", en: "Sismol" },
     tagline: {
       es: "Panel operativo para sistemas de captación de agua.",
       en: "Operations dashboard for water harvesting systems.",
     },
     summary: {
-      es: "Dashboard interno con sensores, métricas, alertas y reportes para centralizar la operación del sistema de captación pluvial de ABEHA.",
-      en: "An internal dashboard with sensors, metrics, alerts, and reports that centralizes operations for ABEHA rainwater harvesting systems.",
+      es: "Panel interno con sensores, métricas, alertas y reportes para centralizar la operación del sistema de captación pluvial de ABEHA.",
+      en: "An internal panel with sensors, metrics, alerts, and reports that centralizes operations for ABEHA rainwater harvesting systems.",
     },
     metrics: [
       {
@@ -541,7 +541,7 @@ export const projects: readonly Project[] = [
       { value: "Producción", label: { es: "estado", en: "status" } },
     ],
     cover: {
-      src: "/images/projects/sismol.png",
+      src: "/images/projects/sismol.webp",
       width: 1288,
       height: 650,
       alt: {
@@ -597,15 +597,15 @@ export const projects: readonly Project[] = [
     client: { es: "ABEHA · Institución académica", en: "ABEHA · Academic institution" },
     liveUrl: "https://admin.tlalocapp.com",
     stack: ["React", "React Native", "TypeScript", "Laravel", "PostgreSQL", "PostGIS", "GCP"],
-    role: { es: "Full Stack Developer", en: "Full Stack Developer" },
+    role: { es: "Desarrollador full stack", en: "Full Stack Developer" },
     title: { es: "TlalocApp", en: "TlalocApp" },
     tagline: {
       es: "Monitoreo de captación pluvial en web y Android.",
       en: "Rainwater harvesting monitoring on web and Android.",
     },
     summary: {
-      es: "App móvil de campo y dashboard web con mapas geoespaciales, datos de precipitación satelital, reportes en Excel y notificaciones push. Más de 180 usuarios activos en dos plataformas.",
-      en: "A field mobile app and web dashboard with geospatial maps, satellite rainfall data, Excel reports, and push notifications. More than 180 active users across two platforms.",
+      es: "App móvil de campo y panel web con mapas, datos satelitales de lluvia, reportes en Excel y notificaciones. Más de 180 usuarios activos en dos plataformas.",
+      en: "A field mobile app and web panel with maps, satellite rainfall data, Excel reports, and notifications. More than 180 active users across two platforms.",
     },
     metrics: [
       { value: "180+", label: { es: "usuarios activos", en: "active users" } },
@@ -629,8 +629,8 @@ export const projects: readonly Project[] = [
       en: "Rainwater harvesting calculator in production.",
     },
     summary: {
-      es: "App en Flutter para calcular captación pluvial, en producción con cobertura en tres países: Perú, México y Nicaragua.",
-      en: "A Flutter app for calculating rainwater harvesting, live in three countries: Peru, Mexico, and Nicaragua.",
+      es: "App en Flutter para calcular cuánta lluvia se puede captar, en uso en tres países: Perú, México y Nicaragua.",
+      en: "A Flutter app that calculates how much rainwater can be collected, in use in three countries: Peru, Mexico, and Nicaragua.",
     },
     metrics: [{ value: "3", label: { es: "países", en: "countries" } }],
     gallery: [],

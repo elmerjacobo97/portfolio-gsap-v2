@@ -121,8 +121,9 @@ export default async function RootLayout({
 	// Absolute, not bare hashes: these links also work from future nested routes.
 	// Nav intercepts them for smooth scrolling only when the target is on the page.
 	const navLinks = [
-		{ href: `/${locale}#projects`, label: dict.nav.projects },
+		{ href: `/${locale}#services`, label: dict.nav.services },
 		{ href: `/${locale}#experience`, label: dict.nav.experience },
+		{ href: `/${locale}#projects`, label: dict.nav.projects },
 		{ href: `/${locale}#about`, label: dict.nav.about },
 		{ href: `/${locale}/blog`, label: dict.nav.blog },
 		{ href: `/${locale}#contact`, label: dict.nav.collaborate },
@@ -158,7 +159,11 @@ export default async function RootLayout({
 					 * block, so a fixed element nested inside it would scroll with the
 					 * page instead of staying pinned to the viewport.
 					 */}
-					<JsonLd locale={locale} description={dict.meta.description} />
+					<JsonLd
+						locale={locale}
+						description={dict.meta.description}
+						role={dict.hero.role}
+					/>
 
 					<SkipLink label={dict.nav.skipToContent} />
 					<GridOverlay />

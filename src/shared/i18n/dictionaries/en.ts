@@ -2,10 +2,10 @@ import type { Dictionary } from "../dictionary";
 
 const en = {
   meta: {
-    title: "Elmer Jacobo — Product engineer · Full-stack developer",
+    title: "Elmer Jacobo — Full-stack developer · Web, apps & software",
     description:
-      "Product engineer and full-stack developer in Trujillo, Peru. I build digital products across frontend, backend, payments, deployment, and applied AI.",
-    ogAlt: "Elmer Jacobo, product engineer and full-stack developer",
+      "Freelance full-stack developer in Trujillo, Peru, working with clients in Latin America and remotely. I build landing pages, websites, mobile apps, and custom software.",
+    ogAlt: "Elmer Jacobo, freelance full-stack developer: websites, mobile apps, and software",
   },
 
   nav: {
@@ -29,13 +29,19 @@ const en = {
   hero: {
     lineOne: "Elmer",
     lineTwo: "Jacobo",
-    role: "Product engineer · Full stack",
-    statement: "I build digital products that move from idea to real use.",
+    role: "Full-stack developer",
+    statement: "I build landing pages, websites, mobile apps, and custom software for businesses.",
     supporting:
-      "I work with you from product definition to launch: interface, product logic, payments, and a foundation your team can maintain. I use AI when it solves a concrete task.",
+      "I work with you from idea to launch: design, development, payments, and a foundation your team can maintain. Freelance, remote from Peru.",
     meta: ["Trujillo, PE", "Remote · UTC−5"],
-    available: "Let's talk about your product",
+    available: "Available for projects",
+    whatsappCta: "Message me on WhatsApp",
     projectsCta: "View projects",
+    trust: [
+      { value: "{years}+", label: "years building" },
+      { value: "380+", label: "active users" },
+      { value: "3", label: "countries with an app" },
+    ],
     scroll: "Explore",
     artifactLabel: "From problem to product",
     artifactKind: "Method",
@@ -48,9 +54,9 @@ const en = {
   },
 
   projects: {
-    index: "01",
+    index: "04",
     title: "Projects",
-    lead: "These are products I built by my own initiative or published as open source. They show how I think and how I work.",
+    lead: "Personal and open-source projects. They show how I think and work when I build software.",
     openProject: "Open project",
     activityLabel: "GitHub activity",
     activitySummary: "contributions in the last year",
@@ -58,46 +64,46 @@ const en = {
   },
 
   experience: {
-    index: "02",
+    index: "03",
     title: "Experience",
-    lead: "Products I have contributed to professionally. I show my responsibility and context without presenting them as personal property.",
+    lead: "Products from companies and clients I worked on. I explain what I did in each one.",
     contribution: "Professional contribution",
     role: "Role",
     openProject: "Open project",
   },
 
   about: {
-    index: "03",
-    title: "Approach",
+    index: "05",
+    title: "About",
     bio: [
-      "I work with people who need to build, improve, or put an existing digital product in order. I connect a business decision to a clear interface and a technical foundation the team can maintain.",
-      "I have spent more than {years} years building web and mobile products in production: dashboards, SaaS products, APIs, payments, and internal tools. In my current work I have led architecture decisions for a SaaS platform with more than 200 active users, migrated its backend from Laravel 9 to 12, and integrated Stripe.",
-      "I can join to define a first scope, improve a product that already has users, or prepare a backend that has become hard to change. You do not need everything figured out; you do need to explain what you want to build or what is slowing the product down.",
+      "I work with businesses and founders who need a website, an app, or a system. I connect a business decision to a clear interface and a technical foundation the team can maintain.",
+      "I have spent more than {years} years building web and mobile products that people use every day: dashboards, subscription platforms, payments, and internal tools. In my current work I led technical decisions for a platform with more than 200 active users, updated its technical base, and integrated Stripe payments.",
+      "I can join to define a first version, improve something that already has users, or bring order to a system that keeps getting harder to change. You do not need everything figured out; just tell me what you want to achieve or what is slowing you down.",
     ],
     stats: [
       { value: "{years}+", label: "years building" },
-      { value: "380+", label: "active users across products" },
+      { value: "380+", label: "active users" },
       { value: "2+", label: "products in production" },
     ],
     portraitAlt: "Portrait of Elmer Jacobo Otiniano",
   },
 
   services: {
-    index: "04",
+    index: "01",
     title: "Services",
-    lead: "I can join when the product still needs direction, when it is already running, or when a technical decision is slowing the team down. We can also start with a focused session to define the next step.",
-    modeLabel: "Mode",
-    deliverables: "What stays",
+    lead: "I choose the delivery based on what your business needs: from a landing page to a custom system. We can also start with a short session to define what will be done.",
+    modeLabel: "Service",
+    deliverables: "What is included",
     fitTitle: "A good fit if...",
     fit: [
       "You can explain the problem you want to solve.",
       "There is context and unfinished decisions to review together.",
-      "You want a clear decision before committing to development.",
+      "You want to be clear on what will be built before paying for development.",
     ],
   },
 
   process: {
-    index: "05",
+    index: "02",
     title: "Process",
     lead: "I show you the work as it happens. We discuss changes before they become code, and every week you have something you can open.",
   },
@@ -112,13 +118,13 @@ const en = {
   faq: {
     index: "06",
     title: "Questions",
-    lead: "What people usually ask before we start: how I work, how long it takes, what I need from you, and how we agree on scope and delivery.",
+    lead: "What people usually ask before we start: how I work, how long it takes, what I need from you, and how we agree on what gets delivered and when.",
   },
 
   contact: {
     index: "07",
     title: "Contact",
-    lead: "Tell me what you want to build, improve, or unblock. I reply within 24 hours.",
+    lead: "Tell me what you want to build, improve, or fix. I reply within 24 hours.",
     channelsTitle: "Direct channels",
     whatsapp: "WhatsApp",
     booking: "Book 30 min",
@@ -131,11 +137,12 @@ const en = {
       company: "Company",
       scope: "What needs solving",
       scopeOptions: [
-        "New product",
-        "Existing product",
-        "Backend and architecture",
-        "Product unblock session",
-        "AI in a product or automation",
+        "Landing page or website",
+        "Mobile app",
+        "Custom system",
+        "Payments, integrations, and internal systems",
+        "AI or automation",
+        "Consulting session",
         "I am still defining it",
       ],
       message: "Tell me what you want to solve",
@@ -165,8 +172,8 @@ const en = {
   footer: {
     marquee: [
       "Tell me about your case",
-      "New or existing product",
-      "One session to unblock",
+      "Landing, website, app, or system",
+      "Consulting session",
       "Reply within 24 hours",
       "Remote from Trujillo",
     ],
@@ -189,14 +196,14 @@ const en = {
     readPost: "Read article",
     backToBlog: "Back to blog",
     readingUnit: "min read",
-    ctaTitle: "Let's talk about your product?",
+    ctaTitle: "Let's talk about your project?",
     ctaBody:
-      "If you want to build, improve, or review a digital product, tell me about your case and I will reply within 24 hours.",
+      "If you need a website, an app, or a system, tell me about your case and I will reply within 24 hours.",
     cta: "Tell me about your case",
-    ctaSubject: "I read your blog and want to talk about my product",
+    ctaSubject: "I read your blog and want to talk about my project",
     ctaPrefill:
-      "Hi Elmer,\n\nI found your blog and I'd like to talk about a product I want to build or improve.\n\n",
-    ogAlt: "Elmer Jacobo's blog on digital products for businesses",
+      "Hi Elmer,\n\nI found your blog and I'd like to talk about a project I want to build or improve.\n\n",
+    ogAlt: "Elmer Jacobo's blog on websites, apps, and software for businesses",
   },
 
   notFound: {

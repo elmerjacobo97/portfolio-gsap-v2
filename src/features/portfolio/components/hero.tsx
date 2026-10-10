@@ -10,8 +10,15 @@ import type { Dictionary } from "@/shared/i18n/dictionary";
 import { gsap, SplitText, useGSAP } from "@/shared/lib/gsap";
 import { introDone } from "@/shared/lib/intro";
 import { OK } from "@/shared/lib/motion";
+import { whatsappUrl } from "@/shared/lib/whatsapp";
 
-export function Hero({ dict }: { dict: Dictionary["hero"] }) {
+export function Hero({
+	dict,
+	whatsappPrefill,
+}: {
+	dict: Dictionary["hero"];
+	whatsappPrefill: string;
+}) {
 	const rootRef = useRef<HTMLElement>(null);
 
 	useGSAP(
@@ -186,14 +193,18 @@ export function Hero({ dict }: { dict: Dictionary["hero"] }) {
 		{ scope: rootRef, dependencies: [] },
 	);
 
-	return <HeroView dict={dict} rootRef={rootRef} />;
+	return (
+		<HeroView dict={dict} whatsappPrefill={whatsappPrefill} rootRef={rootRef} />
+	);
 }
 
 function HeroView({
 	dict,
+	whatsappPrefill,
 	rootRef,
 }: {
 	dict: Dictionary["hero"];
+	whatsappPrefill: string;
 	rootRef: RefObject<HTMLElement | null>;
 }) {
 	return (
@@ -208,7 +219,7 @@ function HeroView({
 				 * cannot reflow, and SplitText's line mask clips anything that
 				 * overflows its box. Narrower here and the headline loses letters.
 				 */}
-				<div className="col-span-12">
+				<div className="col-span-12 lg:col-start-1 lg:row-start-1">
 					<h1 className="hero-name text-mega u-wide text-text">
 						{/* The only copy assistive tech reads: the split version below is
                 broken into per-character elements, which screen readers would
@@ -231,7 +242,7 @@ function HeroView({
 					</h1>
 				</div>
 
-				<div className="hero-meta order-2 col-span-12 mt-10 lg:order-none lg:col-span-3 lg:col-start-10 lg:mt-12 lg:text-right">
+				<div className="hero-meta order-2 col-span-12 mt-10 lg:order-none lg:col-span-3 lg:col-start-10 lg:row-start-1 lg:mt-0 lg:self-end lg:text-right">
 					<p className="u-label text-accent mb-4">{dict.role}</p>
 					<ul className="u-meta text-text-dim space-y-1.5">
 						{dict.meta.map((item) => (
@@ -240,21 +251,30 @@ function HeroView({
 					</ul>
 				</div>
 
-				<div className="hero-copy order-1 col-span-12 mt-10 max-w-[42ch] lg:order-none lg:col-span-6 lg:mt-14">
+				<div className="hero-copy order-1 col-span-12 mt-10 lg:order-none lg:col-span-6 lg:row-start-2 lg:mt-10">
 					<p className="text-lead text-text-secondary max-w-[24ch]">
 						{dict.statement}
 					</p>
 					<p className="text-body text-text-secondary mt-5 max-w-[44ch]">
 						{dict.supporting}
 					</p>
-					<div className="mt-8 flex flex-wrap gap-x-7 gap-y-4">
-						<ArrowLink href="#projects" direction="down" tone="action">
+					<div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
+						<ArrowLink
+							href={whatsappUrl(whatsappPrefill)}
+							external
+							tone="action"
+							analyticsEvent="contact_cta_click"
+							analyticsSource="hero"
+						>
+							{dict.whatsappCta}
+						</ArrowLink>
+						<ArrowLink href="#projects" direction="down">
 							{dict.projectsCta}
 						</ArrowLink>
 					</div>
 				</div>
 
-				<div className="hero-artifact border-rule bg-surface-inset order-3 col-span-12 mt-10 border lg:order-none lg:col-span-5 lg:col-start-8 lg:mt-14">
+				<div className="hero-artifact border-rule bg-surface-inset order-3 col-span-12 mt-10 border lg:order-none lg:col-span-5 lg:col-start-8 lg:row-start-2 lg:mt-10 lg:self-start">
 					<div className="border-rule flex items-center justify-between border-b px-4 py-3">
 						<span className="u-label text-accent">{dict.artifactLabel}</span>
 						<span className="u-label text-text-muted">{dict.artifactKind}</span>
@@ -286,8 +306,16 @@ function HeroView({
 
 			<div className="grid-page">
 				<Rule className="hero-rule col-span-12 mb-6" />
-				<div className="col-span-12 flex items-center justify-between">
+				<div className="col-span-12 flex items-center justify-between gap-6">
 					<Pill>{dict.available}</Pill>
+					<dl className="hidden items-baseline gap-8 lg:flex">
+						{dict.trust.map((item) => (
+							<div key={item.label} className="flex items-baseline gap-2 whitespace-nowrap">
+								<dd className="u-wide text-text order-first">{item.value}</dd>
+								<dt className="u-meta text-text-dim">{item.label}</dt>
+							</div>
+						))}
+					</dl>
 					<span className="u-label flex items-center gap-2">
 						{dict.scroll}
 						<ArrowDown

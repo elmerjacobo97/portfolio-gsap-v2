@@ -4,15 +4,15 @@ import { site } from '@/shared/lib/site'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${site.shortName} | ${site.role}`,
+    name: `${site.shortName} | Desarrollador full stack`,
     short_name: site.shortName,
     description:
-      'Portfolio de Elmer Jacobo, product engineer y desarrollador full stack.',
+      'Portfolio de Elmer Jacobo: landing pages, webs, apps móviles y sistemas a medida.',
     start_url: '/es',
     scope: '/',
     display: 'standalone',
     orientation: 'portrait',
-    background_color: '#050505',
+    background_color: '#080d14',
     theme_color: '#d4ff3f',
     icons: [
       {

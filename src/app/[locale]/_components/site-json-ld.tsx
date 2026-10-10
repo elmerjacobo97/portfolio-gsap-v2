@@ -18,13 +18,16 @@ function serializeJsonLd(value: unknown) {
 export function JsonLd({
 	locale,
 	description,
+	role,
 }: {
 	locale: Locale
 	description: string
+	role: string
 }) {
 	const personId = `${site.url}/#person`
 	const businessId = `${site.url}/#business`
 	const profileImage = `${site.url}/images/profile/elmer-jacobo-portrait.jpg`
+	const socialLinks = site.social.map((s) => s.href)
 
 	const graph = [
 		{
@@ -32,7 +35,7 @@ export function JsonLd({
 			'@id': personId,
 			name: site.name,
 			alternateName: site.shortName,
-			jobTitle: site.role,
+			jobTitle: role,
 			image: profileImage,
 			email: `mailto:${site.email}`,
 			url: `${site.url}/${locale}`,
@@ -41,7 +44,7 @@ export function JsonLd({
 				addressLocality: site.city,
 				addressCountry: site.country,
 			},
-			sameAs: site.social.map((s) => s.href),
+			sameAs: socialLinks,
 			knowsAbout: site.stack,
 		},
 		{
@@ -55,9 +58,10 @@ export function JsonLd({
 			founder: { '@id': personId },
 			areaServed: 'Worldwide',
 			availableLanguage: Object.values(localeTag),
+			sameAs: socialLinks,
 			hasOfferCatalog: {
 				'@type': 'OfferCatalog',
-				name: site.role,
+				name: role,
 				itemListElement: services.map((service) => ({
 					'@type': 'Offer',
 					itemOffered: {

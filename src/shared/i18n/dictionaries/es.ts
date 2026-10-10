@@ -1,9 +1,9 @@
 const es = {
   meta: {
-    title: "Elmer Jacobo — Ingeniero de producto · Full stack",
+    title: "Elmer Jacobo — Desarrollador full stack · Webs, apps y sistemas",
     description:
-      "Ingeniero de producto y desarrollador full stack en Trujillo, Perú. Construyo productos digitales con frontend, backend, pagos, despliegue e IA aplicada.",
-    ogAlt: "Elmer Jacobo, ingeniero de producto y desarrollador full stack",
+      "Desarrollador full stack freelance en Trujillo, Perú, para clientes en LatAm y remoto. Creo landing pages, webs, apps móviles y sistemas a medida.",
+    ogAlt: "Elmer Jacobo, desarrollador full stack freelance: webs, apps móviles y sistemas",
   },
 
   nav: {
@@ -27,13 +27,19 @@ const es = {
   hero: {
     lineOne: "Elmer",
     lineTwo: "Jacobo",
-    role: "Product engineer · Full stack",
-    statement: "Construyo productos digitales que pasan de idea a uso real.",
+    role: "Desarrollador full stack",
+    statement: "Creo landing pages, webs, apps móviles y sistemas a medida para negocios.",
     supporting:
-      "Trabajo contigo desde definir el producto hasta el lanzamiento: interfaz, lógica, pagos y una base que tu equipo pueda mantener. Uso IA cuando resuelve una tarea concreta.",
+      "Trabajo contigo desde la idea hasta el lanzamiento: diseño, programación, pagos y una base que tu equipo pueda mantener. Freelance, remoto desde Perú.",
     meta: ["Trujillo, PE", "Remoto · UTC−5"],
-    available: "Hablemos de tu producto",
+    available: "Disponible para proyectos",
+    whatsappCta: "Escríbeme por WhatsApp",
     projectsCta: "Ver proyectos",
+    trust: [
+      { value: "{years}+", label: "años construyendo" },
+      { value: "380+", label: "usuarios activos" },
+      { value: "3", label: "países con una app" },
+    ],
     scroll: "Explorar",
     artifactLabel: "De problema a producto",
     artifactKind: "Método",
@@ -46,9 +52,9 @@ const es = {
   },
 
   projects: {
-    index: "01",
+    index: "04",
     title: "Proyectos",
-    lead: "Estos son productos que he construido por iniciativa propia o publicado como open source. Aquí puedes revisar cómo pienso y cómo trabajo.",
+    lead: "Proyectos personales y open source. Aquí puedes ver cómo pienso y cómo trabajo al construir software.",
     openProject: "Abrir proyecto",
     activityLabel: "Actividad en GitHub",
     activitySummary: "contribuciones en el último año",
@@ -56,46 +62,46 @@ const es = {
   },
 
   experience: {
-    index: "02",
+    index: "03",
     title: "Experiencia",
-    lead: "Productos en los que he contribuido profesionalmente. Muestro mi responsabilidad y contexto, no los presento como propiedad personal.",
+    lead: "Productos de empresas y clientes en los que trabajé. Explico qué hice yo en cada uno.",
     contribution: "Contribución profesional",
     role: "Rol",
     openProject: "Abrir proyecto",
   },
 
   about: {
-    index: "03",
-    title: "Enfoque",
+    index: "05",
+    title: "Sobre mí",
     bio: [
-      "Trabajo con personas que necesitan construir, mejorar o poner en orden un producto digital. Conecto una decisión de negocio con una interfaz clara y una base técnica que el equipo pueda mantener.",
-      "Llevo más de {years} años construyendo productos web y móviles en producción: dashboards, SaaS, APIs, pagos y herramientas internas. En mi trabajo actual he liderado decisiones de arquitectura de una plataforma SaaS con más de 200 usuarios activos, migré su backend de Laravel 9 a 12 e integré Stripe.",
-      "Puedo entrar para definir un primer alcance, mejorar un producto que ya tiene usuarios o preparar un backend difícil de cambiar. No necesitas tener todo resuelto; sí poder contarme qué quieres construir o qué está frenando el producto.",
+      "Trabajo con negocios y emprendedores que necesitan una web, una app o un sistema. Conecto una decisión de negocio con una interfaz clara y una base técnica que el equipo pueda mantener.",
+      "Llevo más de {years} años construyendo productos web y móviles que se usan de verdad: paneles de control, plataformas con suscripción, pagos y herramientas internas. En mi trabajo actual lideré decisiones técnicas de una plataforma con más de 200 usuarios activos, actualicé su base técnica e integré pagos con Stripe.",
+      "Puedo entrar para definir una primera versión, mejorar algo que ya tiene usuarios u ordenar un sistema que cada vez cuesta más cambiar. No necesitas tener todo resuelto; basta con contarme qué quieres lograr o qué te está frenando.",
     ],
     stats: [
       { value: "{years}+", label: "años construyendo" },
-      { value: "380+", label: "usuarios activos entre productos" },
+      { value: "380+", label: "usuarios activos" },
       { value: "2+", label: "productos en producción" },
     ],
     portraitAlt: "Retrato de Elmer Jacobo Otiniano",
   },
 
   services: {
-    index: "04",
+    index: "01",
     title: "Servicios",
-    lead: "Puedo entrar cuando todavía hay que decidir qué construir, cuando el producto ya existe o cuando una decisión técnica está frenando al equipo. También podemos empezar con una sesión puntual para ordenar el siguiente paso.",
-    modeLabel: "Modo",
-    deliverables: "Qué queda",
+    lead: "Elijo la entrega según lo que tu negocio necesita: desde una landing hasta un sistema a medida. Podemos empezar con una sesión corta para definir qué se va a hacer.",
+    modeLabel: "Servicio",
+    deliverables: "Qué incluye",
     fitTitle: "Buen encaje si...",
     fit: [
       "Puedes explicar qué problema quieres resolver.",
       "Hay contexto y decisiones pendientes para revisar juntos.",
-      "Quieres una decisión clara antes de comprometer un desarrollo.",
+      "Quieres tener claro qué se va a construir antes de pagar el desarrollo.",
     ],
   },
 
   process: {
-    index: "05",
+    index: "02",
     title: "Proceso",
     lead: "Te enseño el trabajo mientras ocurre. Hablamos de los cambios antes de convertirlos en código y cada semana tienes algo que puedes abrir.",
   },
@@ -110,13 +116,13 @@ const es = {
   faq: {
     index: "06",
     title: "Preguntas",
-    lead: "Lo que suelen preguntarme antes de empezar: cómo trabajo, cuánto tarda, qué necesito de ti y cómo acordamos alcance y entrega.",
+    lead: "Lo que suelen preguntarme antes de empezar: cómo trabajo, cuánto tarda, qué necesito de ti y cómo acordamos qué se entrega y cuándo.",
   },
 
   contact: {
     index: "07",
     title: "Contacto",
-    lead: "Cuéntame qué quieres construir, mejorar o destrabar. Respondo en menos de 24 horas.",
+    lead: "Cuéntame qué quieres construir, mejorar o resolver. Respondo en menos de 24 horas.",
     channelsTitle: "Canales directos",
     whatsapp: "WhatsApp",
     booking: "Agendar 30 min",
@@ -129,11 +135,12 @@ const es = {
       company: "Empresa",
       scope: "Qué necesitas resolver",
       scopeOptions: [
-        "Producto nuevo",
-        "Producto existente",
-        "Backend y arquitectura",
-        "Sesión para destrabar un producto",
-        "IA en producto o automatización",
+        "Landing o sitio web",
+        "App móvil",
+        "Sistema a medida",
+        "Pagos, conexiones y sistema interno",
+        "IA o automatización",
+        "Sesión de consultoría",
         "Todavía lo estoy definiendo",
       ],
       message: "Cuéntame qué quieres resolver",
@@ -162,8 +169,8 @@ const es = {
   footer: {
     marquee: [
       "Cuéntame tu caso",
-      "Producto nuevo o existente",
-      "Sesión para destrabar",
+      "Landing, web, app o sistema",
+      "Sesión de consultoría",
       "Respuesta en menos de 24 horas",
       "Remoto desde Trujillo",
     ],
@@ -186,14 +193,14 @@ const es = {
     readPost: "Leer artículo",
     backToBlog: "Volver al blog",
     readingUnit: "min de lectura",
-    ctaTitle: "¿Hablamos de tu producto?",
+    ctaTitle: "¿Hablamos de tu proyecto?",
     ctaBody:
-      "Si quieres construir, mejorar o revisar un producto digital, cuéntame el caso y te respondo en menos de 24 horas.",
+      "Si quieres una web, una app o un sistema, cuéntame el caso y te respondo en menos de 24 horas.",
     cta: "Cuéntame tu caso",
-    ctaSubject: "Leí tu blog y quiero hablar de mi producto",
+    ctaSubject: "Leí tu blog y quiero hablar de mi proyecto",
     ctaPrefill:
-      "Hola Elmer,\n\nEncontré tu blog y me gustaría conversar sobre un producto que quiero construir o mejorar.\n\n",
-    ogAlt: "Blog de Elmer Jacobo sobre productos digitales para negocios",
+      "Hola Elmer,\n\nEncontré tu blog y me gustaría conversar sobre un proyecto que quiero construir o mejorar.\n\n",
+    ogAlt: "Blog de Elmer Jacobo sobre webs, apps y sistemas para negocios",
   },
 
   notFound: {
