@@ -81,14 +81,14 @@ export function About({
 
 				<div className="about-portrait bg-surface border-rule @container relative col-span-12 mt-16 aspect-4/5 overflow-hidden border sm:col-span-8 sm:col-start-3 lg:col-span-5 lg:col-start-1">
 					<Image
-						src="/images/profile/elmer-jacobo-portrait.png"
+						src="/images/profile/elmer-jacobo-portrait.webp"
 						alt={dict.portraitAlt}
 						fill
 						sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 42vw"
 						className="object-cover grayscale"
 					/>
 					<Image
-						src="/images/profile/elmer-jacobo-portrait.png"
+						src="/images/profile/elmer-jacobo-portrait.webp"
 						alt=""
 						fill
 						sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 42vw"

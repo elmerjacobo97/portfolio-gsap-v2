@@ -71,7 +71,7 @@ export const projects: readonly Project[] = [
       { value: "MIT", label: { es: "licencia", en: "license" } },
     ],
     cover: {
-      src: "/images/projects/forge.png",
+      src: "/images/projects/forge.webp",
       width: 1440,
       height: 900,
       alt: {
@@ -160,7 +160,7 @@ export const projects: readonly Project[] = [
       { value: "MIT", label: { es: "licencia", en: "license" } },
     ],
     cover: {
-      src: "/images/projects/spec-flow-skills.png",
+      src: "/images/projects/spec-flow-skills.webp",
       width: 1440,
       height: 900,
       alt: {
@@ -244,7 +244,7 @@ export const projects: readonly Project[] = [
       { value: "MIT", label: { es: "licencia", en: "license" } },
     ],
     cover: {
-      src: "/images/projects/tech-architecture-skills.png",
+      src: "/images/projects/tech-architecture-skills.webp",
       width: 1898,
       height: 962,
       alt: {
@@ -287,7 +287,7 @@ export const projects: readonly Project[] = [
       { value: "MIT", label: { es: "licencia", en: "license" } },
     ],
     cover: {
-      src: "/images/projects/driftwatch-showcase.png",
+      src: "/images/projects/driftwatch-showcase.webp",
       width: 1586,
       height: 992,
       alt: {
@@ -365,7 +365,7 @@ export const projects: readonly Project[] = [
       },
     ],
     cover: {
-      src: "/images/projects/tarjetly-showcase.png",
+      src: "/images/projects/tarjetly-showcase.webp",
       width: 1586,
       height: 992,
       alt: {
@@ -463,7 +463,7 @@ export const projects: readonly Project[] = [
       },
     ],
     cover: {
-      src: "/images/projects/gastly.png",
+      src: "/images/projects/gastly.webp",
       width: 3794,
       height: 1928,
       alt: {
@@ -541,7 +541,7 @@ export const projects: readonly Project[] = [
       { value: "Producción", label: { es: "estado", en: "status" } },
     ],
     cover: {
-      src: "/images/projects/sismol.png",
+      src: "/images/projects/sismol.webp",
       width: 1288,
       height: 650,
       alt: {
