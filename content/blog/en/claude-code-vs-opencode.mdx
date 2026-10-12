@@ -1,0 +1,78 @@
+---
+title: 'Claude Code vs OpenCode: which one to choose for your workflow'
+description: >-
+  I compare Claude Code and OpenCode on installation, models, cost and
+  configuration, and explain when I use each one depending on the project.
+date: '2026-10-18'
+category: AI & Agents
+tags:
+  - Claude Code
+  - OpenCode
+  - MCP
+  - Agents
+  - Terminal
+---
+
+I use Claude Code and OpenCode depending on the project. I choose based on what I need in each case: getting started fast or having control.
+
+Here is the comparison, based on what each tool's official docs say.
+
+## What each one is
+
+[Claude Code](https://code.claude.com/docs/en/overview) is Anthropic's agentic coding tool. It reads your codebase, edits files, runs commands and connects to your development tools. It works in the terminal, VS Code, JetBrains, a desktop app and the web.
+
+[OpenCode](https://opencode.ai/docs/) is an open source coding agent. It also has a terminal interface (TUI), a desktop app (in beta) and an IDE extension. The [sst/opencode](https://github.com/sst/opencode) repository uses the MIT license.
+
+## Installation
+
+Both install with one command:
+
+```bash
+# Claude Code
+curl -fsSL https://claude.ai/install.sh | bash
+
+# OpenCode
+curl -fsSL https://opencode.ai/install | bash
+```
+
+If you prefer Homebrew:
+
+```bash
+brew install --cask claude-code
+brew install anomalyco/tap/opencode
+```
+
+After that it's `claude` or `opencode` inside your project. With Claude Code you log in the first time. With OpenCode you connect a provider with `/connect`.
+
+## Models and cost
+
+Claude Code uses Anthropic models. You need a [Claude subscription](https://claude.com/pricing) or a Console account. Pro costs 20 USD a month (17 USD if you pay annually) and Max starts at 100 USD a month. The terminal CLI, VS Code and JetBrains also accept [third-party providers](https://code.claude.com/docs/en/third-party-integrations).
+
+OpenCode doesn't tie you to one provider. Its documentation mentions [75+ providers](https://opencode.ai/docs/providers/): you add your API key and that's it. It also supports local models through Ollama, or any OpenAI-compatible endpoint. If you want to try it without deciding yet, there's OpenCode Zen, a set of models the team has already tested.
+
+<Callout type="info" title="Subscriptions in OpenCode">
+  OpenCode's documentation mentions logging in with Claude Pro/Max or ChatGPT Plus/Pro from `/connect`, and also warns that Anthropic prohibits third-party plugins for Pro/Max subscriptions. Check Anthropic's terms before relying on it.
+</Callout>
+
+## Configuration and extension
+
+Both read a project instructions file, and the two are not that different.
+
+In Claude Code it's `CLAUDE.md`. If your repo already has an `AGENTS.md`, it [can read that too](https://code.claude.com/docs/en/memory#agents-md). On top of that you get skills to package repeatable workflows, hooks that run commands before or after an action, subagents for parallel work, and an Agent SDK if you want to build your own agents.
+
+In OpenCode, `/init` creates an `AGENTS.md` at the project root. It ships with two built-in agents you switch with Tab: `build`, with full access, and `plan`, which is read-only, doesn't edit files and asks permission before running bash. It also has `/undo`, `/redo` and `/share`, and you can call a `general` subagent with `@general`.
+
+Both support MCP. To see how it's set up in OpenCode, I covered it in [how to connect Figma to OpenCode using MCP](/en/blog/configurar-figma-mcp-opencode).
+
+## When I choose each one
+
+My rule is simple:
+
+- **Claude Code** when I want speed. I install it, log in and start working. I don't have to pick a provider or a model before writing the first instruction.
+- **OpenCode** when I want control. I choose the model, I can switch providers without switching tools, and it lets me customize the configuration in depth.
+
+They don't compete. Since both can read `AGENTS.md`, your project instructions work in either.
+
+## What to do today
+
+Install the one you don't use on a small project and give it the same task you already solved with the other. That's where you notice whether speed or control matters more to you.

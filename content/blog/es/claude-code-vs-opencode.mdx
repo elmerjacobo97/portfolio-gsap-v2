@@ -1,0 +1,78 @@
+---
+title: 'Claude Code vs OpenCode: cuál elegir según tu flujo de trabajo'
+description: >-
+  Comparo Claude Code y OpenCode en instalación, modelos, costo y
+  configuración, y te digo cuándo uso cada uno según el proyecto.
+date: '2026-10-18'
+category: IA y Agentes
+tags:
+  - Claude Code
+  - OpenCode
+  - MCP
+  - Agentes
+  - Terminal
+---
+
+Uso Claude Code y OpenCode según el proyecto. Elijo según lo que necesito en cada caso: llegar rápido o tener control.
+
+Aquí va la comparación con lo que dicen las docs oficiales de cada herramienta.
+
+## Qué es cada uno
+
+[Claude Code](https://code.claude.com/docs/en/overview) es la herramienta de programación con agentes de Anthropic. Lee tu código, edita archivos, ejecuta comandos y se integra con tus herramientas. Funciona en terminal, VS Code, JetBrains, app de escritorio y web.
+
+[OpenCode](https://opencode.ai/docs/) es un agente de código open source. También tiene terminal (TUI), app de escritorio (en beta) y extensión para IDE. El repositorio [sst/opencode](https://github.com/sst/opencode) usa licencia MIT.
+
+## Instalación
+
+Las dos se instalan con un comando:
+
+```bash
+# Claude Code
+curl -fsSL https://claude.ai/install.sh | bash
+
+# OpenCode
+curl -fsSL https://opencode.ai/install | bash
+```
+
+Si prefieres Homebrew:
+
+```bash
+brew install --cask claude-code
+brew install anomalyco/tap/opencode
+```
+
+Desde ahí es `claude` u `opencode` dentro de tu proyecto. Con Claude Code inicias sesión la primera vez. Con OpenCode conectas un proveedor con `/connect`.
+
+## Modelos y costo
+
+Claude Code usa modelos de Anthropic. Necesitas una [suscripción de Claude](https://claude.com/pricing) o una cuenta de la Console. Pro cuesta 20 USD al mes (17 USD si pagas anual) y Max empieza en 100 USD al mes. La versión de terminal, VS Code y JetBrains también acepta [proveedores de terceros](https://code.claude.com/docs/en/third-party-integrations).
+
+OpenCode no te ata a un proveedor. Su documentación habla de [más de 75 proveedores](https://opencode.ai/docs/providers/): conectas tu API key y listo. También soporta modelos locales con Ollama o cualquier endpoint compatible con OpenAI. Si quieres probar sin decidir, tiene OpenCode Zen, un conjunto de modelos que el equipo ya probó.
+
+<Callout type="info" title="Suscripciones en OpenCode">
+  La documentación de OpenCode menciona iniciar sesión con Claude Pro/Max o ChatGPT Plus/Pro desde `/connect`, y a la vez avisa que Anthropic prohíbe plugins de terceros para suscripciones Pro/Max. Revisa los términos de Anthropic antes de apoyarte en eso.
+</Callout>
+
+## Configuración y extensión
+
+Los dos leen un archivo de instrucciones del proyecto, y no son tan distintos.
+
+En Claude Code es `CLAUDE.md`. Si tu repo ya tiene un `AGENTS.md`, también [puede leerlo](https://code.claude.com/docs/en/memory#agents-md). Encima tienes skills para empaquetar flujos repetibles, hooks que ejecutan comandos antes o después de una acción, subagentes para trabajar en paralelo y un Agent SDK si quieres construir tus propios agentes.
+
+En OpenCode, `/init` crea un `AGENTS.md` en la raíz del proyecto. Trae dos agentes integrados que cambias con Tab: `build`, con acceso completo, y `plan`, de solo lectura, que no edita archivos y pide permiso para ejecutar bash. Además tiene `/undo`, `/redo` y `/share`, y puedes invocar un subagente `general` con `@general`.
+
+Los dos soportan MCP. Si quieres ver cómo se configura en OpenCode, lo expliqué en [cómo conectar Figma con OpenCode usando MCP](/es/blog/configurar-figma-mcp-opencode).
+
+## Cuándo elijo cada uno
+
+Mi criterio es simple:
+
+- **Claude Code** cuando quiero rapidez. Lo instalo, inicio sesión y empiezo a trabajar. No tengo que decidir proveedor ni modelo antes de escribir la primera instrucción.
+- **OpenCode** cuando quiero control. Elijo el modelo, puedo cambiar de proveedor sin cambiar de herramienta, y me deja personalizar la configuración a fondo.
+
+No compiten entre sí. Como los dos pueden leer `AGENTS.md`, tus instrucciones de proyecto sirven en ambos.
+
+## Qué hacer hoy
+
+Instala el que no uses en un proyecto pequeño y pídele la misma tarea que ya resolviste con el otro. Ahí notas si te pesa más la rapidez de uno o el control del otro.
