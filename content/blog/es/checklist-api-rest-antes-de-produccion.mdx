@@ -1,0 +1,122 @@
+---
+title: Checklist de tu API REST antes de producción
+description: >-
+  Cuatro puntos que reviso antes de publicar una API: contrato, permisos por
+  recurso, códigos HTTP y límites con logs. Con ejemplos en Laravel.
+date: '2026-10-12'
+category: Backend y DevOps
+tags:
+  - API REST
+  - OpenAPI
+  - Laravel
+  - Rate limiting
+  - Seguridad
+---
+
+Que una API responda bien en Postman no significa que esté lista para producción. En local solo la usas tú, con datos tuyos y sin nadie intentando romperla. En producción la usan frontends que dependen de cada campo, usuarios que piden ids que no son suyos y clientes que repiten una petición mil veces.
+
+Esta es la lista corta que repaso antes de desplegar. Los ejemplos están en Laravel porque es el backend que uso en mis proyectos, pero cada punto aplica a cualquier stack.
+
+## 1. Contrato claro
+
+Si el frontend tiene que adivinar qué devuelve cada endpoint, tarde o temprano adivina mal. Documenta rutas, parámetros y respuestas en un archivo que viva en el repo. El estándar es [OpenAPI](https://spec.openapis.org/oas/latest.html) (no confundir con OpenAI): un formato para describir tu API en un archivo con las rutas que tiene, lo que recibe y lo que responde.
+
+```yaml
+openapi: 3.1.0
+info:
+  title: Cards API
+  version: 1.0.0
+paths:
+  /cards/{id}:
+    get:
+      summary: Obtiene una tarjeta
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: La tarjeta
+        '403':
+          description: No eres dueño de esta tarjeta
+        '404':
+          description: La tarjeta no existe
+```
+
+La ventaja no es el documento en sí. Es que frontend y backend discuten el contrato antes de escribir código, no después de que algo se rompe.
+
+## 2. Permisos por recurso
+
+Este es el error que más me preocupa. Un middleware de autenticación solo confirma que el usuario inició sesión. No confirma que el recurso que pide sea suyo.
+
+Si `GET /cards/42` devuelve la tarjeta 42 a cualquier usuario autenticado, basta con cambiar el número para leer datos ajenos. Valida la propiedad en cada acceso. En Laravel, una [policy](https://laravel.com/docs/authorization) lo deja explícito:
+
+```php
+public function show(Card $card): CardResource
+{
+    Gate::authorize('view', $card);
+
+    return new CardResource($card);
+}
+```
+
+```php
+public function view(User $user, Card $card): bool
+{
+    return $user->id === $card->user_id;
+}
+```
+
+Si la policy falla, Laravel lanza una `AuthorizationException` y responde 403. No hace falta escribir el `if` en cada controlador.
+
+## 3. Estados HTTP correctos
+
+Un `200` con `{ "error": "no encontrado" }` obliga al cliente a leer el cuerpo para saber qué pasó. Los códigos existen para eso. Los cuatro que más uso:
+
+| Código | Cuándo |
+|---|---|
+| `201` | Se creó el recurso |
+| `404` | El recurso no existe |
+| `403` | Existe, pero no tienes permiso |
+| `422` | La validación falló |
+
+Agrego `401` cuando falta el token o venció. Laravel ya devuelve `422` con el detalle por campo cuando falla un `FormRequest`, y para crear basta con indicarlo:
+
+```php
+public function store(StoreCardRequest $request): JsonResponse
+{
+    $card = $request->user()->cards()->create($request->validated());
+
+    return (new CardResource($card))
+        ->response()
+        ->setStatusCode(201);
+}
+```
+
+Un detalle: si un usuario sin permiso pide un recurso que no existe para él, decide si respondes `403` o `404`. El `404` evita revelar que el id existe.
+
+## 4. Límites y logs
+
+Sin rate limiting, un script mal escrito o un abuso deliberado puede tumbar tu API o disparar tu factura. Laravel trae [`RateLimiter`](https://laravel.com/docs/routing#rate-limiting) listo para usarse:
+
+```php
+RateLimiter::for('api', function (Request $request) {
+    return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+});
+```
+
+Limitar por usuario cuando hay sesión y por IP cuando no evita que un usuario legítimo pague por el abuso de otro. Las rutas sensibles, como login o recuperar contraseña, merecen un límite más estricto.
+
+El otro lado son los logs. Registra los errores `5xx` con contexto suficiente para reproducirlos: ruta, usuario, parámetros. Sin eso, te enteras de los fallos porque un usuario te escribe.
+
+<Callout type="info" title="Qué no registrar">
+No guardes contraseñas, tokens ni datos de tarjeta en los logs. Un log filtrado es otra puerta de entrada.
+</Callout>
+
+## Qué hacer ahora
+
+Abre tu API y prueba lo más incómodo: pide con un usuario un recurso de otro. Si la respuesta es `200`, ya sabes por dónde empezar.
+
+Estos cuatro puntos son los que aplico en mis APIs Laravel con Sanctum, roles de equipo y webhooks idempotentes de Stripe.

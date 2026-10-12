@@ -1,0 +1,122 @@
+---
+title: REST API checklist before production
+description: >-
+  Four things I check before shipping an API: contract, per-resource
+  permissions, HTTP status codes, and rate limits with logs. Laravel examples.
+date: '2026-10-12'
+category: Backend & DevOps
+tags:
+  - REST API
+  - OpenAPI
+  - Laravel
+  - Rate limiting
+  - Security
+---
+
+An API that answers fine in Postman isn't ready for production. Locally, only you use it, with your own data and nobody trying to break it. In production it serves frontends that depend on every field, users who request ids that aren't theirs, and clients that repeat a request a thousand times.
+
+This is the short list I go through before deploying. The examples are in Laravel because it's the backend I use in my projects, but each point applies to any stack.
+
+## 1. A clear contract
+
+If the frontend has to guess what each endpoint returns, sooner or later it guesses wrong. Document routes, parameters, and responses in a file that lives in the repo. The standard is [OpenAPI](https://spec.openapis.org/oas/latest.html) (not to be confused with OpenAI): a format that describes your API in a file, with the routes it has, what it receives, and what it returns.
+
+```yaml
+openapi: 3.1.0
+info:
+  title: Cards API
+  version: 1.0.0
+paths:
+  /cards/{id}:
+    get:
+      summary: Gets a card
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The card
+        '403':
+          description: You don't own this card
+        '404':
+          description: The card doesn't exist
+```
+
+The value isn't the document itself. It's that frontend and backend agree on the contract before writing code, not after something breaks.
+
+## 2. Per-resource permissions
+
+This is the mistake that worries me most. An authentication middleware only confirms the user is logged in. It doesn't confirm the resource they're asking for is theirs.
+
+If `GET /cards/42` returns card 42 to any authenticated user, changing the number is enough to read someone else's data. Check ownership on every access. In Laravel, a [policy](https://laravel.com/docs/authorization) makes it explicit:
+
+```php
+public function show(Card $card): CardResource
+{
+    Gate::authorize('view', $card);
+
+    return new CardResource($card);
+}
+```
+
+```php
+public function view(User $user, Card $card): bool
+{
+    return $user->id === $card->user_id;
+}
+```
+
+If the policy fails, Laravel throws an `AuthorizationException` and responds with 403. You don't need to write the `if` in every controller.
+
+## 3. Correct HTTP statuses
+
+A `200` with `{ "error": "not found" }` forces the client to read the body to know what happened. Status codes exist for that. The four I use most:
+
+| Code | When |
+|---|---|
+| `201` | The resource was created |
+| `404` | The resource doesn't exist |
+| `403` | It exists, but you lack permission |
+| `422` | Validation failed |
+
+I add `401` when the token is missing or expired. Laravel already returns `422` with per-field details when a `FormRequest` fails, and for creation you only need to set the code:
+
+```php
+public function store(StoreCardRequest $request): JsonResponse
+{
+    $card = $request->user()->cards()->create($request->validated());
+
+    return (new CardResource($card))
+        ->response()
+        ->setStatusCode(201);
+}
+```
+
+One detail: when a user without permission requests a resource that exists but isn't theirs, decide whether you answer `403` or `404`. `404` avoids revealing that the id exists.
+
+## 4. Limits and logs
+
+Without rate limiting, a badly written script or deliberate abuse can take your API down or inflate your bill. Laravel ships a [`RateLimiter`](https://laravel.com/docs/routing#rate-limiting) ready to use:
+
+```php
+RateLimiter::for('api', function (Request $request) {
+    return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+});
+```
+
+Limiting by user when there's a session and by IP when there isn't keeps a legitimate user from paying for someone else's abuse. Sensitive routes, like login or password recovery, deserve a stricter limit.
+
+The other side is logs. Record `5xx` errors with enough context to reproduce them: route, user, parameters. Without that, you find out about failures when a user writes to you.
+
+<Callout type="info" title="What not to log">
+Don't store passwords, tokens, or card data in logs. A leaked log is another way in.
+</Callout>
+
+## What to do now
+
+Open your API and try the most uncomfortable test: with one user, request another user's resource. If the answer is `200`, you know where to start.
+
+These are the four points I apply in my Laravel APIs with Sanctum, team roles, and idempotent Stripe webhooks.
