@@ -62,14 +62,14 @@ export function MobileMenu({
 
 			<nav
 				aria-label="Primary"
-				className="page-pad flex flex-1 flex-col justify-center gap-2"
+				className="page-pad flex flex-1 flex-col justify-center gap-4"
 			>
 				{links.map((link, i) => (
 					<a
 						key={link.href}
 						href={link.href}
 						onClick={(e) => onNavigateAction(e, link.href)}
-						className="text-h1 u-wide flex items-baseline gap-4"
+						className="text-h1 u-wide flex min-h-11 items-baseline gap-4 py-2"
 					>
 						<span className="u-label !text-on-accent/60 shrink-0">
 							{String(i + 1).padStart(2, "0")}
