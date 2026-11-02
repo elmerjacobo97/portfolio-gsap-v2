@@ -21,7 +21,7 @@ Aquí va la comparación con lo que dicen las docs oficiales de cada herramienta
 
 [Claude Code](https://code.claude.com/docs/en/overview) es la herramienta de programación con agentes de Anthropic. Lee tu código, edita archivos, ejecuta comandos y se integra con tus herramientas. Funciona en terminal, VS Code, JetBrains, app de escritorio y web.
 
-[OpenCode](https://opencode.ai/docs/) es un agente de código open source. También tiene terminal (TUI), app de escritorio (en beta) y extensión para IDE. El repositorio [sst/opencode](https://github.com/sst/opencode) usa licencia MIT.
+[OpenCode](https://opencode.ai/docs/) es un agente de código open source. También tiene terminal (TUI), app de escritorio (en beta) y extensión para IDE. El repositorio [anomalyco/opencode](https://github.com/anomalyco/opencode) usa licencia MIT.
 
 ## Instalación
 
@@ -42,16 +42,20 @@ brew install --cask claude-code
 brew install anomalyco/tap/opencode
 ```
 
+<Callout type="info" title="OpenCode 1 y OpenCode 2">
+  Estos comandos instalan OpenCode 1, el que describe la documentación en opencode.ai/docs. Existe una versión 2 (`brew install opencode` ya instala esa) y las dos usan el comando `opencode`, así que pueden pisarse. Elige una antes de instalar.
+</Callout>
+
 Desde ahí es `claude` u `opencode` dentro de tu proyecto. Con Claude Code inicias sesión la primera vez. Con OpenCode conectas un proveedor con `/connect`.
 
 ## Modelos y costo
 
 Claude Code usa modelos de Anthropic. Necesitas una [suscripción de Claude](https://claude.com/pricing) o una cuenta de la Console. Pro cuesta 20 USD al mes (17 USD si pagas anual) y Max empieza en 100 USD al mes. La versión de terminal, VS Code y JetBrains también acepta [proveedores de terceros](https://code.claude.com/docs/en/third-party-integrations).
 
-OpenCode no te ata a un proveedor. Su documentación habla de [más de 75 proveedores](https://opencode.ai/docs/providers/): conectas tu API key y listo. También soporta modelos locales con Ollama o cualquier endpoint compatible con OpenAI. Si quieres probar sin decidir, tiene OpenCode Zen, un conjunto de modelos que el equipo ya probó.
+OpenCode no te ata a un proveedor. Su documentación habla de [más de 75 proveedores](https://opencode.ai/docs/providers/): conectas tu API key y listo. También soporta modelos locales con Ollama o cualquier endpoint compatible con OpenAI. Si quieres probar sin decidir, ofrece OpenCode Models, una lista curada de modelos que el equipo ya probó.
 
 <Callout type="info" title="Suscripciones en OpenCode">
-  La documentación de OpenCode menciona iniciar sesión con Claude Pro/Max o ChatGPT Plus/Pro desde `/connect`, y a la vez avisa que Anthropic prohíbe plugins de terceros para suscripciones Pro/Max. Revisa los términos de Anthropic antes de apoyarte en eso.
+  Desde `/connect` puedes iniciar sesión con ChatGPT Plus/Pro. Con Claude Pro/Max no: la documentación de OpenCode avisa que existen plugins de terceros para eso y que Anthropic lo prohíbe explícitamente.
 </Callout>
 
 ## Configuración y extensión
