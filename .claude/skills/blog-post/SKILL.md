@@ -29,7 +29,7 @@ Validated by zod in `src/features/blog/services/posts.ts`:
 title: ...
 description: >-
   1-2 sentences, concrete, no empty promises.
-date: 'YYYY-MM-DD'      # today
+date: 'YYYY-MM-DD'      # Notion row Fecha if from a calendar row (post + TikTok same day); else today
 category: <from the table>
 tags:                   # 3-6, do not repeat the category
   - ...
