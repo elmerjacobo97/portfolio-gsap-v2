@@ -1,0 +1,162 @@
+---
+title: 'Server Actions in Next.js: 4 mistakes that leave your endpoint open'
+description: >-
+  Four common Server Action mistakes in Next.js 16: authenticating only on the
+  page, validating the shape but not the owner, trusting proxy.ts, and returning
+  the full record.
+date: '2026-11-22'
+category: Next.js & Architecture
+tags:
+  - Server Actions
+  - Security
+  - Zod
+  - TypeScript
+  - App Router
+---
+
+A Server Action looks like a private function. It isn't. When you mark a function with `'use server'`, Next.js creates an identifier and the browser can call it with a POST to the route where it lives. You don't need the UI or the form. The [Next.js docs](https://nextjs.org/docs/app/guides/data-security#built-in-server-actions-security-features) say it plainly: the action is reachable by direct POST, even if you never import it anywhere else.
+
+Next.js adds two layers: encrypted IDs that change between builds and dead code elimination for actions that aren't used. That reduces noise; it doesn't authenticate anyone. These are the four mistakes that show up when that difference gets lost.
+
+## 1. Authenticating on the page and trusting that session
+
+The pattern looks reasonable: the `/admin` page checks the session and redirects to login. Only admins see the form. The problem is behind the form: the POST reaches the action, not the page.
+
+```tsx
+// app/admin/page.tsx
+import { redirect } from 'next/navigation'
+
+import { deleteRecords } from './actions'
+
+export default async function AdminPage() {
+  const session = await auth()
+  if (!session?.user.isAdmin) redirect('/login')
+
+  return (
+    <form action={deleteRecords}>
+      <button>Delete records</button>
+    </form>
+  )
+}
+```
+
+```ts
+// app/admin/actions.ts
+'use server'
+
+export async function deleteRecords() {
+  const session = await auth()
+  if (!session?.user.isAdmin) throw new Error('Unauthorized')
+
+  await db.record.deleteMany()
+}
+```
+
+The page decides which UI renders. The action decides what runs. They are separate entry points, and each one verifies on its own. The check inside the action is the one that runs when someone calls it directly.
+
+## 2. Validating the shape and forgetting the owner
+
+Zod checks that the body has the right fields. It doesn't check that the resource is yours. That difference is called [IDOR](https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html): swap the `postId` in the body for someone else's and the action deletes it as long as the session is valid.
+
+```ts
+'use server'
+
+import { z } from 'zod'
+
+const schema = z.object({
+  postId: z.string().min(1),
+})
+
+export async function deletePost(formData: FormData) {
+  const session = await auth()
+  if (!session?.user) throw new Error('Unauthorized')
+
+  const parsed = schema.safeParse({
+    postId: formData.get('postId'),
+  })
+  if (!parsed.success) return { ok: false }
+
+  const post = await db.post.findUnique({
+    where: { id: parsed.data.postId },
+  })
+  if (!post || post.authorId !== session.user.id) {
+    throw new Error('Forbidden')
+  }
+
+  await db.post.delete({ where: { id: post.id } })
+  return { ok: true }
+}
+```
+
+Shape validation and ownership checks are two separate steps. The schema answers "does the body have the expected shape?". The query answers "can this user touch this record?". You need both answers before writing to the database.
+
+## 3. Putting "use server" in proxy.ts
+
+In Next.js 16, `middleware.ts` was renamed to [`proxy.ts`](https://nextjs.org/docs/app/api-reference/file-conventions/proxy). The file runs before the route renders and can redirect, rewrite, or modify headers. It already runs on the server.
+
+`'use server'` marks exported functions as Server Actions. It doesn't mark the file as "server-side". In a file with the directive at the top, every export is an action and every value export has to be an async function. A synchronous helper or an exported constant breaks that rule. Shared logic belongs in a separate module with `server-only`.
+
+In `proxy.ts` the directive doesn't add authorization and doesn't turn the proxy into a Server Action. The proxy can stop a navigation without a cookie, nothing more:
+
+```ts
+// proxy.ts
+import { NextResponse, type NextRequest } from 'next/server'
+
+export function proxy(request: NextRequest) {
+  if (!request.cookies.has('session')) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*'],
+}
+```
+
+That keeps someone without a cookie out of `/dashboard`. It doesn't say whether the cookie is valid or whether the user owns the record they're trying to change. That part stays inside the action.
+
+## 4. Returning the full record
+
+Actions serialize what they return and send it to the client. A `db.user.update()` without `select` returns the whole user: password hash, tokens, internal fields. The UI may not render them, but they travel in the response and show up in the Network tab.
+
+```ts
+// bad: the full record crosses to the client
+return db.user.update({ where: { id }, data: { name } })
+```
+
+```ts
+// good: only the state the UI needs
+await db.user.update({ where: { id }, data: { name } })
+return { ok: true }
+```
+
+If the UI needs a few fields, ask for them explicitly:
+
+```ts
+return db.user.update({
+  where: { id },
+  data: { name },
+  select: { id: true, name: true, image: true },
+})
+```
+
+The action returns plain, serializable data. A class instance, a function, or a `Symbol` won't cross that boundary; if you need one, build a DTO with the fields the view uses.
+
+## The checklist
+
+Before you call an action done:
+
+1. The session is read inside the action, not passed as a parameter.
+2. The authenticated user owns the resource being changed.
+3. The input is parsed and validated on the server with Zod or another schema.
+4. The action returns only the state or fields the UI shows.
+5. Expensive work (sending email, bulk writes) has a rate limit.
+
+The first three go together. If the resource doesn't belong to the user, a valid ID and a valid session still aren't enough.
+
+<Callout type="info" title="Test your action without the UI">
+  Copy the POST from the Network tab, change the ID or the body, and replay it
+  with curl. If the action returns data or runs the mutation, it isn't ready.
+</Callout>
+
+As the project grows, move authentication and queries into a `server-only` layer and leave the action as a thin wrapper. The [Data Security guide](https://nextjs.org/docs/app/guides/data-security#using-a-data-access-layer-for-mutations) has the full example with authentication, authorization, and a minimal return value.
