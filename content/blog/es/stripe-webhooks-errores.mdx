@@ -1,0 +1,138 @@
+---
+title: 'Stripe cobró y el usuario sigue sin acceso: 4 errores de webhooks'
+description: >-
+  Cuatro errores que dejan a un cliente pagando sin recibir acceso: firma sobre
+  el JSON parseado, trabajo antes del 200, eventos duplicados y reintentos sin
+  probar. Con el handler corregido en Next.js.
+date: '2026-11-29'
+category: Backend y DevOps
+tags:
+  - Stripe
+  - Webhooks
+  - SaaS
+  - Idempotencia
+  - Next.js
+---
+
+El caso típico: el pago aparece en el dashboard de Stripe, el cliente tiene el correo de confirmación y tu app todavía lo trata como usuario gratuito. Revisas los logs del webhook y dice `200`. Nada falló, y aun así no hay acceso.
+
+Casi siempre es uno de cuatro errores. Los muestro con un route handler de Next.js, pero la lógica es la misma en Express, Laravel o lo que uses.
+
+## 1. Firmas el JSON parseado, no el cuerpo crudo
+
+Stripe firma los bytes exactos que te envía. Si tu framework parsea el body y lo vuelves a serializar, el espacio en blanco o el orden de las llaves cambian y la firma deja de coincidir. [`stripe-node`](https://github.com/stripe/stripe-node#webhook-signing) lo dice explícito: `constructEvent` necesita el cuerpo crudo, tal como llegó.
+
+En un route handler de Next.js eso es `request.text()`, nunca `request.json()`:
+
+```ts
+// src/app/api/webhooks/stripe/route.ts
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+export async function POST(request: Request) {
+  const signature = request.headers.get("stripe-signature");
+  if (!signature) return new Response("Missing signature", { status: 400 });
+
+  let event: Stripe.Event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      await request.text(),
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!,
+    );
+  } catch {
+    return new Response("Invalid signature", { status: 400 });
+  }
+
+  // ...
+}
+```
+
+En Express el mismo error aparece cuando `express.json()` corre antes de tu ruta. Para el endpoint del webhook usa `express.raw({ type: "application/json" })`.
+
+## 2. Procesas antes de responder 200
+
+Stripe espera un `2xx` rápido. La [documentación](https://docs.stripe.com/events/manage-webhook-endpoints) pide devolverlo antes de cualquier lógica que pueda agotar el tiempo: crear la suscripción, enviar correos, llamar a otra API.
+
+Si tu handler tarda y Stripe corta la conexión, lo cuenta como fallo y reintenta. Tú sigues procesando el primer intento, y ahora hay un segundo en camino.
+
+El patrón: guarda el evento, responde, procesa después. En Next.js 16 puedes usar [`after`](https://nextjs.org/docs/app/api-reference/functions/after) para correr el trabajo cuando la respuesta ya salió:
+
+```ts
+import { after } from "next/server";
+
+// dentro de POST, después de constructEvent
+const isNew = await claimEvent(event); // ver el error 3
+if (!isNew) return new Response("Already received", { status: 200 });
+
+after(async () => {
+  await processEvent(event);
+});
+
+return new Response("ok", { status: 200 });
+```
+
+Hay un costo: si `processEvent` falla, Stripe ya recibió su 200 y no reintenta. Por eso el evento se guarda antes, con un estado, y los que se queden sin procesar los reintentas tú (más abajo).
+
+## 3. Procesas dos veces el mismo `event.id`
+
+Stripe garantiza al menos una entrega, no exactamente una. Con reintentos, el mismo evento puede llegar dos veces, y si tu handler suma créditos o crea una suscripción, la segunda vez duplica el efecto.
+
+La solución es una tabla con `event.id` como llave primaria. El `insert` hace de candado:
+
+```sql
+create table stripe_events (
+  id          text primary key,
+  type        text not null,
+  status      text not null default 'received',
+  received_at timestamptz not null default now()
+);
+
+insert into stripe_events (id, type)
+values ($1, $2)
+on conflict (id) do nothing
+returning id;
+```
+
+Si el `insert` devuelve una fila, el evento es nuevo. Si no devuelve nada, ya lo recibiste y respondes `200` sin tocar nada. Así funciona `claimEvent` del bloque anterior. Cuando `processEvent` termina bien, pasa `status` a `processed`.
+
+Los eventos que se quedan en `received` son los que fallaron. Un cron que reprocesa los más viejos de unos minutos, o un `stripe events resend <event_id>`, los recupera sin duplicar nada.
+
+<Callout type="info" title="Idempotente de verdad">
+  Que el handler sea idempotente no depende solo de la tabla. Dar acceso con un
+  `upsert` por usuario y plan (no un `insert` ciego) protege también si alguien
+  reenvía un evento a mano.
+</Callout>
+
+## 4. Nunca probaste el reintento
+
+Todo lo anterior funciona en el caso feliz. Los bugs viven en el segundo intento, y casi nadie lo prueba antes de producción.
+
+Con la [Stripe CLI](https://docs.stripe.com/stripe-cli) puedes hacerlo en local:
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+```
+
+El comando imprime un secreto `whsec_...` para ese listener. Ponlo en `STRIPE_WEBHOOK_SECRET` de tu `.env.local`; no es el mismo que el del endpoint del dashboard. En otra terminal:
+
+```bash
+stripe trigger checkout.session.completed
+stripe events resend evt_xxx
+```
+
+`trigger` crea un evento de prueba con datos de fixture, así que no traerá tu usuario ni tu `metadata`. Sirve para ver la firma, el `200` y el estado en la tabla. `resend` manda el mismo evento otra vez: la segunda vez la tabla tiene que dar `Already received` y no cambiar nada.
+
+Para saber cuánto tiempo tienes en producción: en live mode Stripe reintenta hasta tres días con backoff exponencial; en sandbox, tres veces durante unas horas.
+
+## Checklist para tu endpoint
+
+1. Lee el body con `request.text()` y verifica la firma antes de cualquier otra cosa.
+2. Guarda `event.id` con una llave primaria y responde `200`.
+3. Procesa después de responder y marca el estado.
+4. Prueba con `stripe listen` y `stripe events resend`.
+
+En Tarjetly, un SaaS B2B con suscripciones, los webhooks de Stripe son idempotentes por esta misma razón. Puedes verlo en la sección de proyectos.
+
+¿Tu SaaS cobra pero no da acceso? [Escríbeme](https://elmerjacobo.dev/es#contact) y lo revisamos.

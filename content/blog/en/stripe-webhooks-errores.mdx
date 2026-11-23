@@ -1,0 +1,138 @@
+---
+title: 'Stripe charged the customer and they still have no access: 4 webhook mistakes'
+description: >-
+  Four mistakes that leave a customer paying without getting access: signing
+  parsed JSON, working before the 200, duplicate events, and retries nobody
+  tested. With the fixed handler in Next.js.
+date: '2026-11-29'
+category: Backend & DevOps
+tags:
+  - Stripe
+  - Webhooks
+  - SaaS
+  - Idempotency
+  - Next.js
+---
+
+The usual case: the payment shows up in the Stripe dashboard, the customer has the confirmation email, and your app still treats them as a free user. You check the webhook logs and they say `200`. Nothing failed, and there's still no access.
+
+It's almost always one of four mistakes. I show them with a Next.js route handler, but the logic is the same in Express, Laravel, or whatever you use.
+
+## 1. You sign the parsed JSON, not the raw body
+
+Stripe signs the exact bytes it sends you. If your framework parses the body and you serialize it again, whitespace or key order changes and the signature stops matching. [`stripe-node`](https://github.com/stripe/stripe-node#webhook-signing) says it plainly: `constructEvent` needs the raw body, exactly as received.
+
+In a Next.js route handler that means `request.text()`, never `request.json()`:
+
+```ts
+// src/app/api/webhooks/stripe/route.ts
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+export async function POST(request: Request) {
+  const signature = request.headers.get("stripe-signature");
+  if (!signature) return new Response("Missing signature", { status: 400 });
+
+  let event: Stripe.Event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      await request.text(),
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!,
+    );
+  } catch {
+    return new Response("Invalid signature", { status: 400 });
+  }
+
+  // ...
+}
+```
+
+In Express the same mistake shows up when `express.json()` runs before your route. For the webhook endpoint, use `express.raw({ type: "application/json" })`.
+
+## 2. You process before answering 200
+
+Stripe expects a fast `2xx`. The [docs](https://docs.stripe.com/events/manage-webhook-endpoints) say to return it before any logic that could time out: creating the subscription, sending emails, calling another API.
+
+If your handler is slow and Stripe drops the connection, it counts that as a failure and retries. You're still processing the first attempt, and now a second one is on its way.
+
+The pattern: store the event, respond, process afterwards. In Next.js 16 you can use [`after`](https://nextjs.org/docs/app/api-reference/functions/after) to run the work once the response has gone out:
+
+```ts
+import { after } from "next/server";
+
+// inside POST, after constructEvent
+const isNew = await claimEvent(event); // see mistake 3
+if (!isNew) return new Response("Already received", { status: 200 });
+
+after(async () => {
+  await processEvent(event);
+});
+
+return new Response("ok", { status: 200 });
+```
+
+There's a cost: if `processEvent` fails, Stripe already got its 200 and won't retry. That's why the event is stored first, with a status, and you retry the stuck ones yourself (more on that below).
+
+## 3. You process the same `event.id` twice
+
+Stripe guarantees at-least-once delivery, not exactly-once. With retries, the same event can arrive twice, and if your handler adds credits or creates a subscription, the second delivery doubles the effect.
+
+The fix is a table with `event.id` as the primary key. The `insert` works as the lock:
+
+```sql
+create table stripe_events (
+  id          text primary key,
+  type        text not null,
+  status      text not null default 'received',
+  received_at timestamptz not null default now()
+);
+
+insert into stripe_events (id, type)
+values ($1, $2)
+on conflict (id) do nothing
+returning id;
+```
+
+If the `insert` returns a row, the event is new. If it returns nothing, you've seen it before and you answer `200` without touching anything. That's what `claimEvent` in the previous block does. When `processEvent` finishes cleanly, set `status` to `processed`.
+
+Events stuck in `received` are the ones that failed. A cron job that reprocesses the ones older than a few minutes, or a `stripe events resend <event_id>`, recovers them without duplicating anything.
+
+<Callout type="info" title="Actually idempotent">
+  An idempotent handler doesn't depend on the table alone. Granting access with
+  an `upsert` per user and plan (not a blind `insert`) also protects you when
+  someone resends an event by hand.
+</Callout>
+
+## 4. You never tested the retry
+
+Everything above works on the happy path. The bugs live in the second attempt, and almost nobody tests it before production.
+
+With the [Stripe CLI](https://docs.stripe.com/stripe-cli) you can do it locally:
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+```
+
+The command prints a `whsec_...` secret for that listener. Put it in `STRIPE_WEBHOOK_SECRET` in your `.env.local`; it's not the same one as the dashboard endpoint. In another terminal:
+
+```bash
+stripe trigger checkout.session.completed
+stripe events resend evt_xxx
+```
+
+`trigger` creates a test event with fixture data, so it won't carry your user or your `metadata`. It's useful for checking the signature, the `200`, and the row in the table. `resend` sends the same event again: the second time the table has to answer `Already received` and change nothing.
+
+How long you have in production: in live mode Stripe retries for up to three days with exponential backoff; in a sandbox, three times over a few hours.
+
+## Checklist for your endpoint
+
+1. Read the body with `request.text()` and verify the signature before anything else.
+2. Store `event.id` under a primary key and answer `200`.
+3. Process after responding and mark the status.
+4. Test with `stripe listen` and `stripe events resend`.
+
+In Tarjetly, a B2B SaaS with subscriptions, the Stripe webhooks are idempotent for this same reason. You can see it in the projects section.
+
+Does your SaaS charge but not grant access? [Write to me](https://elmerjacobo.dev/en#contact) and we'll look at it.
