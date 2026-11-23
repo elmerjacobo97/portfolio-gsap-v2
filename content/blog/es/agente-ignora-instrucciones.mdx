@@ -1,0 +1,101 @@
+---
+title: 'Tu agente ignora tus instrucciones: 4 causas y cómo arreglarlo'
+description: >-
+  Cuando Claude Code hace lo que le prohibiste, casi nunca es rebeldía. Cuatro
+  causas concretas y qué mover a hooks y permisos para que la regla se cumpla.
+date: '2026-11-22'
+category: IA y Agentes
+tags:
+  - Claude Code
+  - Hooks
+  - CLAUDE.md
+  - Agentes
+---
+
+Le escribes "no toques la base de datos" en el `CLAUDE.md`, y el agente la toca igual. La reacción normal es subir el tono: poner la regla en mayúsculas, agregar IMPORTANT, repetirla tres veces. Casi nunca funciona, y la razón no es que el agente sea desobediente.
+
+Lo que sigue aplica a Claude Code, que es la herramienta que uso y cuya documentación revisé. Otros agentes resuelven la precedencia a su manera, así que no asumas que todo se traslada igual.
+
+## 1. Tu regla es contexto, no una ley
+
+Un `CLAUDE.md` no se ejecuta. Se carga al inicio de la sesión como un mensaje de usuario después del system prompt, y el modelo decide qué hacer con él. La documentación de Claude Code lo dice sin rodeos: la instrucción no tiene garantía de cumplirse, puede decidir no hacerla.
+
+Es la diferencia entre dos tipos de instrucción:
+
+- **No determinista**: tu prompt, el `CLAUDE.md`, una skill. El modelo las lee y decide.
+- **Determinista**: un hook, una regla `deny` o una configuración gestionada. El arnés las ejecuta siempre, decida lo que decida el modelo.
+
+Si una regla no admite excepciones, está en el lado equivocado.
+
+## 2. Tus instrucciones se contradicen
+
+Los archivos no se sobrescriben entre sí. Claude Code los concatena: primero el nivel de usuario (`~/.claude/CLAUDE.md`), después el del proyecto, y lo que está más cerca de donde lanzaste la sesión se lee al final. No hay un "gana el del proyecto" mecánico.
+
+Si el archivo global dice "pregunta antes de tocar archivos" y el del proyecto dice "aplica los cambios directamente", el agente tiene dos órdenes válidas. Según la documentación, ante instrucciones que se contradicen puede elegir una de forma arbitraria.
+
+Qué hacer: revisa de vez en cuando `~/.claude/CLAUDE.md`, el del proyecto, los de subcarpetas y `.claude/rules/`. Busca la misma materia tratada dos veces con respuestas distintas y deja una sola.
+
+## 3. El archivo creció demasiado
+
+Cada línea compite con las demás por atención. La recomendación oficial es mantener cada `CLAUDE.md` por debajo de unas 200 líneas: más largo consume más contexto y baja el cumplimiento. Con un archivo así, tu regla clave queda enterrada entre convenciones de estilo que el agente ya sigue solo.
+
+Qué hacer:
+
+- Quita lo que el agente puede deducir del código: estructura de carpetas, listas de dependencias.
+- Deja trampas, razones y convenciones que difieren de lo normal.
+- Mueve lo que solo aplica a una parte del repo a reglas con alcance por ruta en `.claude/rules/`.
+
+Los imports con `@archivo` ordenan, pero no reducen el contexto: se cargan junto con el archivo que los importa.
+
+## 4. Lo que solo dijiste en la conversación se pierde al compactar
+
+Cuando la conversación se acerca al límite de contexto, Claude Code la resume. El `CLAUDE.md` de la raíz sobrevive y se vuelve a leer desde disco. Una instrucción que diste solo en el chat puede no sobrevivir.
+
+Si le dijiste a mitad de sesión "en este proyecto nunca uses `any`" y luego la sesión se compactó, esa regla quizá ya no existe para el agente. La regla práctica: si algo importa más allá de esta sesión, va a un archivo. Lo que no está escrito en disco, para el agente deja de existir.
+
+## La salida: reglas duras en hooks y permisos
+
+Para lo que no tiene excepciones, no escribas prosa. Configura al arnés para que lo haga cumplir.
+
+Una regla `deny` en `.claude/settings.json` bloquea la lectura de secretos en cualquier modo de permisos:
+
+```json
+{
+  "permissions": {
+    "deny": ["Read(./.env)", "Read(./.env.*)", "Read(./secrets/**)"]
+  }
+}
+```
+
+Y un hook `PreToolUse` puede inspeccionar el comando antes de que corra. Con `exit 2` lo bloquea, y lo que escribas en stderr le llega al agente como explicación:
+
+```bash
+#!/bin/bash
+input=$(cat)
+command=$(jq -r '.tool_input.command' <<<"$input")
+
+if echo "$command" | grep -qi "drop table"; then
+  echo "Blocked: dropping tables is not allowed" >&2
+  exit 2
+fi
+
+exit 0
+```
+
+Se registra en `settings.json` con un matcher sobre la herramienta `Bash`. `exit 0` significa "sin decisión": el flujo normal de permisos sigue aplicando.
+
+El criterio para decidir dónde va cada cosa:
+
+- ¿Es una preferencia o un estilo? Al `CLAUDE.md`, corto.
+- ¿Es una regla que no admite excepciones? A un hook o a `deny`.
+- ¿Importa solo en una parte del repo? A una regla con alcance por ruta.
+
+Y a la inversa: si tienes hooks para cosas que son solo preferencias, bórralos y deja que el agente decida.
+
+Para empezar, abre tu `CLAUDE.md` y busca la línea que más has repetido o puesto en mayúsculas. Esa es la candidata a hook.
+
+## Referencias
+
+- [Memoria y CLAUDE.md](https://code.claude.com/docs/en/memory)
+- [Hooks](https://code.claude.com/docs/en/hooks)
+- [Buenas prácticas](https://code.claude.com/docs/en/best-practices)

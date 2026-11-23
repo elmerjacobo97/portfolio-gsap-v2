@@ -1,0 +1,102 @@
+---
+title: 'Your agent ignores your instructions: 4 causes and how to fix them'
+description: >-
+  When Claude Code does what you told it not to, it's rarely defiance. Four
+  concrete causes, and which rules to move into hooks and permissions so they
+  actually hold.
+date: '2026-11-22'
+category: AI & Agents
+tags:
+  - Claude Code
+  - Hooks
+  - CLAUDE.md
+  - Agents
+---
+
+You write "don't touch the database" in your `CLAUDE.md`, and the agent touches it anyway. The usual reaction is to turn up the volume: capitalize the rule, add IMPORTANT, repeat it three times. It almost never works, and the reason isn't that the agent is disobedient.
+
+Everything below applies to Claude Code, the tool I use and whose docs I checked. Other agents resolve precedence in their own way, so don't assume it all carries over.
+
+## 1. Your rule is context, not law
+
+A `CLAUDE.md` isn't executed. It's loaded at the start of the session as a user message after the system prompt, and the model decides what to do with it. The Claude Code docs are blunt about it: there's no guarantee the instruction gets followed, and the model can decide not to.
+
+That's the difference between two kinds of instruction:
+
+- **Non-deterministic**: your prompt, `CLAUDE.md`, a skill. The model reads them and decides.
+- **Deterministic**: a hook, a `deny` rule, or a managed setting. The harness runs them every time, whatever the model decides.
+
+If a rule can't have exceptions, it's on the wrong side.
+
+## 2. Your instructions contradict each other
+
+Files don't override each other. Claude Code concatenates them: user level first (`~/.claude/CLAUDE.md`), then the project's, and whatever is closest to where you launched the session is read last. There's no mechanical "project wins".
+
+If your global file says "ask before touching files" and the project file says "apply changes directly", the agent has two valid orders. According to the docs, when instructions contradict, it may pick one arbitrarily.
+
+What to do: review `~/.claude/CLAUDE.md`, the project one, subfolder ones, and `.claude/rules/` from time to time. Look for the same topic covered twice with different answers and keep one.
+
+## 3. The file grew too long
+
+Every line competes with the others for attention. The official recommendation is to keep each `CLAUDE.md` under about 200 lines: longer files use more context and lower adherence. In a file like that, your key rule ends up buried between style conventions the agent already follows on its own.
+
+What to do:
+
+- Remove what the agent can infer from the code: folder layouts, dependency lists.
+- Keep pitfalls, rationale, and conventions that differ from the norm.
+- Move anything that only applies to part of the repo into path-scoped rules in `.claude/rules/`.
+
+`@file` imports help with organization but don't reduce context: they load together with the file that imports them.
+
+## 4. What you only said in the conversation gets lost on compaction
+
+When the conversation nears the context limit, Claude Code summarizes it. The root `CLAUDE.md` survives and is re-read from disk. An instruction you gave only in chat may not.
+
+If you told it mid-session "never use `any` in this project" and the session was then compacted, that rule may no longer exist for the agent. The practical rule: if something matters beyond this session, put it in a file. What isn't written to disk stops existing for the agent.
+
+## The way out: hard rules in hooks and permissions
+
+For things that can't have exceptions, don't write prose. Configure the harness to enforce them.
+
+A `deny` rule in `.claude/settings.json` blocks reading secrets in every permission mode:
+
+```json
+{
+  "permissions": {
+    "deny": ["Read(./.env)", "Read(./.env.*)", "Read(./secrets/**)"]
+  }
+}
+```
+
+And a `PreToolUse` hook can inspect the command before it runs. `exit 2` blocks it, and whatever you write to stderr reaches the agent as an explanation:
+
+```bash
+#!/bin/bash
+input=$(cat)
+command=$(jq -r '.tool_input.command' <<<"$input")
+
+if echo "$command" | grep -qi "drop table"; then
+  echo "Blocked: dropping tables is not allowed" >&2
+  exit 2
+fi
+
+exit 0
+```
+
+You register it in `settings.json` with a matcher on the `Bash` tool. `exit 0` means "no decision": the normal permission flow still applies.
+
+The rule of thumb for where each thing goes:
+
+- A preference or style? `CLAUDE.md`, kept short.
+- A rule with no exceptions? A hook or `deny`.
+- Only matters in part of the repo? A path-scoped rule.
+
+And the reverse: if you have hooks for things that are just preferences, delete them and let the agent decide.
+
+To start, open your `CLAUDE.md` and find the line you've repeated or capitalized the most. That's your hook candidate.
+
+## References
+
+- [Memory and CLAUDE.md](https://code.claude.com/docs/en/memory)
+- [Hooks](https://code.claude.com/docs/en/hooks)
+- [Best practices](https://code.claude.com/docs/en/best-practices)
