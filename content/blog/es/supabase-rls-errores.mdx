@@ -1,0 +1,183 @@
+---
+title: 'Supabase RLS: 3 errores que dejan tu base abierta'
+description: >-
+  Tu publishable key es pública por diseño. Estos tres errores de RLS son los
+  que dejan la base abierta: policies `for all`, la secret key en el cliente y
+  vistas o funciones que se saltan las policies.
+date: '2026-11-27'
+category: Backend y DevOps
+tags:
+  - Supabase
+  - Postgres
+  - RLS
+  - Seguridad
+  - Next.js
+---
+
+La publishable key de Supabase está hecha para vivir en el navegador. Va en el bundle, en el HTML, en cualquier request que puedas inspeccionar. Eso no es un descuido: es el diseño. Lo que decide si alguien lee tu tabla de transacciones no es la clave, son las policies de Row Level Security.
+
+Y RLS es fácil de configurar a medias. Estos son los tres errores que veo con más frecuencia, con el SQL que los cierra.
+
+## Error 1: una policy `for all` y a otra cosa
+
+Activar RLS es solo el primer paso:
+
+```sql
+alter table public.transactions enable row level security;
+```
+
+Con eso, la tabla queda cerrada para `anon` y `authenticated`. El problema llega con la policy que se agrega después. Esta es la que aparece en casi todos los tutoriales:
+
+```sql
+create policy "own transactions"
+on public.transactions for all
+to authenticated
+using ((select auth.uid()) = user_id);
+```
+
+Funciona para leer tus filas. Pero `for all` cubre cuatro operaciones, no una: `select`, `insert`, `update` y `delete`. Si tu intención era solo lectura, también acabas de permitir escritura y borrado sobre tus propias filas. Y como es una policy permisiva, cualquier otra policy permisiva en la misma tabla se suma con `or`: una `using (true)` deja todo abierto aunque la primera se vea estricta.
+
+Cada operación tiene además su propia semántica. `select` y `delete` usan `using` para elegir filas. `insert` solo acepta `with check`, porque no hay fila vieja que evaluar. `update` usa las dos: `using` encuentra las filas que puedes tocar y `with check` valida cómo quedan después.
+
+Separar las policies hace visible esa diferencia:
+
+```sql
+create policy "transactions_select_own"
+on public.transactions for select
+to authenticated
+using ((select auth.uid()) = user_id);
+
+create policy "transactions_insert_own"
+on public.transactions for insert
+to authenticated
+with check ((select auth.uid()) = user_id);
+
+create policy "transactions_update_own"
+on public.transactions for update
+to authenticated
+using ((select auth.uid()) = user_id)
+with check ((select auth.uid()) = user_id);
+
+create policy "transactions_delete_own"
+on public.transactions for delete
+to authenticated
+using ((select auth.uid()) = user_id);
+```
+
+Cuatro policies, cada una con la operación que realmente quieres permitir. `to authenticated` evita que `anon` llegue a evaluarlas. Y `(select auth.uid())` en lugar de `auth.uid()` no es cosmético: Postgres lo evalúa una vez por statement en vez de una vez por fila.
+
+## Error 2: la secret key en el cliente
+
+`service_role` no es un usuario con más permisos. Es un rol con `bypassrls`, y eso significa que las policies no existen para él. Cualquier fila de cualquier tabla, sin filtro.
+
+En proyectos nuevos la clave se llama `sb_secret_...`, pero el problema es el mismo. Si esa clave termina en el navegador, RLS deja de importar. Y termina ahí por dos caminos típicos: una variable `NEXT_PUBLIC_` con el nombre equivocado, o un cliente de Supabase creado en un archivo que también importa un componente de cliente.
+
+En Gastly, mi app de finanzas, el cliente de Supabase está partido en tres: browser, server y proxy. Solo el de server recibe la secret key, y ese archivo nunca se importa desde un componente con `'use client'`.
+
+```ts
+// src/shared/lib/supabase/admin.ts
+import 'server-only'
+import { createClient } from '@supabase/supabase-js'
+
+export const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  { auth: { persistSession: false, autoRefreshToken: false } },
+)
+```
+
+`server-only` hace que el build falle si alguien importa ese archivo desde el cliente. Es la barrera más barata que puedes poner: no depende de que nadie se equivoque, el build te avisa.
+
+La publishable key sí puede ir en el cliente. Esa es su función. La secret key no, ni en un test, ni en un script temporal, ni en un `.env` que luego copias a Vercel con el prefijo de siempre.
+
+## Error 3: vistas y funciones que se saltan RLS
+
+Una vista en Postgres se ejecuta con los permisos de quien la creó, no de quien la consulta. Si la creó `postgres`, lee las tablas como `postgres`, y las policies de tu usuario no aplican. La vista se vuelve una puerta lateral.
+
+Desde Postgres 15 se arregla con `security_invoker`:
+
+```sql
+create view public.monthly_totals
+with (security_invoker = true)
+as
+select
+  user_id,
+  date_trunc('month', occurred_at) as month,
+  sum(amount) as total
+from public.transactions
+group by user_id, date_trunc('month', occurred_at);
+```
+
+Si la vista ya existe, se cambia sin recrearla:
+
+```sql
+alter view public.monthly_totals set (security_invoker = true);
+```
+
+Las funciones tienen el mismo problema, con un agravante: `security definer` ejecuta con los privilegios del dueño y, por defecto, cualquier función nueva en `public` es ejecutable por `anon`. PostgREST la publica en `/rest/v1/rpc/<nombre>` sin que tengas que hacer nada.
+
+```sql
+-- así no
+create function public.all_transactions()
+returns setof public.transactions
+language sql
+security definer
+as $$
+  select * from public.transactions;
+$$;
+```
+
+Esa función devuelve todas las filas de todos los usuarios a cualquiera con la publishable key. No necesita login. Si el proyecto es de finanzas, acabas de publicar los movimientos de todos tus clientes.
+
+La versión segura es `security invoker`, con el filtro dentro y el `search_path` fijo:
+
+```sql
+create function public.monthly_total(target_month date)
+returns numeric
+language sql
+security invoker
+set search_path = ''
+as $$
+  select coalesce(sum(amount), 0)
+  from public.transactions
+  where user_id = (select auth.uid())
+    and occurred_at >= date_trunc('month', target_month)
+    and occurred_at < date_trunc('month', target_month) + interval '1 month';
+$$;
+```
+
+Si de verdad necesitas `security definer` — por ejemplo, para leer una tabla de roles que el usuario no puede consultar — filtra siempre por `auth.uid()` dentro de la función, fija `search_path = ''` y califica los nombres con esquema. Y revoca el `execute` de `anon`:
+
+```sql
+revoke execute on function public.monthly_total(date) from anon;
+```
+
+## La prueba antes de dar la tabla por cerrada
+
+El SQL editor de Supabase no sirve para probar esto. Ahí corres como `postgres`, el dueño de las tablas, y el dueño se salta RLS salvo que uses `force row level security`. Todo se ve bien y no probaste nada.
+
+La prueba real usa dos cuentas. Inicia sesión como el usuario A, guarda su `access_token`, y pide las filas del usuario B con la publishable key:
+
+```bash
+curl "$SUPABASE_URL/rest/v1/transactions?user_id=eq.$USER_B_ID" \
+  -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
+  -H "Authorization: Bearer $USER_A_JWT"
+```
+
+La respuesta correcta es `[]`. Si salen filas, RLS está apagado, la policy es permisiva o la tabla vive en un esquema expuesto sin policies.
+
+Repite con una escritura, que es la que casi nadie prueba:
+
+```bash
+curl -X POST "$SUPABASE_URL/rest/v1/transactions" \
+  -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
+  -H "Authorization: Bearer $USER_A_JWT" \
+  -H "Content-Type: application/json" \
+  -d "{\"user_id\":\"$USER_B_ID\",\"amount\":100,\"occurred_at\":\"2026-11-01\"}"
+```
+
+Tiene que responder `403` con un error de row-level security. Si responde `201`, el `insert` de A puede escribir a nombre de B.
+
+Lo último: abre **Advisors** en el dashboard. Los lints `0013_rls_disabled_in_public` y `0028_anon_security_definer_function_executable` cubren dos de los tres errores de este artículo, y corren sobre todas las tablas, no solo la que estabas revisando.
+
+Si hoy revisas un proyecto: activa RLS en cada tabla de `public`, escribe una policy por operación, saca la secret key del cliente y corre los advisors. Son quince minutos y cubren lo que más se rompe.

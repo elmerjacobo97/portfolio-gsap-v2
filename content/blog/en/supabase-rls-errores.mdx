@@ -1,0 +1,183 @@
+---
+title: 'Supabase RLS: 3 Mistakes That Leave Your Database Open'
+description: >-
+  Your publishable key is public by design. These three RLS mistakes are what
+  leave the database open: for all policies, the secret key in the client, and
+  views or functions that skip policies.
+date: '2026-11-27'
+category: Backend & DevOps
+tags:
+  - Supabase
+  - Postgres
+  - RLS
+  - Security
+  - Next.js
+---
+
+The Supabase publishable key is meant to live in the browser. It ships in the bundle, in the HTML, in every request you can inspect. That is not an oversight: it is the design. What decides whether someone can read your transactions table is not the key. It is the Row Level Security policies.
+
+And RLS is easy to set up halfway. These are the three mistakes I see most often, with the SQL that closes them.
+
+## Mistake 1: one `for all` policy and done
+
+Enabling RLS is only the first step:
+
+```sql
+alter table public.transactions enable row level security;
+```
+
+With that, the table is closed to `anon` and `authenticated`. The problem arrives with the policy added right after. This is the one that shows up in almost every tutorial:
+
+```sql
+create policy "own transactions"
+on public.transactions for all
+to authenticated
+using ((select auth.uid()) = user_id);
+```
+
+It works for reading your rows. But `for all` covers four operations, not one: `select`, `insert`, `update`, and `delete`. If all you wanted was read access, you just allowed writes and deletes on your own rows too. And because it is a permissive policy, any other permissive policy on the same table is added with `or`: one `using (true)` leaves everything open even when the first policy looks strict.
+
+Each operation also has its own semantics. `select` and `delete` use `using` to choose rows. `insert` only accepts `with check`, because there is no old row to evaluate. `update` uses both: `using` finds the rows you can touch, and `with check` validates what they look like afterward.
+
+Splitting the policies makes that difference visible:
+
+```sql
+create policy "transactions_select_own"
+on public.transactions for select
+to authenticated
+using ((select auth.uid()) = user_id);
+
+create policy "transactions_insert_own"
+on public.transactions for insert
+to authenticated
+with check ((select auth.uid()) = user_id);
+
+create policy "transactions_update_own"
+on public.transactions for update
+to authenticated
+using ((select auth.uid()) = user_id)
+with check ((select auth.uid()) = user_id);
+
+create policy "transactions_delete_own"
+on public.transactions for delete
+to authenticated
+using ((select auth.uid()) = user_id);
+```
+
+Four policies, each one with the operation you actually want to allow. `to authenticated` keeps `anon` from even evaluating them. And `(select auth.uid())` instead of `auth.uid()` is not cosmetic: Postgres evaluates it once per statement instead of once per row.
+
+## Mistake 2: the secret key in the client
+
+`service_role` is not a user with more permissions. It is a role with `bypassrls`, which means the policies do not exist for it. Any row in any table, no filter.
+
+In new projects the key is called `sb_secret_...`, but the problem is the same. If that key ends up in the browser, RLS stops mattering. And it gets there two typical ways: a `NEXT_PUBLIC_` variable with the wrong name, or a Supabase client created in a file that also imports a client component.
+
+In Gastly, my personal finance app, the Supabase client is split into three: browser, server, and proxy. Only the server one receives the secret key, and that file is never imported from a component with `'use client'`.
+
+```ts
+// src/shared/lib/supabase/admin.ts
+import 'server-only'
+import { createClient } from '@supabase/supabase-js'
+
+export const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  { auth: { persistSession: false, autoRefreshToken: false } },
+)
+```
+
+`server-only` makes the build fail if anyone imports that file from the client. It is the cheapest barrier you can add: it does not depend on nobody making a mistake, the build tells you.
+
+The publishable key can go in the client. That is its job. The secret key cannot, not in a test, not in a temporary script, not in an `.env` you later copy to Vercel with the usual prefix.
+
+## Mistake 3: views and functions that skip RLS
+
+A Postgres view runs with the permissions of whoever created it, not whoever queries it. If `postgres` created it, it reads the tables as `postgres`, and your user's policies do not apply. The view becomes a side door.
+
+Since Postgres 15 you fix it with `security_invoker`:
+
+```sql
+create view public.monthly_totals
+with (security_invoker = true)
+as
+select
+  user_id,
+  date_trunc('month', occurred_at) as month,
+  sum(amount) as total
+from public.transactions
+group by user_id, date_trunc('month', occurred_at);
+```
+
+If the view already exists, you change it without recreating it:
+
+```sql
+alter view public.monthly_totals set (security_invoker = true);
+```
+
+Functions have the same problem, plus one extra: `security definer` runs with the owner's privileges, and by default every new function in `public` is executable by `anon`. PostgREST publishes it at `/rest/v1/rpc/<name>` whether you meant to or not.
+
+```sql
+-- don't do this
+create function public.all_transactions()
+returns setof public.transactions
+language sql
+security definer
+as $$
+  select * from public.transactions;
+$$;
+```
+
+That function returns every row from every user to anyone with the publishable key. It does not need a login. If the project is a finance app, you just published all of your clients' transactions.
+
+The safe version is `security invoker`, with the filter inside and a pinned `search_path`:
+
+```sql
+create function public.monthly_total(target_month date)
+returns numeric
+language sql
+security invoker
+set search_path = ''
+as $$
+  select coalesce(sum(amount), 0)
+  from public.transactions
+  where user_id = (select auth.uid())
+    and occurred_at >= date_trunc('month', target_month)
+    and occurred_at < date_trunc('month', target_month) + interval '1 month';
+$$;
+```
+
+If you truly need `security definer` — to read a roles table the user cannot query, for example — always filter by `auth.uid()` inside the function, pin `search_path = ''`, and schema-qualify every name. Then revoke `execute` from `anon`:
+
+```sql
+revoke execute on function public.monthly_total(date) from anon;
+```
+
+## The test before calling the table closed
+
+The Supabase SQL editor is useless for testing this. There you run as `postgres`, the table owner, and the owner bypasses RLS unless you use `force row level security`. Everything looks fine and you tested nothing.
+
+The real test uses two accounts. Sign in as user A, keep the `access_token`, and request user B's rows with the publishable key:
+
+```bash
+curl "$SUPABASE_URL/rest/v1/transactions?user_id=eq.$USER_B_ID" \
+  -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
+  -H "Authorization: Bearer $USER_A_JWT"
+```
+
+The correct response is `[]`. If rows come back, RLS is off, the policy is permissive, or the table lives in an exposed schema with no policies.
+
+Repeat with a write, which almost nobody tests:
+
+```bash
+curl -X POST "$SUPABASE_URL/rest/v1/transactions" \
+  -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
+  -H "Authorization: Bearer $USER_A_JWT" \
+  -H "Content-Type: application/json" \
+  -d "{\"user_id\":\"$USER_B_ID\",\"amount\":100,\"occurred_at\":\"2026-11-01\"}"
+```
+
+It has to answer `403` with a row-level security error. If it answers `201`, user A can write on user B's behalf.
+
+Last step: open **Advisors** in the dashboard. Lints `0013_rls_disabled_in_public` and `0028_anon_security_definer_function_executable` cover two of the three mistakes in this article, and they run across every table, not only the one you were reviewing.
+
+If you review a project today: enable RLS on every table in `public`, write one policy per operation, get the secret key out of the client, and run the advisors. It takes fifteen minutes and covers what breaks most often.
