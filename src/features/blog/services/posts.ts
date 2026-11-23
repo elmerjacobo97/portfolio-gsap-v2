@@ -3,9 +3,6 @@ import 'server-only'
 import { readdir, readFile } from 'fs/promises'
 import path from 'path'
 
-import { format } from 'date-fns'
-import type { Locale as DateFnsLocale } from 'date-fns'
-import { enUS, es } from 'date-fns/locale'
 import matter from 'gray-matter'
 import { z } from 'zod'
 
@@ -105,14 +102,15 @@ export async function postExists(locale: Locale, slug: string): Promise<boolean>
 	return (await getPost(locale, slug)) !== null
 }
 
-const DATE_PATTERN: Record<Locale, string> = {
-	es: 'd MMM yyyy',
-	en: 'MMM d, yyyy',
-}
-
-const DATE_LOCALE: Record<Locale, DateFnsLocale> = { es, en: enUS }
+const DATE_LOCALE: Record<Locale, string> = { es: 'es', en: 'en-US' }
 
 /** Locale-aware date for meta rails and JSON-LD, e.g. "18 ago 2026" / "Aug 18, 2026". */
 export function formatPostDate(date: Date, locale: Locale) {
-	return format(date, DATE_PATTERN[locale], { locale: DATE_LOCALE[locale] })
+	// Stored dates are UTC midnight; format in UTC so the build machine timezone cannot shift the day.
+	return new Intl.DateTimeFormat(DATE_LOCALE[locale], {
+		day: 'numeric',
+		month: 'short',
+		year: 'numeric',
+		timeZone: 'UTC',
+	}).format(date)
 }
