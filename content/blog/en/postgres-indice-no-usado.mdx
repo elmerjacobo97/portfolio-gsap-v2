@@ -1,0 +1,132 @@
+---
+title: "The Index Exists but Postgres Won't Use It: 4 Causes"
+description: >-
+  You have an index on the column and the query is still slow. Four reasons
+  Postgres ignores it, and how to check with EXPLAIN (ANALYZE, BUFFERS) before
+  you create another one.
+date: '2026-12-01'
+category: Backend & DevOps
+tags:
+  - PostgreSQL
+  - SQL
+  - Indexes
+  - Performance
+  - EXPLAIN
+---
+
+You have an index on `email` and login takes two seconds. The usual move is to create another index and try again, and it almost never helps: Postgres decided not to use the one you already have. Before touching the schema, look at which plan it chose and why.
+
+## First, read the plan
+
+`EXPLAIN` without `ANALYZE` only shows what Postgres thinks it will do. With `ANALYZE` it runs the query for real, and `BUFFERS` tells you how many pages it read.
+
+```sql
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM users WHERE lower(email) = 'ana@example.com';
+```
+
+Two lines matter. If you see `Seq Scan on users` with `Rows Removed by Filter: <millions>` below it, Postgres read the whole table and threw almost everything away. If you see `Index Scan` or `Index Only Scan`, the index was used and the problem is somewhere else. Timings depend on your machine and your data, so measure them yourself before and after each change.
+
+To reproduce everything in this article without touching production, create a test table:
+
+```sql
+CREATE TABLE users AS
+SELECT
+  g AS id,
+  'user' || g || '@example.com' AS email,
+  (ARRAY['active', 'active', 'active', 'active', 'banned'])[1 + g % 5] AS status
+FROM generate_series(1, 1000000) AS g;
+
+CREATE INDEX users_email_idx ON users (email);
+CREATE INDEX users_status_idx ON users (status);
+ANALYZE users;
+```
+
+## 1. You apply a function or a cast to the column
+
+The `users_email_idx` index stores `email` values as they are. If the query filters on `lower(email)`, Postgres can't use it: the index orders `email`, not `lower(email)`.
+
+```sql
+-- Seq Scan: the index is useless for this expression
+SELECT * FROM users WHERE lower(email) = 'user42@example.com';
+```
+
+The same happens with `date(created_at) = '2026-01-01'` or `id::text = '42'`. The fix is an index on the exact expression the query uses:
+
+```sql
+CREATE INDEX users_email_lower_idx ON users (lower(email));
+```
+
+When you can, change the query so it compares the bare column. For dates, a range (`created_at >= '2026-01-01' AND created_at < '2026-01-02'`) uses the regular index without creating another one.
+
+## 2. You use `LIKE '%text%'`
+
+A btree index is a sorted tree. It finds values by their beginning, not their middle. The [documentation](https://www.postgresql.org/docs/current/indexes-types.html) puts it this way: the optimizer can use btree with `LIKE` if the pattern is a constant anchored at the start (`'foo%'`), but not with `'%bar'`.
+
+```sql
+SELECT * FROM users WHERE email LIKE '%example%';
+```
+
+There are two different cases:
+
+- **Prefix search (`'user4%'`)**: btree works, with one condition. If your database doesn't use the `C` collation, you need the `text_pattern_ops` operator class:
+
+```sql
+CREATE INDEX users_email_prefix_idx ON users (email text_pattern_ops);
+```
+
+- **Search in the middle (`'%text%'`)**: use the `pg_trgm` extension with a GIN index, which supports `LIKE` and `ILIKE` at any position:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX users_email_trgm_idx ON users USING GIN (email gin_trgm_ops);
+```
+
+Trigram indexes take more space and cost more on every write. Create them only for columns where you really search by content.
+
+## 3. The filter returns too many rows
+
+Here Postgres has it right. If the query asks for 80% of the table, reading it in order is cheaper than jumping between the index and the heap row by row.
+
+```sql
+-- In my test table, 4 out of 5 users are 'active'
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM users WHERE status = 'active';
+```
+
+You expect an `Index Scan` on `users_status_idx` and you get a `Seq Scan`. That is the correct decision. An index on a column with few distinct values and a skewed distribution almost never helps the majority value.
+
+It can help the minority one. `status = 'banned'` returns one row in five, and there the planner may pick the index. If you only query that value, a partial index is smaller and more direct:
+
+```sql
+CREATE INDEX users_banned_idx ON users (id) WHERE status = 'banned';
+```
+
+Before asking why the index isn't used, estimate how many rows the query should return.
+
+## 4. The statistics are stale
+
+The planner decides from statistics: how many rows the table has and how values are distributed. If you loaded a million rows and nobody ran `ANALYZE`, it thinks the table is nearly empty and that reading all of it is cheap.
+
+Compare estimated and actual rows in the plan:
+
+```
+Seq Scan on users  (cost=... rows=1 width=...) (actual time=... rows=250000.00 loops=1)
+```
+
+If the estimated `rows=` and the `actual` one differ by orders of magnitude, the statistics don't describe your table. Refresh them:
+
+```sql
+ANALYZE users;
+```
+
+Autovacuum does this on its own most of the time. It falls behind after a bulk load, a migration that rewrites half a table, or a large `COPY`. If it keeps happening on one table, check that table's autovacuum parameters instead of running `ANALYZE` by hand every time.
+
+## What to do now
+
+1. Run `EXPLAIN (ANALYZE, BUFFERS)` on your slowest query and look for a `Seq Scan` with a high `Rows Removed by Filter`.
+2. Check whether the `WHERE` applies a function, a cast, or a `LIKE '%…%'` to the indexed column.
+3. Compare estimated rows against actual rows. If they look nothing alike, run `ANALYZE`.
+4. Measure before and after. If the time doesn't drop, the new index is dead weight: drop it.
+
+Is your SaaS slowing down with real data? [Write to me](https://elmerjacobo.dev/en#contact) and we'll go through the plans together.

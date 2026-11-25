@@ -1,0 +1,132 @@
+---
+title: 'El índice existe pero Postgres no lo usa: 4 causas'
+description: >-
+  Tienes un índice en la columna y la consulta sigue lenta. Cuatro causas por
+  las que Postgres lo ignora y cómo comprobarlo con EXPLAIN (ANALYZE, BUFFERS)
+  antes de crear otro índice.
+date: '2026-12-01'
+category: Backend y DevOps
+tags:
+  - PostgreSQL
+  - SQL
+  - Índices
+  - Rendimiento
+  - EXPLAIN
+---
+
+Tienes un índice en `email` y el login tarda dos segundos. Lo normal es crear otro índice y probar de nuevo, y casi nunca arregla nada: Postgres decidió no usar el que ya existe. Antes de tocar el esquema hay que ver qué plan eligió y por qué.
+
+## Primero, lee el plan
+
+`EXPLAIN` sin `ANALYZE` solo muestra lo que Postgres cree que va a hacer. Con `ANALYZE` ejecuta la consulta de verdad, y con `BUFFERS` te dice cuántas páginas leyó.
+
+```sql
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM users WHERE lower(email) = 'ana@example.com';
+```
+
+Dos líneas importan. Si ves `Seq Scan on users` y debajo `Rows Removed by Filter: <millones>`, Postgres leyó la tabla entera y descartó casi todo. Si ves `Index Scan` o `Index Only Scan`, el índice sí se usó y el problema está en otro lado. Los tiempos dependen de tu máquina y de tus datos, así que mídelos tú antes y después de cada cambio.
+
+Para reproducir todo lo de este artículo sin tocar producción, crea una tabla de prueba:
+
+```sql
+CREATE TABLE users AS
+SELECT
+  g AS id,
+  'user' || g || '@example.com' AS email,
+  (ARRAY['active', 'active', 'active', 'active', 'banned'])[1 + g % 5] AS status
+FROM generate_series(1, 1000000) AS g;
+
+CREATE INDEX users_email_idx ON users (email);
+CREATE INDEX users_status_idx ON users (status);
+ANALYZE users;
+```
+
+## 1. Aplicas una función o un cast a la columna
+
+El índice `users_email_idx` guarda los valores de `email` tal cual. Si la consulta filtra por `lower(email)`, Postgres no puede usarlo: el índice ordena `email`, no `lower(email)`.
+
+```sql
+-- Seq Scan: el índice no sirve para esta expresión
+SELECT * FROM users WHERE lower(email) = 'user42@example.com';
+```
+
+Lo mismo pasa con `date(created_at) = '2026-01-01'` o con `id::text = '42'`. La corrección es un índice sobre la expresión exacta que usa la consulta:
+
+```sql
+CREATE INDEX users_email_lower_idx ON users (lower(email));
+```
+
+Si puedes, es mejor cambiar la consulta para que compare la columna sin transformarla. Para fechas, un rango (`created_at >= '2026-01-01' AND created_at < '2026-01-02'`) usa el índice normal sin crear otro.
+
+## 2. Usas `LIKE '%texto%'`
+
+Un índice btree es un árbol ordenado. Sirve para buscar por el principio del valor, no por el medio. La [documentación](https://www.postgresql.org/docs/current/indexes-types.html) lo dice así: el optimizador puede usar btree con `LIKE` si el patrón es constante y está anclado al inicio (`'foo%'`), pero no con `'%bar'`.
+
+```sql
+SELECT * FROM users WHERE email LIKE '%example%';
+```
+
+Hay dos casos distintos:
+
+- **Búsqueda por prefijo (`'user4%'`)**: btree sirve, con una condición. Si tu base no usa la collation `C`, necesitas la clase de operador `text_pattern_ops`:
+
+```sql
+CREATE INDEX users_email_prefix_idx ON users (email text_pattern_ops);
+```
+
+- **Búsqueda por el medio (`'%texto%'`)**: usa la extensión `pg_trgm` con un índice GIN, que soporta `LIKE` e `ILIKE` en cualquier posición:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX users_email_trgm_idx ON users USING GIN (email gin_trgm_ops);
+```
+
+Los índices trigram ocupan más espacio y cuestan más en cada escritura. Créalos solo para las columnas donde de verdad buscas por contenido.
+
+## 3. El filtro devuelve demasiadas filas
+
+Si la consulta pide el 80 % de la tabla, leerla en orden es más barato que saltar entre el índice y el heap fila por fila.
+
+```sql
+-- En mi tabla de prueba, 4 de cada 5 usuarios están 'active'
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM users WHERE status = 'active';
+```
+
+Esperas `Index Scan` por `users_status_idx` y ves `Seq Scan`. Es la decisión correcta. Un índice en una columna con pocos valores distintos y una distribución sesgada casi nunca ayuda al valor mayoritario.
+
+Sí puede ayudar al minoritario. `status = 'banned'` devuelve una de cada cinco filas, y ahí el planner puede elegir el índice. Si solo consultas ese valor, un índice parcial es más pequeño y directo:
+
+```sql
+CREATE INDEX users_banned_idx ON users (id) WHERE status = 'banned';
+```
+
+Antes de preguntarte por qué no usa el índice, calcula cuántas filas debería devolver la consulta.
+
+## 4. Las estadísticas están viejas
+
+El planner decide con estadísticas: cuántas filas tiene la tabla y cómo se reparten los valores. Si cargaste un millón de filas y nadie corrió `ANALYZE`, piensa que la tabla casi está vacía y que leerla entera es barato.
+
+Compara en el plan las filas estimadas con las reales:
+
+```
+Seq Scan on users  (cost=... rows=1 width=...) (actual time=... rows=250000.00 loops=1)
+```
+
+Si `rows=` en la estimación y `rows=` en `actual` difieren por órdenes de magnitud, las estadísticas no representan tu tabla. Actualízalas:
+
+```sql
+ANALYZE users;
+```
+
+Autovacuum lo hace solo en la mayoría de los casos. Falla después de una carga masiva, una migración que reescribe media tabla o un `COPY` grande. Si ocurre seguido en una tabla concreta, revisa los parámetros de autovacuum de esa tabla en vez de lanzar `ANALYZE` a mano cada vez.
+
+## Qué hacer ahora
+
+1. Corre `EXPLAIN (ANALYZE, BUFFERS)` sobre tu consulta más lenta y busca `Seq Scan` con `Rows Removed by Filter` alto.
+2. Revisa si el `WHERE` aplica una función, un cast o un `LIKE '%…%'` sobre la columna indexada.
+3. Compara filas estimadas contra reales. Si no se parecen, corre `ANALYZE`.
+4. Mide antes y después. Si el tiempo no baja, el índice nuevo sobra: bórralo.
+
+¿Tu SaaS se vuelve lento con datos reales? [Escríbeme](https://elmerjacobo.dev/es#contact) y revisamos los planes juntos.
