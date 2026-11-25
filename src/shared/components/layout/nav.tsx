@@ -102,14 +102,14 @@ export function Nav({
               hit box, under the 24px minimum touch target (axe: target-size). */}
 					<TransitionLink
 						href={`/${locale}`}
-						className="group col-span-6 inline-flex w-fit items-center py-1 xl:col-span-3"
+						className="group col-span-6 inline-flex w-fit items-center py-1 xl:col-span-2"
 					>
 						<BrandMark />
 					</TransitionLink>
 
 					<nav
 						aria-label="Primary"
-						className="col-span-6 hidden justify-center gap-4 xl:flex"
+						className="relative z-10 col-span-6 hidden justify-center gap-4 xl:col-span-7 xl:flex"
 					>
 						{links.map((link) => (
 							<TransitionLink
@@ -118,9 +118,22 @@ export function Nav({
 								aria-current={isActive(link.href) ? "location" : undefined}
 								className={cn(
 									"u-label hover:text-accent focus-visible:text-accent inline-flex items-center px-2 py-2 whitespace-nowrap transition-colors duration-200",
-									isActive(link.href) ? "text-accent" : "text-text-dim",
+									isActive(link.href)
+										? "text-accent"
+										: link.highlight
+											? "text-text"
+											: "text-text-dim",
 								)}
 							>
+								{link.highlight && (
+									<span
+										aria-hidden
+										className="relative mr-2 inline-flex size-1.5 shrink-0"
+									>
+										<span className="bg-accent-fill absolute inset-0 rounded-full motion-safe:animate-[ping_1.6s_ease-out_3]" />
+										<span className="bg-accent-fill relative size-1.5 rounded-full" />
+									</span>
+								)}
 								[&nbsp;{link.label}&nbsp;]
 							</TransitionLink>
 						))}

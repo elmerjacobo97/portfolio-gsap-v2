@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Archivo, Space_Mono } from "next/font/google";
+import { Geist_Mono, Sora } from "next/font/google";
 
 import "./globals.css";
 
@@ -12,17 +12,15 @@ import { NotFoundContent } from "@/shared/components/layout/not-found-content";
 import { ThemeProvider } from "@/shared/components/layout/theme-provider";
 import { ThemedToaster } from "@/shared/components/layout/themed-toaster";
 
-const archivo = Archivo({
-	variable: "--font-archivo",
+const sora = Sora({
+	variable: "--font-sora",
 	subsets: ["latin", "latin-ext"],
-	axes: ["wdth"],
 	display: "swap",
 });
 
-const spaceMono = Space_Mono({
-	variable: "--font-space-mono",
+const geistMono = Geist_Mono({
+	variable: "--font-geist-mono",
 	subsets: ["latin", "latin-ext"],
-	weight: ["400", "700"],
 	display: "swap",
 });
 
@@ -45,7 +43,7 @@ export default async function GlobalNotFound() {
 	return (
 		<html
 			lang={localeTag[defaultLocale]}
-			className={`${archivo.variable} ${spaceMono.variable}`}
+			className={`${sora.variable} ${geistMono.variable}`}
 			suppressHydrationWarning
 		>
 			<body className="bg-canvas text-text">

@@ -24,8 +24,7 @@ export default async function OpengraphImage({
   const socials = site.social.map((s) => s.label.toUpperCase()).join(' · ')
 
   // No custom font is loaded: next/og would need a .ttf shipped in the repo,
-  // and Archivo's whole point is a variable wdth axis that Satori cannot use
-  // anyway. The system grotesque keeps the card on-brand without the binary.
+  // and Satori cannot use the variable axes of the site fonts anyway. The system grotesque keeps the card on-brand without the binary.
   return new ImageResponse(
     (
       <div

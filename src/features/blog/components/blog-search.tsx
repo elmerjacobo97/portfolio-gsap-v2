@@ -55,8 +55,9 @@ export function BlogSearch({
 			// Re-pack the editorial grid so hidden posts leave no gaps.
 			card.classList.remove(...PLACEMENTS);
 			card.classList.add(...placement(visible).split(" "));
-			const number = card.querySelector("[data-post-number]");
-			if (number) number.textContent = String(visible + 1).padStart(2, "0");
+			for (const number of card.querySelectorAll("[data-post-number]")) {
+				number.textContent = String(visible + 1).padStart(2, "0");
+			}
 			visible += 1;
 		}
 

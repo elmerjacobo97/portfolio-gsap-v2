@@ -46,13 +46,13 @@
   --color-scrim: var(--color-ink-950);
 
   /* ── TYPE ───────────────────────────────────────────────────────────── */
-  --font-display: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
-  --font-sans: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
-  --font-mono: var(--font-space-mono), ui-monospace, "SF Mono", monospace;
+  --font-display: var(--font-sora), "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-sora), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
 
   --text-mega: clamp(3.25rem, 12.5vw, 15rem);
   --text-mega--line-height: 0.82;
-  --text-mega--letter-spacing: -0.045em;
+  --text-mega--letter-spacing: -0.02em;
   --text-mega--font-weight: 800;
 
   --text-numeral: clamp(4rem, 14vw, 16rem);
@@ -62,12 +62,12 @@
 
   --text-display: clamp(2.75rem, 7.5vw, 8rem);
   --text-display--line-height: 0.88;
-  --text-display--letter-spacing: -0.035em;
+  --text-display--letter-spacing: -0.02em;
   --text-display--font-weight: 700;
 
   --text-h1: clamp(2rem, 4.6vw, 4.25rem);
   --text-h1--line-height: 0.94;
-  --text-h1--letter-spacing: -0.03em;
+  --text-h1--letter-spacing: -0.02em;
   --text-h1--font-weight: 700;
 
   --text-h2: clamp(1.625rem, 3vw, 2.75rem);
@@ -152,10 +152,10 @@
   background: var(--color-rule);
 }
 
-/* The expanded-grotesque display voice — Archivo's wdth axis pushed to 118. */
+/* The heavy uppercase display voice — Sora at wght 800. */
 @utility u-wide {
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 118, "wght" 800;
+  font-variation-settings: "wght" 800;
   text-transform: uppercase;
 }
 

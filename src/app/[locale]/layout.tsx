@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Archivo, Space_Mono } from "next/font/google";
+import { Geist_Mono, Sora } from "next/font/google";
 import "../globals.css";
 
 import { getDictionary } from "@/shared/i18n/get-dictionary";
@@ -24,22 +24,19 @@ import { ThemedToaster } from "@/shared/components/layout/themed-toaster";
 import { AnalyticsClickTracker } from "@/shared/components/layout/analytics-click-tracker";
 
 /**
- * Archivo carries the whole display voice. It is one of the very few Google
- * fonts with a real `wdth` axis (62–125), so `wdth 118 / wght 800` gives the
- * expanded grotesque for headlines and `wdth 100 / wght 400` gives body copy —
- * from a single variable file. See the `u-wide` utility in globals.css.
+ * Sora carries the whole display voice. Its open, geometric letterforms keep
+ * the heavy uppercase headlines (`wght 800`) from fusing together. See the
+ * `u-wide` utility in globals.css.
  */
-const archivo = Archivo({
-	variable: "--font-archivo",
+const sora = Sora({
+	variable: "--font-sora",
 	subsets: ["latin", "latin-ext"],
-	axes: ["wdth"],
 	display: "swap",
 });
 
-const spaceMono = Space_Mono({
-	variable: "--font-space-mono",
+const geistMono = Geist_Mono({
+	variable: "--font-geist-mono",
 	subsets: ["latin", "latin-ext"],
-	weight: ["400", "700"],
 	display: "swap",
 });
 
@@ -126,18 +123,18 @@ export default async function RootLayout({
 		{ href: `/${locale}#projects`, label: dict.nav.projects },
 		{ href: `/${locale}#about`, label: dict.nav.about },
 		{ href: `/${locale}#resources`, label: dict.nav.resources },
-		{ href: `/${locale}/blog`, label: dict.nav.blog },
 		{ href: `/${locale}#contact`, label: dict.nav.collaborate },
+		{ href: `/${locale}/blog`, label: dict.nav.blog, highlight: true },
 	];
 
 	return (
 		// The font variables MUST sit on <html>. `--font-sans` is declared at
 		// `:root`, and custom-property substitution happens where the property is
-		// declared — putting them on <body> makes `var(--font-archivo)` resolve to
+		// declared — putting them on <body> makes `var(--font-sora)` resolve to
 		// the guaranteed-invalid value and the whole type system falls back.
 		<html
 			lang={localeTag[locale]}
-			className={`${archivo.variable} ${spaceMono.variable}`}
+			className={`${sora.variable} ${geistMono.variable}`}
 			// Extensions (LanguageTool, Grammarly…) stamp attributes on <html> before
 			// React hydrates. Suppressing here covers only this element.
 			suppressHydrationWarning

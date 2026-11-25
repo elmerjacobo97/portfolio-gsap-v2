@@ -51,61 +51,61 @@ colors:
   on-accent-light: "#F7F7F2"
 typography:
   mega:
-    fontFamily: Archivo
+    fontFamily: Sora
     fontSize: 52px
     fontWeight: 800
     lineHeight: 0.82
-    letterSpacing: -0.045em
-    fontVariation: '"wdth" 118, "wght" 800'
+    letterSpacing: -0.02em
+    fontVariation: '"wght" 800'
   numeral:
-    fontFamily: Archivo
+    fontFamily: Sora
     fontSize: 64px
     fontWeight: 800
     lineHeight: 0.78
     letterSpacing: -0.05em
-    fontVariation: '"wdth" 118, "wght" 800'
+    fontVariation: '"wght" 800'
   display:
-    fontFamily: Archivo
+    fontFamily: Sora
     fontSize: 44px
     fontWeight: 700
     lineHeight: 0.88
-    letterSpacing: -0.035em
+    letterSpacing: -0.02em
   h1:
-    fontFamily: Archivo
+    fontFamily: Sora
     fontSize: 32px
     fontWeight: 700
     lineHeight: 0.94
-    letterSpacing: -0.03em
+    letterSpacing: -0.02em
   h2:
-    fontFamily: Archivo
+    fontFamily: Sora
     fontSize: 26px
     fontWeight: 700
     lineHeight: 1
     letterSpacing: -0.02em
   h3:
-    fontFamily: Archivo
+    fontFamily: Sora
     fontSize: 20px
     fontWeight: 600
     lineHeight: 1.1
     letterSpacing: -0.01em
   lead:
-    fontFamily: Archivo
+    fontFamily: Sora
     fontSize: 17px
     fontWeight: 400
     lineHeight: 1.42
   body:
-    fontFamily: Archivo
+    fontFamily: Sora
     fontSize: 15px
     fontWeight: 400
     lineHeight: 1.55
   meta:
-    fontFamily: Space Mono
+    fontFamily: Geist Mono
     fontSize: 13px
     fontWeight: 400
     lineHeight: 1.1
     letterSpacing: 0.12em
   micro:
-    fontFamily: Space Mono
+    fontFamily: Geist Mono
     fontSize: 11px
     fontWeight: 400
     lineHeight: 1.1
@@ -221,7 +221,7 @@ components:
 
 This is the implemented visual language of the Elmer Jacobo portfolio. It is a
 **dark-default editorial/technical system**: an almost-black canvas, a visible
-12-column hairline grid, oversized expanded grotesque headlines, compact monospace
+12-column hairline grid, oversized heavy grotesque headlines, compact monospace
 metadata, and one acid-lime interaction signal. The result is intentionally spare,
 high contrast, and structured like a technical portfolio rather than a card-based
 product dashboard. An explicit light theme is also supported through semantic
@@ -294,11 +294,11 @@ texture, not a decorative color gradient.
 
 The type system uses two Google fonts loaded in `src/app/[locale]/layout.tsx`:
 
-- **Archivo** is both `--font-display` and `--font-sans`. It carries the display
-  voice, section headings, project titles, body copy, and lead copy. Its `wdth`
-  axis is loaded explicitly. The `u-wide` utility uppercases text and applies
-  `font-variation-settings: "wdth" 118, "wght" 800`.
-- **Space Mono** is `--font-mono`. It is reserved for eyebrows, indices, metadata,
+- **Sora** is both `--font-display` and `--font-sans`. It carries the display
+  voice, section headings, project titles, body copy, and lead copy. Its open
+  letterforms keep heavy uppercase from fusing. The `u-wide` utility uppercases text and applies
+  `font-variation-settings: "wght" 800`.
+- **Geist Mono** is `--font-mono`. It is reserved for eyebrows, indices, metadata,
   navigation labels, technical facts, status readouts, and other compact utility
   text. These labels are uppercase with deliberate tracking. `u-label` uses the
   micro scale; `u-meta` uses the metadata scale.
@@ -419,11 +419,13 @@ content.
   stroke. The E is chalk and the J is acid; hover/focus swaps those two colors.
 - `src/shared/components/layout/nav.tsx` provides the fixed translucent top bar, centered
   desktop links, locale switcher, theme toggle, and mobile-menu trigger. Controls
-  use Space Mono labels and generous hit-area padding.
+  use Geist Mono labels and generous hit-area padding. A link flagged `highlight`
+  (Blog, always last) keeps the bracketed label but in `text-text` with a small
+  acid dot before it (ping x3 on load, static after, motion-safe only). The mobile menu does not mark it.
 - `src/shared/components/layout/theme-provider.tsx` and `theme-toggle.tsx` provide explicit
   dark/light switching through `next-themes`; system preference is not followed.
 - `src/shared/components/layout/mobile-menu.tsx` is a native full-viewport acid dialog below
-  `md`. Its numbered links use expanded Archivo and dark ink labels.
+  `md`. Its numbered links use Sora and dark ink labels.
 - `src/shared/components/layout/grid-overlay.tsx` renders the fixed visible grid bed.
 - `src/shared/components/layout/footer.tsx` combines a bordered marquee band with a three-part
   grid for local time, social links, and copyright.
@@ -439,12 +441,12 @@ content.
   16px Lucide `ArrowUpRight`, acid hover color, and a small diagonal translate.
   Internal routes use `TransitionLink`; external routes open in a new tab.
 - `src/shared/components/ui/pill.tsx` is the availability badge: a square outlined label,
-  Space Mono micro type, and two-layer acid circular status dots, with the outer
+  Geist Mono micro type, and two-layer acid circular status dots, with the outer
   dot pulsing during the hero reveal.
 - `src/shared/components/ui/numeral.tsx` is the oversized transparent outlined number used
   behind process steps and similar indices.
 - `src/shared/components/ui/section-header.tsx` establishes the repeated section
-  pattern: acid monospace index, expanded Archivo title, optional chalk lead, and
+  pattern: acid monospace index, Sora title, optional chalk lead, and
   a drawn hairline.
 
 ### Content and work
@@ -523,5 +525,5 @@ position readout, not a timed animation.
 - **Don't** set native `scroll-behavior: smooth`, put fixed chrome inside
   `#smooth-content`, or enable the desktop horizontal process pin on mobile or for
   reduced-motion users.
-- **Don't** import a second font for one-off components. Archivo and Space Mono are
+- **Don't** import a second font for one-off components. Sora and Geist Mono are
   the complete current type system.

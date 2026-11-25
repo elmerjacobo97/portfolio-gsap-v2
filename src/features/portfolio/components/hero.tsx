@@ -85,7 +85,7 @@ export function Hero({
 				introDone.then(() => {
 					if (cancelled) return;
 
-					// autoSplit re-splits (and re-runs onSplit) when Archivo finishes
+					// autoSplit re-splits (and re-runs onSplit) when Sora finishes
 					// loading or the line width changes — the documented fix for
 					// SplitText measuring against a fallback font.
 					split = SplitText.create(

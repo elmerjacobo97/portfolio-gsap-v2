@@ -5,8 +5,9 @@ import { placement } from "./post-placement";
 import { cn } from "@/shared/lib/cn";
 import { TransitionLink } from "@/shared/components/motion/transition-link";
 import { ArrowLink } from "@/shared/components/ui/arrow-link";
+import { Numeral } from "@/shared/components/ui/numeral";
 
-/** Editorial post link. Motion belongs to the list entrance, not hover. */
+/** Editorial post card. Motion belongs to the list entrance; hover only changes color. */
 export function PostCard({
 	post,
 	locale,
@@ -27,13 +28,24 @@ export function PostCard({
 
 	return (
 		<article
-			className={cn("post-card group col-span-12", placement(index))}
+			className={cn(
+				"post-card group border-rule hover:border-accent relative flex flex-col overflow-hidden border p-6 transition-colors duration-300 md:p-8",
+				"before:bg-accent-fill before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:opacity-0 before:transition-opacity before:duration-300 group-hover:before:opacity-100",
+				"col-span-12",
+				placement(index),
+			)}
 			data-post-category={post.category}
 			data-post-search={[post.title, post.description, post.category, post.slug, ...post.tags]
 				.filter(Boolean)
 				.join(" ")}
 		>
-			<div className="flex items-baseline justify-between gap-6 border-rule border-y py-3">
+			<div aria-hidden className="pointer-events-none absolute right-4 -bottom-6 select-none">
+				<Numeral className="!text-[clamp(5rem,9vw,9rem)] opacity-25">
+					<span data-post-number>{String(index + 1).padStart(2, "0")}</span>
+				</Numeral>
+			</div>
+
+			<div className="border-rule relative flex items-baseline justify-between gap-6 border-b pb-3">
 				<div className="u-meta text-text-dim flex min-w-0 flex-wrap gap-x-3 gap-y-1">
 					<span data-post-number className="text-accent">
 						{String(index + 1).padStart(2, "0")}
@@ -46,8 +58,8 @@ export function PostCard({
 				</span>
 			</div>
 
-			<div className="mt-5">
-				<h3 className="text-h2 u-wide line-clamp-3">
+			<div className="relative mt-5 flex-1">
+				<h3 className="text-h2 u-wide">
 					<TransitionLink
 						href={href}
 						className="transition-colors duration-300 group-hover:text-accent"
@@ -60,7 +72,7 @@ export function PostCard({
 				</p>
 			</div>
 
-			<div className="mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-rule border-t pt-3">
+			<div className="border-rule relative mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t pt-3">
 				<ArrowLink
 					href={href}
 					analyticsEvent="post_view"
