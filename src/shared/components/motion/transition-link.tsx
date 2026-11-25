@@ -20,6 +20,7 @@ export function TransitionLink({
   prefetch = true,
   onFocus,
   onBlur,
+  'aria-current': ariaCurrent,
 }: {
   href: string
   children: React.ReactNode
@@ -28,6 +29,7 @@ export function TransitionLink({
   /** Callers that animate on hover pass these to mirror the state on focus. */
   onFocus?: React.FocusEventHandler<HTMLAnchorElement>
   onBlur?: React.FocusEventHandler<HTMLAnchorElement>
+  'aria-current'?: 'page' | 'location' | undefined
 }) {
   const router = useRouter()
   const { contextSafe } = useGSAP()
@@ -95,6 +97,7 @@ export function TransitionLink({
       onPointerEnter={() => router.prefetch(href)}
       onFocus={onFocus}
       onBlur={onBlur}
+      aria-current={ariaCurrent}
       className={className}
     >
       {children}

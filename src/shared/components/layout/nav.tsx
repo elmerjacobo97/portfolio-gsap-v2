@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 import type { Locale } from "@/shared/i18n/config";
 import { cn } from "@/shared/lib/cn";
 import type { NavLink } from "./nav-types";
-import { ScrollSmoother } from "@/shared/lib/gsap";
+import { ScrollSmoother, ScrollTrigger, useGSAP } from "@/shared/lib/gsap";
 import { TransitionLink } from "@/shared/components/motion/transition-link";
 import { BrandMark } from "./brand-mark";
 import { LocaleSwitcher } from "./locale-switcher";
@@ -54,6 +55,41 @@ export function Nav({
 	closeLabel: string;
 }) {
 	const [open, setOpen] = useState(false);
+	const [activeSectionHref, setActiveSectionHref] = useState<string | null>(null);
+	const pathname = usePathname();
+
+	// Scroll-spy: highlight the link whose home-page section crosses 60% of the
+	// viewport. Sections missing from the page (blog, 404) are skipped.
+	useGSAP(
+		() => {
+			const triggers = links.flatMap((link) => {
+				const sectionId = link.href.split("#")[1];
+				const section = sectionId && document.getElementById(sectionId);
+				if (!section) return [];
+
+				return ScrollTrigger.create({
+					trigger: section,
+					start: "top 60%",
+					end: "bottom 60%",
+					onToggle: ({ isActive }) =>
+						setActiveSectionHref((current) =>
+							isActive ? link.href : current === link.href ? null : current,
+						),
+				});
+			});
+
+			return () => {
+				triggers.forEach((trigger) => trigger.kill());
+				setActiveSectionHref(null);
+			};
+		},
+		{ dependencies: [pathname] },
+	);
+
+	const isActive = (href: string) =>
+		href.includes("#")
+			? activeSectionHref === href
+			: pathname.startsWith(href);
 
 	return (
 		<>
@@ -73,15 +109,19 @@ export function Nav({
 
 					<nav
 						aria-label="Primary"
-						className="col-span-6 hidden justify-center gap-2 xl:flex"
+						className="col-span-6 hidden justify-center gap-4 xl:flex"
 					>
 						{links.map((link) => (
 							<TransitionLink
 								key={link.href}
 								href={link.href}
-								className="u-label text-text-dim hover:text-text inline-flex items-center px-2 py-2 whitespace-nowrap transition-colors duration-200"
+								aria-current={isActive(link.href) ? "location" : undefined}
+								className={cn(
+									"u-label hover:text-accent focus-visible:text-accent inline-flex items-center px-2 py-2 whitespace-nowrap transition-colors duration-200",
+									isActive(link.href) ? "text-accent" : "text-text-dim",
+								)}
 							>
-								{link.label}
+								[&nbsp;{link.label}&nbsp;]
 							</TransitionLink>
 						))}
 					</nav>

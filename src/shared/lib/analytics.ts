@@ -6,6 +6,8 @@ export const ANALYTICS_EVENTS = [
   'post_view',
   'contact_submit',
   'contact_cta_click',
+  'resource_view',
+  'resource_download',
 ] as const
 
 export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[number]

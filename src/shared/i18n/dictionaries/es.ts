@@ -9,6 +9,7 @@ const es = {
   nav: {
     services: "Qué construyo",
     projects: "Proyectos",
+    resources: "Recursos",
     experience: "Experiencia",
     process: "Cómo trabajo",
     about: "Sobre mí",
@@ -106,6 +107,18 @@ const es = {
     lead: "Te enseño el trabajo mientras ocurre. Hablamos de los cambios antes de convertirlos en código y cada semana tienes algo que puedes abrir.",
   },
 
+  resources: {
+    index: "06",
+    title: "Recursos",
+    lead: "Guías y cheatsheets en PDF que uso en mi día a día. Ábrelos aquí o descárgalos gratis.",
+    previewLabel: "Vista previa",
+    openLabel: "Abrir en pestaña nueva",
+    downloadLabel: "Descargar",
+    closeLabel: "Cerrar vista previa",
+    formatLabel: "PDF",
+    pagesUnit: "págs.",
+  },
+
   testimonials: {
     index: "06",
     title: "Lo que dicen",
@@ -114,13 +127,13 @@ const es = {
   },
 
   faq: {
-    index: "06",
+    index: "07",
     title: "Preguntas",
     lead: "Lo que suelen preguntarme antes de empezar: cómo trabajo, cuánto tarda, qué necesito de ti y cómo acordamos qué se entrega y cuándo.",
   },
 
   contact: {
-    index: "07",
+    index: "08",
     title: "Contacto",
     lead: "Cuéntame qué quieres construir, mejorar o resolver. Respondo en menos de 24 horas.",
     channelsTitle: "Canales directos",

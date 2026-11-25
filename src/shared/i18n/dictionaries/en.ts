@@ -11,6 +11,7 @@ const en = {
   nav: {
     services: "What I build",
     projects: "Projects",
+    resources: "Resources",
     experience: "Experience",
     process: "How I work",
     about: "About",
@@ -108,6 +109,18 @@ const en = {
     lead: "I show you the work as it happens. We discuss changes before they become code, and every week you have something you can open.",
   },
 
+  resources: {
+    index: "06",
+    title: "Resources",
+    lead: "PDF guides and cheatsheets I use day to day. Open them here or download them for free.",
+    previewLabel: "Preview",
+    openLabel: "Open in new tab",
+    downloadLabel: "Download",
+    closeLabel: "Close preview",
+    formatLabel: "PDF",
+    pagesUnit: "pp.",
+  },
+
   testimonials: {
     index: "06",
     title: "What they say",
@@ -116,13 +129,13 @@ const en = {
   },
 
   faq: {
-    index: "06",
+    index: "07",
     title: "Questions",
     lead: "What people usually ask before we start: how I work, how long it takes, what I need from you, and how we agree on what gets delivered and when.",
   },
 
   contact: {
-    index: "07",
+    index: "08",
     title: "Contact",
     lead: "Tell me what you want to build, improve, or fix. I reply within 24 hours.",
     channelsTitle: "Direct channels",

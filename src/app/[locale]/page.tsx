@@ -10,6 +10,7 @@ import { Hero } from "@/features/portfolio/components/hero";
 import { Experience } from "@/features/portfolio/components/experience";
 import { Process } from "@/features/portfolio/components/process";
 import { Services } from "@/features/portfolio/components/services";
+import { Resources } from "@/features/portfolio/components/resources";
 import { Projects } from "@/features/portfolio/components/projects";
 import { GithubActivity } from "@/features/portfolio/components/github-activity";
 
@@ -33,6 +34,7 @@ export default async function Home({
       <About dict={dict.about}>
         <GithubActivity dict={dict.projects} />
       </About>
+      <Resources dict={dict.resources} locale={locale} />
       {/* <Testimonials dict={dict.testimonials} locale={locale} /> */}
       <Faq dict={dict.faq} locale={locale} />
       <Contact
